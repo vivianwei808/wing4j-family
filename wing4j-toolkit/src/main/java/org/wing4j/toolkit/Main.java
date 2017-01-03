@@ -114,7 +114,7 @@ public class Main {
     }
 
     void run() throws IOException {
-        System.out.println("Welcome to Wing4j!");
+        System.out.println("Welcome to Wing4j toolkit!");
         if (co.getCommand() == null) {
             boolean jlinemissing = false;
             // only use jline if it's in the classpath

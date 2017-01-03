@@ -23,7 +23,7 @@ public abstract class ReflectionUtils {
 		}
 		//递归调用获取超类的字段
 		Class<?> superClass = clazz.getSuperclass();
-		if (superClass.equals(Object.class)) {
+		if (superClass == Object.class) {
 			return result;
 		}
 		List<Field> superFields = getFields(superClass);
