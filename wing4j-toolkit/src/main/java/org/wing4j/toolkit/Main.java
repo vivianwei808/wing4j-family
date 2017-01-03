@@ -49,7 +49,7 @@ public class Main {
     }
 
     protected String getPrompt() {
-        return "wing4j>";
+        return "cli>";
     }
 
     /**
