@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" abstract="false" lazy-init="false"
+          autowire="default">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+        <property name="url" value="jdbc:log4jdbc:h2:mem:wing4j;MODE=MySQL"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+        <property name="maxActive" value="1"/>
+        <property name="initialSize" value="1"/>
+        <property name="maxIdle" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxWait" value="30000"/>
+    </bean>
+
+    <bean class="org.wing4j.common.sequence.h2.H2SequenceServiceImpl">
+        <property name="autoCreate" value="true"/>
+    </bean>
+</beans>

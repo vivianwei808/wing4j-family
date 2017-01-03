@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.wing4j</groupId>
+        <artifactId>wing4j-common</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>wing4j-common-utils</artifactId>
+    <name>wing4j-common-utils</name>
+    <description>This is the wing4j-family member wing4j-common-utils</description>
+    <url>http://git.oschina.net/wing4j</url>
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses</url>
+        </license>
+    </licenses>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+    </dependencies>
+</project>
