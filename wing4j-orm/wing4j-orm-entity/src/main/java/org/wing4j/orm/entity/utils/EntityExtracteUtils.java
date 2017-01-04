@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 public abstract class EntityExtracteUtils {
 
-    public static final Map<Class, TableMetadata> TABLES = new HashMap<Class, TableMetadata>();
+    public static final Map<Class, TableMetadata> TABLES_CACHE = new HashMap<Class, TableMetadata>();
 
     /**
      * 提取实体上的元信息
@@ -30,8 +30,8 @@ public abstract class EntityExtracteUtils {
      */
     public static TableMetadata extractTable(Class entityClass) {
         //如果缓存包含则直接返回
-        if (TABLES.containsKey(entityClass)) {
-            return TABLES.get(entityClass);
+        if (TABLES_CACHE.containsKey(entityClass)) {
+            return TABLES_CACHE.get(entityClass);
         }
         javax.persistence.Table tableAnnJPA = (javax.persistence.Table) entityClass.getAnnotation(javax.persistence.Table.class);
         org.wing4j.orm.Table tableAnnWing4j = (org.wing4j.orm.Table) entityClass.getAnnotation(org.wing4j.orm.Table.class);
@@ -74,7 +74,7 @@ public abstract class EntityExtracteUtils {
         }
         //提取数据引擎
         if (dataEngineAnn != null && dataEngineAnn.value() != null) {
-            if (dataEngineAnn.value() != DataEngineType.NONE) {
+            if (dataEngineAnn.value() != DataEngineType.Auto) {
                 tableMetadata.setDataEngine(dataEngineAnn.value().name());
             }
         }

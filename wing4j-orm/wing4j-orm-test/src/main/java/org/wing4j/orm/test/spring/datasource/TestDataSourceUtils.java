@@ -2,7 +2,7 @@ package org.wing4j.orm.test.spring.datasource;
 
 import lombok.extern.slf4j.Slf4j;
 import org.wing4j.common.utils.EnvironmentUtils;
-import org.wing4j.orm.test.Wing4jTestRuntimeException;
+import org.wing4j.orm.test.TestRuntimeException;
 
 @Slf4j
 public class TestDataSourceUtils {
@@ -17,11 +17,11 @@ public class TestDataSourceUtils {
     }
 
     public static String lookupDataSource() {
-        EnvironmentUtils.Environment environment = EnvironmentUtils.determineRuntime();
+        EnvironmentUtils.Environment env = EnvironmentUtils.determineRuntime();
         if (MYSQL_DATASOURCE.equals(currentDataSource.get())
-                && EnvironmentUtils.Environment.MAVEN_JUNIT == environment) {
+                && EnvironmentUtils.Environment.MAVEN_JUNIT == env) {
             log.error("maven runtime environment not allow use mySql database!");
-            throw new Wing4jTestRuntimeException("maven runtime environment not allow use mySql database!");
+            throw new TestRuntimeException("maven runtime environment not allow use mySql database!");
         }
         if ((MYSQL_DATASOURCE.equals(currentDataSource.get())
                 || H2_DATASOURCE.equals(currentDataSource.get()))) {
@@ -29,11 +29,11 @@ public class TestDataSourceUtils {
             return currentDataSource.get();
 
         }
-        if (EnvironmentUtils.Environment.MAVEN_JUNIT == environment) {
+        if (EnvironmentUtils.Environment.MAVEN_JUNIT == env) {
             log.info("unit test use :{}!", H2_DATASOURCE);
             return H2_DATASOURCE;
         }
-        if (EnvironmentUtils.Environment.IDE_JUNIT == environment) {
+        if (EnvironmentUtils.Environment.IDE_JUNIT == env) {
             log.info("unit test use :{}!", H2_DATASOURCE);
             return H2_DATASOURCE;
         }

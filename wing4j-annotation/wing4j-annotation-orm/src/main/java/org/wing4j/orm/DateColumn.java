@@ -1,13 +1,12 @@
 package org.wing4j.orm;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by wing4j on 2016/12/17.
+ * 日期字段类型
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

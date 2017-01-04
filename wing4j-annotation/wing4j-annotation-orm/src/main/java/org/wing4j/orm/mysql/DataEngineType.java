@@ -1,10 +1,15 @@
 package org.wing4j.orm.mysql;
 
 /**
- * Created by Administrator on 2016/9/1.
+ * 存储引擎类型<br>
+ *     <ol>
+ *         <li>InnoDB存储引擎</li>
+ *         <li>MyISAM存储引擎</li>
+ *         <li>MySQL自动选择</li>
+ *     </ol>
  */
 public enum DataEngineType {
     InnoDB,
-    MYISAM,
-    NONE
+    MyISAM,
+    Auto
 }

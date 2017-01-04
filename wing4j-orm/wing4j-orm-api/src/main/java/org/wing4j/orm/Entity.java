@@ -15,10 +15,11 @@ public abstract class Entity {
     /**
      * 数据库模式
      */
-    @org.wing4j.orm.Ignore
+    @Ignore
     protected String schema;
     /**
      * 排序字段
      */
+    @Ignore
     protected final List<String> orderBys = new ArrayList<>();
 }

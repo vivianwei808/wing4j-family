@@ -11,6 +11,9 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
+/**
+ * 关键字工具，用于对关键字进行检查
+ */
 @Slf4j
 public abstract class KeywordsUtils {
     final static Properties KEYWORDS = new Properties();

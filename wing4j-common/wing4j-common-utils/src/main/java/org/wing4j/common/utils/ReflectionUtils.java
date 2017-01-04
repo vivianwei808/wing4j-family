@@ -10,41 +10,41 @@ import java.util.List;
  */
 public abstract class ReflectionUtils {
 	/**
-	 * 获取一个类对象所以的字段
-	 * @param clazz 提取类对象
-	 * @return 字段列表
+	 * 获取一个类所有的字段
+	 * @param clazz 提取类
+	 * @return 字段
 	 */
 	public static List<Field> getFields(Class<?> clazz) {
-		//获取当前类的字段
-		List<Field> result = new ArrayList<Field>(20);
+		//获取当前类以及父类的字段
+		List<Field> allFields = new ArrayList<Field>(20);
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-			result.add(field);
+			allFields.add(field);
 		}
-		//递归调用获取超类的字段
-		Class<?> superClass = clazz.getSuperclass();
-		if (superClass == Object.class) {
-			return result;
+		//递归获取超类的字段
+		Class<?> superClazz = clazz.getSuperclass();
+		if (superClazz == Object.class) {
+			return allFields;
 		}
-		List<Field> superFields = getFields(superClass);
-		result.addAll(superFields);
-		return result;
+		List<Field> superFields = getFields(superClazz);
+		allFields.addAll(superFields);
+		return allFields;
 	}
 
 	/**
-	 * 获取字段，排除有transient关键字的字段
-	 * @param clazz 提取类对象
-	 * @return 字段列表
+	 * 获取一个类所有的字段，不包括transient标注的字段
+	 * @param clazz 提取类
+	 * @return 字段
 	 */
 	public static List<Field> getFieldsExcludeTransient(Class<?> clazz) {
-		List<Field> result = new ArrayList<Field>();
+		List<Field> allFields = new ArrayList<Field>();
 		List<Field> fields = getFields(clazz);
 		for (Field field : fields) {
 			if (Modifier.isTransient(field.getModifiers())) {
 				continue;
 			}
-			result.add(field);
+			allFields.add(field);
 		}
-		return result;
+		return allFields;
 	}
 }

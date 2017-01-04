@@ -1,6 +1,5 @@
 package org.wing4j.test;
 
-import org.junit.Assert;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,8 +8,9 @@ import org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.wing4j.orm.test.spring.CreateTableTestExecutionListener;
-import org.wing4j.orm.test.spring.DevDataSourceTestExecutionListener;
+import org.wing4j.orm.test.spring.TestDataSourceTestExecutionListener;
 
 /**
  * 数据库访问测试基类<br>
@@ -22,7 +22,7 @@ import org.wing4j.orm.test.spring.DevDataSourceTestExecutionListener;
 @Transactional
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
 @TestExecutionListeners({
-        DevDataSourceTestExecutionListener.class,
+        TestDataSourceTestExecutionListener.class,
         CreateTableTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         SqlScriptsTestExecutionListener.class})
@@ -32,6 +32,6 @@ public abstract class DbBaseTest extends BaseTest implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        org.springframework.util.Assert.notNull(jdbcTemplate, "JdbcTemplate is required!");
+        Assert.notNull(jdbcTemplate, "JdbcTemplate is required!");
     }
 }

@@ -13,6 +13,9 @@ import org.wing4j.test.DevDataSourceType;
 
 import java.lang.reflect.Method;
 
+/**
+ * 自动创建表监听器
+ */
 public class CreateTableTestExecutionListener extends AbstractTestExecutionListener {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateTableTestExecutionListener.class);

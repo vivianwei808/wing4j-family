@@ -28,8 +28,6 @@ public class MavenTestResourceLookup {
             String className = stackTraceElement.getClassName();
             int lastDotIdx = className.lastIndexOf(".");
             return className.substring(0, lastDotIdx);
-//                return Class.forName(stackTraceElement.getClassName()).getPackage().getName().replaceAll("\\.", "/");
-            // NONE
         }
         return "";
     }

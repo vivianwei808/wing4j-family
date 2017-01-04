@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wing4j on 2017/1/2.
@@ -22,20 +21,55 @@ import java.util.Map;
 public class Main {
     protected int commandCount = 0;
     /**
-     * 存放支持的命令
-     */
-    protected static final Map<String, String> commandMap = new HashMap<String, String>();
-    /**
      * 存放执行过的历史命令
      */
     protected HashMap<Integer, String> history = new HashMap<Integer, String>();
     /**
-     * 命令选项
+     * 命令集合
      */
-    protected Win4jCommandOptions co = new Win4jCommandOptions();
+    protected static CommandCollection commandCollection = new CommandCollection();
 
     static {
-        commandMap.put("reverse", "-h jdbc:mysql://192.168.1.106:3306/wing4j -u root -p root -schema wing4j -package org.wing4j.entity");
+        {
+            CommandDefine define = new CommandDefine();
+            define.addOption("url", "h", true, 1, "数据库地址", "jdbc:mysql://192.168.1.106:3306/wing4j");
+            define.addOption("u", true, 1, "用户名", "root");
+            define.addOption("p", true, 1, "密码", "root");
+            define.addOption("schema", true, 1, "数据库模式", "wing4j");
+            define.addOption("package", true, 1, "保存包名", "org.wing4j.entity");
+            define.setName("逆向工程");
+            define.setCmd("reverse");
+            define.setExample("reverse -h jdbc:mysql://192.168.1.106:3306/wing4j -u root -p root -schema wing4j -package org.wing4j.entity");
+            commandCollection.addDefine(define);
+        }
+        {
+            CommandDefine define = new CommandDefine();
+            define.setName("帮助信息");
+            define.setCmd("help");
+            define.setExample("help 帮助信息");
+            commandCollection.addDefine(define);
+        }
+        {
+            CommandDefine define = new CommandDefine();
+            define.setName("退出CLI");
+            define.setCmd("quit");
+            define.setExample("quit 退出CLI");
+            commandCollection.addDefine(define);
+        }
+        {
+            CommandDefine define = new CommandDefine();
+            define.setName("退出CLI");
+            define.setCmd("exit");
+            define.setExample("exit 退出CLI");
+            commandCollection.addDefine(define);
+        }
+        {
+            CommandDefine define = new CommandDefine();
+            define.setName("查看历史命令");
+            define.setCmd("history");
+            define.setExample("history 查看历史命令");
+            commandCollection.addDefine(define);
+        }
     }
 
     /**
@@ -56,29 +90,26 @@ public class Main {
      * 用法提示方法
      */
     static void usage() {
-        System.err.println("Wing4j cmd args");
-        for (String cmd : commandMap.keySet()) {
-            System.err.println("\t" + cmd + " " + commandMap.get(cmd));
-        }
+        System.err.println("Wing4j toolkit用法:");
+        System.out.println(Help.toString(commandCollection));
     }
 
-    protected boolean processCmd(Win4jCommandOptions co) {
-        String cmd = co.getCommand();
+    protected boolean processCmd(Command command) {
+        String cmd = command.getCmd();
         if (cmd.equals("quit") || cmd.equals("exit")) {
             System.out.println("Quitting...");
             System.exit(0);
-        } else if (cmd.equals("his")) {
+        } else if (cmd.equals("history")) {
             for (int i = commandCount - 10; i <= commandCount; ++i) {
                 if (i < 0) continue;
                 System.out.println(i + " - " + history.get(i));
             }
         } else if (cmd.equals("reverse")) {
-            Map<String, String> options = co.getOptions();
-            String packageName = options.get("package");
-            String schema = options.get("schema");
-            String h = options.get("h");
-            String u = options.get("u");
-            String p = options.get("p");
+            String packageName = command.valueString("package");
+            String schema = command.valueString("schema");
+            String h = command.valueString("h");
+            String u = command.valueString("u");
+            String p = command.valueString("p");
             if (packageName == null) {
                 System.out.println("package is empty!");
                 return false;
@@ -93,7 +124,7 @@ public class Main {
             } catch (Exception e) {
                 log.error("逆向生成失败", e);
             }
-        } else {//什么都不能匹配则输出用法
+        } else if (cmd.equals("help")) {//什么都不能匹配则输出用法
             usage();
         }
         return true;
@@ -106,41 +137,46 @@ public class Main {
      */
     public void executeLine(String line) {
         if (!line.equals("")) {
-            co.parseCommand(line);
+            String[] args = line.split(" ");
+            CommandDefine define = commandCollection.getOptionCollection().get(args[0]);
+            if (define == null) {
+                System.out.println(commandCollection.getOptionCollection().keySet());
+                System.out.println("无效的命令【" + args[0] + "】");
+                return;
+            }
+            Command command = define.parseCommand(line);
             addToHistory(commandCount, line);
-            processCmd(co);
+            processCmd(command);
             commandCount++;
         }
     }
 
     void run() throws IOException {
         System.out.println("Welcome to Wing4j toolkit!");
-        if (co.getCommand() == null) {
-            boolean jlinemissing = false;
-            // only use jline if it's in the classpath
-            try {
-                Class consoleC = Class.forName("jline.console.ConsoleReader");
-                Object console = consoleC.newInstance();
-                System.out.println("JLine support is enabled");
-                Method addCompleter = consoleC.getMethod("addCompleter", Completer.class);
-                addCompleter.invoke(console, new FileNameCompleter());
-                String line;
-                Method readLine = consoleC.getMethod("readLine", String.class);
-                while ((line = (String) readLine.invoke(console, getPrompt())) != null) {
-                    executeLine(line);
-                }
-            } catch (Exception e) {
-                log.debug("Unable to start jline", e);
-                jlinemissing = true;
+        boolean jlinemissing = false;
+        // only use jline if it's in the classpath
+        try {
+            Class consoleC = Class.forName("jline.console.ConsoleReader");
+            Object console = consoleC.newInstance();
+            System.out.println("JLine support is enabled");
+            Method addCompleter = consoleC.getMethod("addCompleter", Completer.class);
+            addCompleter.invoke(console, new FileNameCompleter());
+            String line;
+            Method readLine = consoleC.getMethod("readLine", String.class);
+            while ((line = (String) readLine.invoke(console, getPrompt())) != null) {
+                executeLine(line);
             }
+        } catch (Exception e) {
+            log.debug("Unable to start jline", e);
+            jlinemissing = true;
+        }
 
-            if (jlinemissing) {
-                System.out.println("JLine support is disabled");
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    executeLine(line);
-                }
+        if (jlinemissing) {
+            System.out.println("JLine support is disabled");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String line;
+            while ((line = br.readLine()) != null) {
+                executeLine(line);
             }
         }
 

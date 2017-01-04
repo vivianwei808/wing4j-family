@@ -1,21 +1,23 @@
 package org.wing4j.common.utils;
 
-
+/**
+ * 字符串工具
+ */
 public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
-     * 将驼峰命名转换为下划线命名
+     * 驼峰风格命名转换成下划线风格的命名
      *
-     * @param param
-     * @return
+     * @param str 驼峰命名风格字符串
+     * @return 下划线风格的命名
      */
-    public static String camelToUnderline(String param) {
-        if (param == null || "".equals(param.trim())) {
+    public static String camelToUnderline(String str) {
+        if (isBlank(str)) {
             return "";
         }
-        int len = param.length();
+        int len = str.length();
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
-            char c = param.charAt(i);
+            char c = str.charAt(i);
             if (Character.isUpperCase(c) && i > 0) {
                 sb.append("_");
                 sb.append(Character.toUpperCase(c));
@@ -27,49 +29,23 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * 第一个符号大写
-     * @param param
-     * @return
-     */
-   public static String firstCharToUpper(String param){
-        if (param == null || "".equals(param.trim())) {
-            return "";
-        }
-        char[] chars = param.toCharArray();
-        chars[0] = Character.toUpperCase(chars[0]);
-        return new String(chars);
-    }
-    /**
-     * 第一个符号大写
-     * @param param
-     * @return
-     */
-    public static String firstCharToLower(String param){
-        if (param == null || "".equals(param.trim())) {
-            return "";
-        }
-        char[] chars = param.toCharArray();
-        chars[0] = Character.toLowerCase(chars[0]);
-        return new String(chars);
-    }
-
-    /**
-     * 将下划线转换为驼峰命名
-     * @param param 下划线的命名
+     * 下划线风格的命名转换成驼峰风格命名
+     *
+     * @param str 下划线的命名
      * @return 驼峰命名
      */
-    public static String underlineToCamel(String param) {
-        if (param == null || "".equals(param.trim())) {
+    public static String underlineToCamel(String str) {
+        if (isBlank(str)) {
             return "";
         }
-        int len = param.length();
+        int len = str.length();
         StringBuilder sb = new StringBuilder(len);
-        param = param.toLowerCase();
-        String[] words = param.split("_");
+        str = str.toLowerCase();
+        String[] words = str.split("_");
         for (int i = 0; i < words.length; i++) {
-            if(i == 0){
+            if (i == 0) {
                 sb.append(words[i]);
-            }else{
+            } else {
                 sb.append(firstCharToUpper(words[i]));
             }
         }
@@ -77,41 +53,74 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * 填充字符串长度
-     * @param in 输入字符串
-     * @param rightFillStyle 为真右填充
-     * @param fillChar 填充字符
-     * @param len 长度
-     * @return
+     * 首字母大写
+     *
+     * @param str 字符串
+     * @return 字符串
      */
-    public static String fill(String in, boolean rightFillStyle, char fillChar, int len) {
+    public static String firstCharToUpper(String str) {
+        if (isBlank(str)) {
+            return "";
+        }
+        char[] chars = str.toCharArray();
+        chars[0] = Character.toUpperCase(chars[0]);
+        return new String(chars);
+    }
+
+    /**
+     * 首字母小写
+     *
+     * @param str 字符串
+     * @return 字符串
+     */
+    public static String firstCharToLower(String str) {
+        if (isBlank(str)) {
+            return "";
+        }
+        char[] chars = str.toCharArray();
+        chars[0] = Character.toLowerCase(chars[0]);
+        return new String(chars);
+    }
+
+
+    /**
+     * 填充字符串长度
+     *
+     * @param in            输入字符串
+     * @param leftFillStyle 是否进行左填充
+     * @param fill          填充字符
+     * @param len           长度
+     * @return 期望长度的字段
+     */
+    public static String fill(String in, boolean leftFillStyle, char fill, int len) {
         String str = in;
         while (str.length() < len) {
-            str = rightFillStyle ? str + fillChar : fillChar + str;
+            str = leftFillStyle ? fill + str : str + fill;
         }
         return str;
     }
 
     /**
-     * 安全toString
-     * @param obj
+     * 以安全的方式获取字符串
+     *
+     * @param in 输入对象
      * @param ifNullRetVal 如果为空，则返回设置的值
-     * @return
+     * @return 字符串
      */
-    public static String safeToString(Object obj, String ifNullRetVal){
-        if(obj == null){
+    public static String safeToString(Object in, String ifNullRetVal) {
+        if (in == null) {
             return ifNullRetVal;
         }
-        String str = obj.toString();
-        return str;
+        return in.toString();
     }
 
     /**
-     * 安全toString
-     * @param obj
-     * @return
+     * 以安全的方式获取字符串
+     *
+     * @param in 输入对象
+     * @return 获取字符串形式
      */
-    public static String safeToString(Object obj){
-        return safeToString(obj, null);
+    public static String safeToString(Object in) {
+        return safeToString(in, null);
     }
 }
