@@ -46,28 +46,35 @@ public class Main {
             CommandDefine define = new CommandDefine();
             define.setName("帮助信息");
             define.setCmd("help");
-            define.setExample("help 帮助信息");
+            define.setExample("help");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("退出CLI");
             define.setCmd("quit");
-            define.setExample("quit 退出CLI");
+            define.setExample("quit");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("退出CLI");
             define.setCmd("exit");
-            define.setExample("exit 退出CLI");
+            define.setExample("exit");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("查看历史命令");
             define.setCmd("history");
-            define.setExample("history 查看历史命令");
+            define.setExample("history");
+            commandCollection.addDefine(define);
+        }
+        {
+            CommandDefine define = new CommandDefine();
+            define.setName("清屏");
+            define.setCmd("clean");
+            define.setExample("clean");
             commandCollection.addDefine(define);
         }
     }
@@ -124,7 +131,11 @@ public class Main {
             } catch (Exception e) {
                 log.error("逆向生成失败", e);
             }
-        } else if (cmd.equals("help")) {//什么都不能匹配则输出用法
+        } else if (cmd.equals("clean")) {
+            for (int i = 0; i < 30; i++) {
+                System.out.println("\n");
+            }
+        } else if (cmd.equals("help")) {
             usage();
         }
         return true;

@@ -16,7 +16,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.annotation.Transactional;
 import org.wing4j.orm.test.spring.CreateTableTestExecutionListener;
 import org.wing4j.orm.test.spring.TestDataSourceTestExecutionListener;
-@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
