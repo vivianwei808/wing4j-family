@@ -33,48 +33,42 @@ public class Main {
         {
             CommandDefine define = new CommandDefine();
             define.addOption("url", "h", true, 1, "数据库地址", "jdbc:mysql://192.168.1.106:3306/wing4j");
-            define.addOption("u", true, 1, "用户名", "root");
-            define.addOption("p", true, 1, "密码", "root");
-            define.addOption("schema", true, 1, "数据库模式", "wing4j");
-            define.addOption("package", true, 1, "保存包名", "org.wing4j.entity");
+            define.addOption("username", "u", true, 1, "用户名", "root");
+            define.addOption("password", "p", true, 1, "密码", "root");
+            define.addOption("schema", "s", true, 1, "数据库模式", "wing4j");
+            define.addOption("package", "f", true, 1, "保存包名", "org.wing4j.entity");
             define.setName("逆向工程");
             define.setCmd("reverse");
             define.setExample("reverse -h jdbc:mysql://192.168.1.106:3306/wing4j -u root -p root -schema wing4j -package org.wing4j.entity");
+            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("帮助信息");
             define.setCmd("help");
-            define.setExample("help");
+            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("退出CLI");
             define.setCmd("quit");
-            define.setExample("quit");
+            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("退出CLI");
             define.setCmd("exit");
-            define.setExample("exit");
+            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
         {
             CommandDefine define = new CommandDefine();
             define.setName("查看历史命令");
             define.setCmd("history");
-            define.setExample("history");
-            commandCollection.addDefine(define);
-        }
-        {
-            CommandDefine define = new CommandDefine();
-            define.setName("清屏");
-            define.setCmd("clean");
-            define.setExample("clean");
+            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
     }
@@ -97,8 +91,9 @@ public class Main {
      * 用法提示方法
      */
     static void usage() {
-        System.err.println("Wing4j toolkit用法:");
-        System.out.println(Help.toString(commandCollection));
+        System.out.println("Wing4j toolkit用法:");
+        HelpFormatter formmatter = new HelpFormatter();
+        formmatter.render("", commandCollection,"");
     }
 
     protected boolean processCmd(Command command) {

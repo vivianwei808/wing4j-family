@@ -26,7 +26,7 @@ import org.wing4j.orm.test.spring.TestDataSourceTestExecutionListener;
         SqlScriptsTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class})
-public class BaseTest implements ApplicationContextAware {
+public abstract class BaseTest implements ApplicationContextAware {
     protected ApplicationContext ctx;
     public <T> T getBean(Class clazz){
         return (T) ctx.getBean(clazz);

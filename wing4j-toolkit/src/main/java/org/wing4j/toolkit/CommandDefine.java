@@ -25,6 +25,9 @@ public class CommandDefine {
     @Setter
     @Getter
     protected String example;
+    @Setter
+    @Getter
+    protected String extrInfo;
     /**
      * 获取选项信息
      *

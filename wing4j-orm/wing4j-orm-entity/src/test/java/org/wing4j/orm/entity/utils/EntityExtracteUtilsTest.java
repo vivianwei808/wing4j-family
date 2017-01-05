@@ -28,7 +28,7 @@ public class EntityExtracteUtilsTest {
         TableMetadata tableMetadata =  EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class);
         Assert.assertEquals(4, tableMetadata.getColumnMetadatas().size());
         Assert.assertEquals("CHAR(36)", tableMetadata.getColumnMetadatas().get("SERIAL_NO").getDataType());
-        Assert.assertEquals("CHAR(12)", tableMetadata.getColumnMetadatas().get("COL1").getDataType());
+        Assert.assertEquals("VARCHAR(12)", tableMetadata.getColumnMetadatas().get("COL1").getDataType());
         Assert.assertEquals("DECIMAL(10,3)", tableMetadata.getColumnMetadatas().get("COL2").getDataType());
         Assert.assertEquals("INTEGER", tableMetadata.getColumnMetadatas().get("COL3").getDataType());
     }

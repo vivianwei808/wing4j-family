@@ -49,19 +49,19 @@ public class StringUtilsTest {
     @Test
     public void testFill() throws Exception {
         {
-            String str_new = StringUtils.fill("1", false, '0', 6);
+            String str_new = StringUtils.fill("1", true, '0', 6);
             Assert.assertEquals("000001", str_new);
         }
         {
-            String str_new = StringUtils.fill("1", true, '0', 6);
+            String str_new = StringUtils.fill("1", false, '0', 6);
             Assert.assertEquals("100000", str_new);
         }
         {
-            String str_new = StringUtils.fill("1", false, 'A', 6);
+            String str_new = StringUtils.fill("1", true, 'A', 6);
             Assert.assertEquals("AAAAA1", str_new);
         }
         {
-            String str_new = StringUtils.fill("1", true, 'A', 6);
+            String str_new = StringUtils.fill("1", false, 'A', 6);
             Assert.assertEquals("1AAAAA", str_new);
         }
     }
