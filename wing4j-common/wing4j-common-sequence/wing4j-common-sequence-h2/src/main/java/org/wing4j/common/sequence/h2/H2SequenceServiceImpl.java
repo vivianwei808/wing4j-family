@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 import org.wing4j.common.sequence.SequenceService;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -23,13 +24,23 @@ public class H2SequenceServiceImpl implements SequenceService, InitializingBean 
 
     @Override
     public int nextval(String schema, String prefix, String sequenceName, String feature) {
+        Connection connection = null;
         try {
-            String db = jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName();
+            connection = jdbcTemplate.getDataSource().getConnection();
+            String db = connection.getMetaData().getDatabaseProductName();
             if (!"H2".equals(db)) {
                 throw new IllegalArgumentException("数据库不运行在H2上");
             }
         } catch (SQLException e) {
             log.error("", e);
+        }finally {
+            if(connection != null){
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         String seqName = "seq_" + schema + "_" + prefix + "_" + sequenceName + "_" + feature;
         seqName = seqName.toLowerCase();
@@ -43,13 +54,23 @@ public class H2SequenceServiceImpl implements SequenceService, InitializingBean 
 
     @Override
     public int curval(String schema, String prefix, String sequenceName, String feature) {
+        Connection connection = null;
         try {
-            String db = jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName();
+            connection = jdbcTemplate.getDataSource().getConnection();
+            String db = connection.getMetaData().getDatabaseProductName();
             if (!"H2".equals(db)) {
                 throw new IllegalArgumentException("数据库不运行在H2上");
             }
         } catch (SQLException e) {
             log.error("", e);
+        }finally {
+            if(connection != null){
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         String seqName = "seq_" + schema + "_" + prefix + "_" + sequenceName + "_" + feature;

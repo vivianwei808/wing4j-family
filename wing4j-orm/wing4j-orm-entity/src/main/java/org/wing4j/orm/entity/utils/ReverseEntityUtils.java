@@ -44,7 +44,7 @@ public class ReverseEntityUtils {
             String engine = resultSet.getString("table_engine");
             String autoIncrement = resultSet.getString("auto_increment");
             String comment = resultSet.getString("table_comment");
-            TableMetadata tableMetadata = TableMetadata.builder().tableName(name).className(StringUtils.firstCharToUpper(StringUtils.underlineToCamel(name))).dataEngine(engine).comment(comment).schema(shcema).build();
+            TableMetadata tableMetadata = TableMetadata.builder().tableName(name).className(StringUtils.firstCharToUpper(StringUtils.underlineToCamel(name)) + "Entity").dataEngine(engine).comment(comment).schema(shcema).build();
             reverse(tableMetadata, shcema, connection);
             tableMetadatas.add(tableMetadata);
         }

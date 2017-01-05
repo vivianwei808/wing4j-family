@@ -109,9 +109,9 @@ public class Main {
         } else if (cmd.equals("reverse")) {
             String packageName = command.valueString("package");
             String schema = command.valueString("schema");
-            String h = command.valueString("h");
-            String u = command.valueString("u");
-            String p = command.valueString("p");
+            String h = command.valueString("url");
+            String u = command.valueString("username");
+            String p = command.valueString("password");
             if (packageName == null) {
                 System.out.println("package is empty!");
                 return false;
