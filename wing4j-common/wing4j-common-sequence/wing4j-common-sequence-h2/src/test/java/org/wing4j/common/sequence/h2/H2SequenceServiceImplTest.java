@@ -21,39 +21,43 @@ public class H2SequenceServiceImplTest {
     @Test
     public void testNextval(){
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j1", "fa", "testCurval", "fixed");
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j1", "fa", "testCurval", "fixed");
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed1");
+            int seq = sequenceService.nextval("wing4j1", "fa", "testCurval", "fixed1");
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO1", "fixed1");
-            Assert.assertEquals(1, seq);
+            int seq = sequenceService.nextval("wing4j", "fa", "testCurval", "fixed");
+            Assert.assertEquals(3, seq);
         }
     }
 
     @Test
     public void testCurval() throws Exception {
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j", "fa", "testCurval", "fixed");
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "testCurval", "fixed");
+            Assert.assertEquals(1, seq);
+        }
+        {
+            int seq = sequenceService.nextval("wing4j", "fa", "testCurval", "fixed");
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "testCurval", "fixed");
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "testCurval", "fixed");
             Assert.assertEquals(2, seq);
         }
     }

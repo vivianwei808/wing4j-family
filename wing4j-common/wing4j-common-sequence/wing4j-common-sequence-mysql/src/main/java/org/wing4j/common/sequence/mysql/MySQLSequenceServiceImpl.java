@@ -10,7 +10,10 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.Assert;
+import org.wing4j.common.logtrack.BaseRuntimeException;
+import org.wing4j.common.logtrack.ErrorContextFactory;
 import org.wing4j.common.sequence.SequenceService;
+import org.wing4j.common.utils.StringUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,15 +37,15 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
      * create-table sql script
      * primary key is order, seq_name, seq_feature, seq_value is fixed!
      */
-    static String SQL_CREATE_TABLE = "create table if not exists {0}{1}_sequence_inf(seq_value int not null auto_increment, seq_name varchar(50) not null, seq_feature varchar(50) not null, primary key(seq_name, seq_feature, seq_value)) ENGINE=MyISAM auto_increment=1";
+    static String SQL_CREATE_TABLE = "create table if not exists {}{}_sequence_inf(seq_value int not null auto_increment, seq_name varchar(50) not null, seq_feature varchar(50) not null, primary key(seq_name, seq_feature, seq_value)) ENGINE=MyISAM auto_increment=1";
     /**
      * nextval sql script
      */
-    static String SQL_NEXTVAL = "insert into {0}{1}_sequence_inf(seq_name, seq_feature) values(?,?)";
+    static String SQL_NEXTVAL = "insert into {}{}_sequence_inf(seq_name, seq_feature) values(?,?)";
     /**
      * curval sql script
      */
-    static String SQL_CURVAL = "select max(seq_value) from {0}{1}_sequence_inf where seq_name=? and seq_feature=?";
+    static String SQL_CURVAL = "select max(seq_value) from {}{}_sequence_inf where seq_name=? and seq_feature=?";
 
     @Override
     public int nextval(String schema, String prefix, final String sequenceName, final String feature) {
@@ -57,7 +60,7 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
         final String sql = MessageFormat.format(SQL_NEXTVAL, schema, prefix);
         log.debug(sql);
         if (this.autoCreate) {
-            jdbcTemplate.execute(MessageFormat.format(SQL_CREATE_TABLE, schema, prefix));
+            jdbcTemplate.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
         }
         try {
             KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
@@ -72,10 +75,11 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
             }, generatedKeyHolder);
             return generatedKeyHolder.getKey().intValue();
         } catch (DataAccessException e) {
-            //进行异常处理,打印建表语句
-            log.error("use MySQL MyISAM engine nextval happens error!", e);
-            log.error("please in MySQL database execute this sql script：{}", MessageFormat.format(SQL_CREATE_TABLE, schema, prefix));
-            throw e;
+            throw new BaseRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService generate nextval")
+                    .message("use MySQL MyISAM engine nextval happens error!")
+                    .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))
+                    .cause(e));
         }
     }
 
@@ -90,16 +94,17 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
             prefix = "wing4j";
         }
         if (this.autoCreate) {
-            jdbcTemplate.execute(MessageFormat.format(SQL_CREATE_TABLE, schema, prefix));
+            jdbcTemplate.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
         }
         try {
-            int seq = jdbcTemplate.queryForObject(MessageFormat.format(SQL_CURVAL, schema, prefix), new Object[]{sequenceName, feature}, Integer.class);
+            int seq = jdbcTemplate.queryForObject(StringUtils.format(SQL_CURVAL, schema, prefix), new Object[]{sequenceName, feature}, Integer.class);
             return seq;
         } catch (DataAccessException e) {
-            //进行异常处理,打印建表语句
-            log.error("use MySQL MyISAM engine curval happens error!", e);
-            log.error("please in MySQL database execute this sql script：{}", MessageFormat.format(SQL_CREATE_TABLE, schema, prefix));
-            throw e;
+            throw new BaseRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService generate nextval")
+                    .message("use MySQL MyISAM engine nextval happens error!")
+                    .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))
+                    .cause(e));
         }
     }
 

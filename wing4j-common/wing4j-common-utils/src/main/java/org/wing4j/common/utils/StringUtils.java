@@ -123,4 +123,14 @@ public abstract class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static String safeToString(Object in) {
         return safeToString(in, null);
     }
+
+    /**
+     * 使用{}占位符的字符串，并进行替换
+     * @param format 带占位符的字符串
+     * @param args 参数
+     * @return 替换完成的信息
+     */
+    public static String format(String format, Object... args){
+        return MessageFormatter.format(format, args);
+    }
 }

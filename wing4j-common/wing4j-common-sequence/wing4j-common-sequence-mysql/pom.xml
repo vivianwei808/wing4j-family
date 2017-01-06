@@ -17,6 +17,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>org.wing4j</groupId>
+            <artifactId>wing4j-common-logtrack</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <scope>provided</scope>
@@ -55,4 +60,15 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

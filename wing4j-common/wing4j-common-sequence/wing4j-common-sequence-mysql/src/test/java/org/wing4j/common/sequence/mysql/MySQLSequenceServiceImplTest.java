@@ -41,6 +41,10 @@ public class MySQLSequenceServiceImplTest {
     @Test
     public void testCurval() throws Exception {
         {
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            Assert.assertEquals(1, seq);
+        }
+        {
             int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
             Assert.assertEquals(1, seq);
         }

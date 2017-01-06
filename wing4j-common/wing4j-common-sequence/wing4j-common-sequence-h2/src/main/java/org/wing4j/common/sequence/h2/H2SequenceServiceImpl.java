@@ -6,6 +6,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
+import org.wing4j.common.logtrack.BaseRuntimeException;
+import org.wing4j.common.logtrack.ErrorContextFactory;
 import org.wing4j.common.sequence.SequenceService;
 
 import java.sql.Connection;
@@ -29,16 +31,27 @@ public class H2SequenceServiceImpl implements SequenceService, InitializingBean 
             connection = jdbcTemplate.getDataSource().getConnection();
             String db = connection.getMetaData().getDatabaseProductName();
             if (!"H2".equals(db)) {
-                throw new IllegalArgumentException("数据库不运行在H2上");
+                throw new BaseRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is {}, {} can not run on other database", db, this.getClass().getSimpleName())
+                        .solution("please check if use H2 database in pom.xml"));
             }
         } catch (SQLException e) {
-            log.error("", e);
-        }finally {
-            if(connection != null){
+            throw new BaseRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService generate nextval")
+                    .message("nextval happens a error, cause current database is h2, {} can not run on other database", this.getClass().getSimpleName())
+                    .solution("please check if use H2 database in pom.xml")
+                    .cause(e));
+        } finally {
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new BaseRuntimeException(ErrorContextFactory.instance()
+                            .activity("use SequenceService generate nextval")
+                            .message("nextval happens a error, cause current database is h2, {} can not run on other database", this.getClass().getSimpleName())
+                            .solution("please check if use H2 database in pom.xml")
+                            .cause(e));
                 }
             }
         }
@@ -59,16 +72,27 @@ public class H2SequenceServiceImpl implements SequenceService, InitializingBean 
             connection = jdbcTemplate.getDataSource().getConnection();
             String db = connection.getMetaData().getDatabaseProductName();
             if (!"H2".equals(db)) {
-                throw new IllegalArgumentException("数据库不运行在H2上");
+                throw new BaseRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is {}, {} can not run on other database", db, this.getClass().getSimpleName())
+                        .solution("please check if use H2 database in pom.xml"));
             }
         } catch (SQLException e) {
-            log.error("", e);
-        }finally {
-            if(connection != null){
+            throw new BaseRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService generate nextval")
+                    .message("nextval happens a error, cause current database is h2, {} can not run on other database", this.getClass().getSimpleName())
+                    .solution("please check if use H2 database in pom.xml")
+                    .cause(e));
+        } finally {
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new BaseRuntimeException(ErrorContextFactory.instance()
+                            .activity("use SequenceService generate nextval")
+                            .message("nextval happens a error, cause current database is h2, {} can not run on other database", this.getClass().getSimpleName())
+                            .solution("please check if use H2 database in pom.xml")
+                            .cause(e));
                 }
             }
         }
