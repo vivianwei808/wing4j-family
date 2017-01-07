@@ -4,9 +4,9 @@
 
  **wing4j家族**
 1. wing4j common
-2. wing4j orm
-3. wing4j test
-4. wing4j toolkit
+2. [wing4j orm](http://git.oschina.net/wing4j/wing4j-family/wikis/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8wing4j-orm)
+3. [wing4j test](http://git.oschina.net/wing4j/wing4j-family/wikis/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8wing4j-test)
+4. [wing4j toolkit](http://git.oschina.net/wing4j/wing4j-family/wikis/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8wing4j-toolkit)
 
  **wing4j common** 
 提供开发过程中的公共程序，日志跟踪模块，序号服务生成服务。 
