@@ -15,6 +15,6 @@ public class ReverseEntityUtilsTest {
     @Test
     public void testGenerateFormDatabase() throws Exception {
         List<TableMetadata> tables = ReverseEntityUtils.reverseFormDatabase("wing4j", "jdbc:mysql://192.168.1.106:3306/wing4j", "root", "root");
-
+        System.out.println(tables);
     }
 }

@@ -56,7 +56,7 @@ public class ReverseEntityUtils {
 
     public static void reverse(TableMetadata tableMetadata, String schema, Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
-        String sql = "select cols.column_name as column_name, cols.column_default as column_default, cols.is_nullable as is_nullable, cols.data_type as data_type, cols.column_type as column_type, extra as extra, cols.column_key as column_key, cols.column_comment as column_comment from information_schema.columns cols where cols.table_schema = '" + schema + "' and table_name = '"+ tableMetadata.getTableName() +"'order by cols.ordinal_position";
+        String sql = "select cols.column_name as column_name, cols.column_default as column_default, cols.is_nullable as is_nullable, cols.data_type as data_type, cols.column_type as column_type, extra as extra, cols.column_key as column_key, cols.column_comment as column_comment from information_schema.columns cols where cols.table_schema = '" + schema + "' and table_name = '"+ tableMetadata.getTableName() +"' order by cols.ordinal_position";
         //执行数据SQL获取表字段信息
         boolean succ = statement.execute(sql);
         ResultSet resultSet = statement.getResultSet();
@@ -64,24 +64,30 @@ public class ReverseEntityUtils {
             String column_name = resultSet.getString("column_name");
             String column_default = resultSet.getString("column_default");
             String is_nullable = resultSet.getString("is_nullable");
-            String data_type = resultSet.getString("data_type");
+            String jdbc_type = resultSet.getString("data_type");
             String extra = resultSet.getString("extra");
-            String column_type = resultSet.getString("column_type");
+            String dataType = resultSet.getString("column_type");
             String column_key = resultSet.getString("column_key");
             String column_comment = resultSet.getString("column_comment");
 
-            if(data_type.equals("int")){
-                data_type = "NUMERIC";
-            }else if(data_type.equals("decimal")){
-                data_type = "DECIMAL";
+            if(jdbc_type.equals("int")){
+                jdbc_type = "NUMERIC";
+                dataType = "INTEGER";
+            }else if(jdbc_type.equals("tinyint")){
+                jdbc_type = "NUMERIC";
+                dataType = "TINYINT";
+            }else if(jdbc_type.equals("decimal")){
+                jdbc_type = "DECIMAL";
+            }else if(jdbc_type.equals("datetime")){
+                jdbc_type = "TIMESTAMP";
             }
             ColumnMetadata.ColumnMetadataBuilder builder = ColumnMetadata.builder()
                     .tableMetadata(tableMetadata)
                     .jdbcName(column_name.toUpperCase())
                     .defaultValue(column_default)
                     .nullable("YES".equals(is_nullable))
-                    .jdbcType(data_type.toUpperCase())
-                    .dataType(column_type.toUpperCase())
+                    .jdbcType(jdbc_type.toUpperCase())
+                    .dataType(dataType.toUpperCase())
                     .comment(column_comment);
             //如果是主键则添加到主键列表中
             if(column_key != null && "PRI".equalsIgnoreCase(column_key)){
