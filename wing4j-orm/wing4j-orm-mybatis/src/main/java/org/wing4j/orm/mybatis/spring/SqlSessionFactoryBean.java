@@ -78,163 +78,62 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
 
     private ObjectWrapperFactory objectWrapperFactory;
 
-    /**
-     * Sets the ObjectFactory.
-     *
-     * @param objectFactory
-     * @since 1.1.2
-     */
     public void setObjectFactory(ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
     }
 
-    /**
-     * Sets the ObjectWrapperFactory.
-     *
-     * @param objectWrapperFactory
-     * @since 1.1.2
-     */
     public void setObjectWrapperFactory(ObjectWrapperFactory objectWrapperFactory) {
         this.objectWrapperFactory = objectWrapperFactory;
     }
 
-    /**
-     * Gets the DatabaseIdProvider
-     *
-     * @return
-     * @since 1.1.0
-     */
     public DatabaseIdProvider getDatabaseIdProvider() {
         return databaseIdProvider;
     }
 
-    /**
-     * Sets the DatabaseIdProvider.
-     * As of version 1.2.2 this variable is not initialized by default.
-     *
-     * @param databaseIdProvider
-     * @since 1.1.0
-     */
     public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
         this.databaseIdProvider = databaseIdProvider;
     }
 
-    /**
-     * Mybatis plugin list.
-     *
-     * @param plugins list of plugins
-     * @since 1.0.1
-     */
     public void setPlugins(Interceptor[] plugins) {
         this.plugins = plugins;
     }
 
-    /**
-     * Packages to search for type aliases.
-     *
-     * @param typeAliasesPackage package to scan for domain objects
-     * @since 1.0.1
-     */
     public void setTypeAliasesPackage(String typeAliasesPackage) {
         this.typeAliasesPackage = typeAliasesPackage;
     }
 
-    /**
-     * Super class which domain objects have to extend to have a type alias created.
-     * No effect if there is no package to scan configured.
-     *
-     * @param typeAliasesSuperType super class for domain objects
-     * @since 1.1.2
-     */
     public void setTypeAliasesSuperType(Class<?> typeAliasesSuperType) {
         this.typeAliasesSuperType = typeAliasesSuperType;
     }
 
-    /**
-     * Packages to search for type handlers.
-     *
-     * @param typeHandlersPackage package to scan for type handlers
-     * @since 1.0.1
-     */
     public void setTypeHandlersPackage(String typeHandlersPackage) {
         this.typeHandlersPackage = typeHandlersPackage;
     }
 
-    /**
-     * Set type handlers. They must be annotated with {@code MappedTypes} and optionally with {@code MappedJdbcTypes}
-     *
-     * @param typeHandlers Type handler list
-     * @since 1.0.1
-     */
     public void setTypeHandlers(TypeHandler<?>[] typeHandlers) {
         this.typeHandlers = typeHandlers;
     }
 
-    /**
-     * List of type aliases to register. They can be annotated with {@code Alias}
-     *
-     * @param typeAliases Type aliases list
-     * @since 1.0.1
-     */
     public void setTypeAliases(Class<?>[] typeAliases) {
         this.typeAliases = typeAliases;
     }
 
-    /**
-     * If true, a final check is done on Configuration to assure that all mapped
-     * statements are fully loaded and there is no one still pending to resolve
-     * includes. Defaults to false.
-     *
-     * @param failFast enable failFast
-     * @since 1.0.1
-     */
     public void setFailFast(boolean failFast) {
         this.failFast = failFast;
     }
 
-    /**
-     * Set the location of the MyBatis {@code SqlSessionFactory} config file. A typical value is
-     * "WEB-INF/mybatis-configuration.xml".
-     */
     public void setConfigLocation(Resource configLocation) {
         this.configLocation = configLocation;
     }
 
-    /**
-     * Set locations of MyBatis mapper files that are going to be merged into the {@code SqlSessionFactory}
-     * configuration at runtime.
-     * <p>
-     * This is an alternative to specifying "&lt;sqlmapper&gt;" entries in an MyBatis config file.
-     * This property being based on Spring's resource abstraction also allows for specifying
-     * resource patterns here: e.g. "classpath*:sqlmap/*-mapper.xml".
-     */
     public void setMapperLocations(Resource[] mapperLocations) {
         this.mapperLocations = mapperLocations;
     }
 
-    /**
-     * Set optional properties to be passed into the SqlSession configuration, as alternative to a
-     * {@code &lt;properties&gt;} tag in the configuration xml file. This will be used to
-     * resolve placeholders in the config file.
-     */
     public void setConfigurationProperties(Properties sqlSessionFactoryProperties) {
         this.configurationProperties = sqlSessionFactoryProperties;
     }
 
-    /**
-     * Set the JDBC {@code DataSource} that this instance should manage transactions for. The {@code DataSource}
-     * should match the one used by the {@code SqlSessionFactory}: for example, you could specify the same
-     * JNDI DataSource for both.
-     * <p>
-     * A transactional JDBC {@code Connection} for this {@code DataSource} will be provided to application code
-     * accessing this {@code DataSource} directly via {@code DataSourceUtils} or {@code DataSourceTransactionManager}.
-     * <p>
-     * The {@code DataSource} specified here should be the target {@code DataSource} to manage transactions for, not
-     * a {@code TransactionAwareDataSourceProxy}. Only data access code may work with
-     * {@code TransactionAwareDataSourceProxy}, while the transaction manager needs to work on the
-     * underlying target {@code DataSource}. If there's nevertheless a {@code TransactionAwareDataSourceProxy}
-     * passed in, it will be unwrapped to extract its target {@code DataSource}.
-     */
     public void setDataSource(DataSource dataSource) {
         if (dataSource instanceof TransactionAwareDataSourceProxy) {
             // If we got a TransactionAwareDataSourceProxy, we need to perform
@@ -247,12 +146,7 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         }
     }
 
-    /**
-     * Sets the {@code SqlSessionFactoryBuilder} to use when creating the {@code SqlSessionFactory}.
-     * <p>
-     * This is mainly meant for testing so that mock SqlSessionFactory classes can be injected. By
-     * default, {@code SqlSessionFactoryBuilder} creates {@code DefaultSqlSessionFactory} instances.
-     */
+
     public void setSqlSessionFactoryBuilder(SqlSessionFactoryBuilder sqlSessionFactoryBuilder) {
         this.sqlSessionFactoryBuilder = sqlSessionFactoryBuilder;
     }
@@ -261,20 +155,11 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         this.transactionFactory = transactionFactory;
     }
 
-    /**
-     * <b>NOTE:</b> This class <em>overrides</em> any {@code Environment} you have set in the MyBatis
-     * config file. This is used only as a placeholder name. The default value is
-     * {@code SqlSessionFactoryBean.class.getSimpleName()}.
-     *
-     * @param environment the environment name
-     */
+
     public void setEnvironment(String environment) {
         this.environment = environment;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void afterPropertiesSet() throws Exception {
         notNull(dataSource, "Property 'dataSource' is required");
@@ -283,15 +168,7 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         this.sqlSessionFactory = buildSqlSessionFactory();
     }
 
-    /**
-     * Build a {@code SqlSessionFactory} instance.
-     * <p>
-     * The default implementation uses the standard MyBatis {@code XMLConfigBuilder} API to build a
-     * {@code SqlSessionFactory} instance based on an Reader.
-     *
-     * @return SqlSessionFactory
-     * @throws IOException if loading the config file failed
-     */
+
     protected SqlSessionFactory buildSqlSessionFactory() throws IOException {
 
         Configuration configuration;
@@ -423,9 +300,6 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         return this.sqlSessionFactoryBuilder.build(configuration);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public SqlSessionFactory getObject() throws Exception {
         if (this.sqlSessionFactory == null) {
@@ -435,25 +309,18 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         return this.sqlSessionFactory;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Class<? extends SqlSessionFactory> getObjectType() {
         return this.sqlSessionFactory == null ? SqlSessionFactory.class : this.sqlSessionFactory.getClass();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean isSingleton() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (failFast && event instanceof ContextRefreshedEvent) {

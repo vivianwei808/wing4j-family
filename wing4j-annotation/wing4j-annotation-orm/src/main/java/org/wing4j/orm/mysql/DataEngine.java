@@ -12,5 +12,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataEngine {
+    /**
+     * 数据引擎
+     * @return 数据引擎
+     */
     DataEngineType value() default DataEngineType.Auto;
 }

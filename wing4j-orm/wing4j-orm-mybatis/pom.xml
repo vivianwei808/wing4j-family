@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-orm</artifactId>
         <groupId>org.wing4j</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>wing4j-orm-mybatis</artifactId>
     <description>This is the wing4j-orm member wing4j-orm-mybatis</description>
@@ -21,12 +21,12 @@
         <dependency>
             <groupId>org.wing4j</groupId>
             <artifactId>wing4j-orm-api</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j</groupId>
             <artifactId>wing4j-orm-entity</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j</groupId>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.wing4j</groupId>
             <artifactId>wing4j-orm-test</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>

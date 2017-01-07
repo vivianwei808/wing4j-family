@@ -14,14 +14,14 @@ public @interface NumberColumn {
     /**
      * 字段名称
      *
-     * @return
+     * @return 字段名称
      */
     String name() default "";
 
     /**
      * 是否允许为空
      *
-     * @return
+     * @return 是否允许为空
      */
     boolean nullable() default true;
 
@@ -32,17 +32,19 @@ public @interface NumberColumn {
     String defaultValue() default "";
     /**
      * 数字小数部分
+     * @return 数字小数部分精度
      */
     int precision() default 0;
 
     /**
      * 整数部分
+     * @return 整数部分精度
      */
     int scale() default 0;
 
     /**
      * 数字类型
-     * @return
+     * @return 数字类型
      */
     NumberType type() default NumberType.INTEGER;
 }

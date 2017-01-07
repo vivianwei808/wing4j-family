@@ -74,159 +74,67 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         this.basePackage = basePackage;
     }
 
-    /**
-     * Same as {@code MapperFactoryBean#setAddToConfig(boolean)}.
-     *
-     * @param addToConfig
-     * @see MapperFactoryBean#setAddToConfig(boolean)
-     */
+
     public void setAddToConfig(boolean addToConfig) {
         this.addToConfig = addToConfig;
     }
 
-    /**
-     * This property specifies the annotation that the scanner will search for.
-     * <p>
-     * The scanner will register all interfaces in the base package that also have the
-     * specified annotation.
-     * <p>
-     * Note this can be combined with markerInterface.
-     *
-     * @param annotationClass annotation class
-     */
+
     public void setAnnotationClass(Class<? extends Annotation> annotationClass) {
         this.annotationClass = annotationClass;
     }
 
-    /**
-     * This property specifies the parent that the scanner will search for.
-     * <p>
-     * The scanner will register all interfaces in the base package that also have the
-     * specified interface class as a parent.
-     * <p>
-     * Note this can be combined with annotationClass.
-     *
-     * @param superClass parent class
-     */
     public void setMarkerInterface(Class<?> superClass) {
         this.markerInterface = superClass;
     }
 
-    /**
-     * Specifies which {@code SqlSessionTemplate} to use in the case that there is
-     * more than one in the spring context. Usually this is only needed when you
-     * have more than one datasource.
-     * <p>
-     * Note bean names are used, not bean references. This is because the scanner
-     * loads early during the start process and it is too early to build mybatis
-     * object instances.
-     *
-     * @since 1.1.0
-     *
-     * @param sqlSessionTemplateName Bean name of the {@code SqlSessionTemplate}
-     */
     public void setSqlSessionTemplateBeanName(String sqlSessionTemplateName) {
         this.sqlSessionTemplateBeanName = sqlSessionTemplateName;
     }
 
-    /**
-     * Specifies which {@code SqlSessionFactory} to use in the case that there is
-     * more than one in the spring context. Usually this is only needed when you
-     * have more than one datasource.
-     * <p>
-     * @deprecated Use {@link #setSqlSessionFactoryBeanName(String)} instead.
-     *
-     * @param sqlSessionFactory
-     */
+
     @Deprecated
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
         this.sqlSessionFactory = sqlSessionFactory;
     }
 
-    /**
-     * Specifies which {@code SqlSessionFactory} to use in the case that there is
-     * more than one in the spring context. Usually this is only needed when you
-     * have more than one datasource.
-     * <p>
-     * Note bean names are used, not bean references. This is because the scanner
-     * loads early during the start process and it is too early to build mybatis
-     * object instances.
-     *
-     * @since 1.1.0
-     *
-     * @param sqlSessionFactoryName Bean name of the {@code SqlSessionFactory}
-     */
+
     public void setSqlSessionFactoryBeanName(String sqlSessionFactoryName) {
         this.sqlSessionFactoryBeanName = sqlSessionFactoryName;
     }
 
-    /**
-     *
-     * @since 1.1.1
-     *
-     * @param processPropertyPlaceHolders
-     */
     public void setProcessPropertyPlaceHolders(boolean processPropertyPlaceHolders) {
         this.processPropertyPlaceHolders = processPropertyPlaceHolders;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setBeanName(String name) {
         this.beanName = name;
     }
 
-    /**
-     * Gets beanNameGenerator to be used while running the scanner.
-     *
-     * @return the beanNameGenerator BeanNameGenerator that has been configured
-     * @since 1.2.0
-     */
     public BeanNameGenerator getNameGenerator() {
         return nameGenerator;
     }
 
-    /**
-     * Sets beanNameGenerator to be used while running the scanner.
-     *
-     * @param nameGenerator the beanNameGenerator to set
-     * @since 1.2.0
-     */
     public void setNameGenerator(BeanNameGenerator nameGenerator) {
         this.nameGenerator = nameGenerator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void afterPropertiesSet() throws Exception {
         notNull(this.basePackage, "Property 'basePackage' is required");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         // left intentionally blank
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @since 1.0.2
-     */
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
         if (this.processPropertyPlaceHolders) {
@@ -256,13 +164,6 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
     }
 
-    /*
-     * BeanDefinitionRegistries are called early in application startup, before
-     * BeanFactoryPostProcessors. This means that PropertyResourceConfigurers will not have been
-     * loaded and any property substitution of this class' properties will fail. To avoid this, find
-     * any PropertyResourceConfigurers defined in the context and run them on this class' bean
-     * definition. Then update the value.
-     */
     private void processPropertyPlaceHolders() {
         Map<String, PropertyResourceConfigurer> prcs = applicationContext.getBeansOfType(PropertyResourceConfigurer.class);
 

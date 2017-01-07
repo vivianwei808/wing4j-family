@@ -6,8 +6,8 @@
         <artifactId>wing4j-parent</artifactId>
         <version>1.0.0</version>
     </parent>
-    <groupId>org.wing4j</groupId>
     <artifactId>wing4j-family</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
     <name>wing4j-family</name>
     <packaging>pom</packaging>
     <description>This is the wing4j-family</description>
@@ -23,7 +23,15 @@
         <module>wing4j-common</module>
         <module>wing4j-orm</module>
         <module>wing4j-test</module>
-        <module>wing4j-demo</module>
         <module>wing4j-toolkit</module>
+        <module>wing4j-demo</module>
     </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

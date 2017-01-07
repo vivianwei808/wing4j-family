@@ -27,28 +27,9 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static javax.persistence.TemporalType.TIMESTAMP;
 
-/**
- * This annotation must be specified for persistent fields 
- * or properties of type {@link java.util.Date} and {@link 
- * java.util.Calendar}. It may only be specified for fields 
- * or properties of these types.
- * 
- * <p> The <code>Temporal</code> annotation may be used in 
- * conjunction with the {@link Basic} annotation.
- *
- * <pre>
- *     Example:
- * 
- *     &#064;Temporal(DATE)
- *     protected java.util.Date endDate;
- * </pre>
- *
- * @since Java Persistence 1.0
- */
 @Target({METHOD, FIELD}) 
 @Retention(RUNTIME)
 public @interface Temporal {
 
-    /** The type used in mapping java.util.Date or java.util.Calendar. */
     TemporalType value();
 }

@@ -41,7 +41,7 @@ public @interface StringColumn {
     /**
      * 字段数据类型
      *
-     * @return
+     * @return 数据类型
      */
     StringType type() default StringType.VARCHAR;
 }

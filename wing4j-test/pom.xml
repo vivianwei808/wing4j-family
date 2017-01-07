@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.wing4j</groupId>
-        <artifactId>wing4j-parent</artifactId>
-        <version>1.0.0</version>
+        <artifactId>wing4j-family</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <groupId>org.wing4j</groupId>
     <artifactId>wing4j-test</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>wing4j-test</name>
     <modules>
@@ -20,37 +20,32 @@
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-annotation-orm</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-annotation-test</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-common-utils</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wing4j</groupId>
-                <artifactId>wing4j-orm-test</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-orm-entity</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-orm-mybatis</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wing4j</groupId>
                 <artifactId>wing4j-orm-test</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

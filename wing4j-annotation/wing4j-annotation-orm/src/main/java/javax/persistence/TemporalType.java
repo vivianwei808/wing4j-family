@@ -22,12 +22,6 @@
  */
 package javax.persistence;
 
-/**
- * Type used to indicate a specific mapping of {@link java.util.Date} 
- * or {@link java.util.Calendar}.
- *
- * @since Java Persistence 1.0
- */
 public enum TemporalType {
 
     /** Map as java.sql.Date */

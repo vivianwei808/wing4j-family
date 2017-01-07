@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.wing4j</groupId>
         <artifactId>wing4j-common</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>wing4j-common-utils</artifactId>
     <name>wing4j-common-utils</name>

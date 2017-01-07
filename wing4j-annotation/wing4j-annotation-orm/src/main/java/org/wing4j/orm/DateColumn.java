@@ -33,7 +33,7 @@ public @interface DateColumn {
     /**
      * 字段数据类型
      *
-     * @return
+     * @return 数据类型
      */
     DateType type() default DateType.TIMESTAMP;
 }
