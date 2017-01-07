@@ -46,7 +46,7 @@ public class UpdateByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         final Executor executor = config.newExecutor(transaction);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
@@ -65,7 +65,7 @@ public class UpdateByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         demoEntity.setCol2(BigDecimal.ZERO);
         demoEntity.setCol3(2);
 
-        MappedStatementBuilder builder = new UpdateByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+        MappedStatementBuilder builder = new UpdateByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
         MappedStatement ms = builder.build();
         config.addMappedStatement(ms);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

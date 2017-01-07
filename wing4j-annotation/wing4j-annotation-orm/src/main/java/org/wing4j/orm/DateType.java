@@ -15,5 +15,9 @@ public enum DateType {
     /**
      * 保存时间戳
      */
-    TIMESTAMP
+    TIMESTAMP,
+    /**
+     * 无时区年月日时分秒
+     */
+    DATETIME
 }

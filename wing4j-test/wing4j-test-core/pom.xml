@@ -2,7 +2,7 @@
                    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 <modelVersion>4.0.0</modelVersion>
 <parent>
-    <groupId>org.wing4j</groupId>
+    <groupId>org.wing4j.test</groupId>
     <artifactId>wing4j-test</artifactId>
     <version>1.0.1-SNAPSHOT</version>
 </parent>
@@ -10,7 +10,7 @@
 <name>wing4j-test-core</name>
 <dependencies>
     <dependency>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.test</groupId>
         <artifactId>wing4j-test-util</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </dependency>
@@ -37,16 +37,16 @@
         <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.orm</groupId>
         <artifactId>wing4j-orm-test</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.annotation</groupId>
         <artifactId>wing4j-annotation-orm</artifactId>
     </dependency>
     <dependency>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.orm</groupId>
         <artifactId>wing4j-orm-mybatis</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </dependency>

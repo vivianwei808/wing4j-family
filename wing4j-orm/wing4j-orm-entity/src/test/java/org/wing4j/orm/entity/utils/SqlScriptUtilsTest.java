@@ -3,6 +3,7 @@ package org.wing4j.orm.entity.utils;
 import org.junit.Test;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.TableMetadata;
+import org.wing4j.orm.entity.utils.wing4j.NormalWing4jDemoEntity;
 
 import java.io.ByteArrayOutputStream;
 
@@ -14,7 +15,7 @@ public class SqlScriptUtilsTest {
     @Test
     public void testGenerateCreateTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
         SqlScriptUtils.generateCreateTable(os, tableMetadata, "", null, WordMode.lowerCase, WordMode.lowerCase, true);
         System.out.println(os.toString());
     }
@@ -22,7 +23,7 @@ public class SqlScriptUtilsTest {
     @Test
     public void testGenerateDropTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
         SqlScriptUtils.generateDropTable(os, tableMetadata, null, WordMode.lowerCase, WordMode.lowerCase, true);
         System.out.println(os.toString());
     }
@@ -30,7 +31,7 @@ public class SqlScriptUtilsTest {
     @Test
     public void testGenerateTruncateTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
         SqlScriptUtils.generateTruncateTable(os, tableMetadata, null, WordMode.lowerCase, WordMode.lowerCase);
         System.out.println(os.toString());
     }

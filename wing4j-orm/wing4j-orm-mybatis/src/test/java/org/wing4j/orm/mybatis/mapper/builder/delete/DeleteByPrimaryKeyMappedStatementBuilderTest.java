@@ -42,7 +42,7 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             DemoEntity demoEntity = new DemoEntity();
@@ -54,7 +54,7 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
             Assert.assertEquals(1, cnt);
         }
         {
-            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             int cnt = sqlSession.delete(Constants.DELETE_BY_PRIMARY_KEY, serialNo);
@@ -75,7 +75,7 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             DemoEntity demoEntity = new DemoEntity();
@@ -87,7 +87,7 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
             Assert.assertEquals(1, cnt);
         }
         {
-            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             int cnt = sqlSession.delete(Constants.DELETE_BY_PRIMARY_KEY, serialNo);

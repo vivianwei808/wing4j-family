@@ -26,14 +26,14 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
  * Created by wing4j on 2016/12/18.
  */
 public class LockByForUpdateOrMappedStatementBuilder extends MappedStatementBuilder {
-    public LockByForUpdateOrMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode);
+    public LockByForUpdateOrMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
     }
 
     @Override
     public MappedStatement build() {
         TypeHandlerRegistry registry = config.getTypeHandlerRegistry();
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, strictWing4j);
         Map<String, ColumnMetadata> fields = tableMetadata.getColumnMetadatas();
         String select = convert("SELECT", keywordMode);
         String from = convert("FROM", keywordMode);

@@ -6,7 +6,7 @@
         <artifactId>wing4j-family</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>org.wing4j</groupId>
+    <groupId>org.wing4j.test</groupId>
     <artifactId>wing4j-test</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -18,32 +18,32 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.annotation</groupId>
                 <artifactId>wing4j-annotation-orm</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.annotation</groupId>
                 <artifactId>wing4j-annotation-test</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.common</groupId>
                 <artifactId>wing4j-common-utils</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.orm</groupId>
                 <artifactId>wing4j-orm-entity</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.orm</groupId>
                 <artifactId>wing4j-orm-mybatis</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.wing4j</groupId>
+                <groupId>org.wing4j.test</groupId>
                 <artifactId>wing4j-orm-test</artifactId>
                 <version>1.0.1-SNAPSHOT</version>
             </dependency>

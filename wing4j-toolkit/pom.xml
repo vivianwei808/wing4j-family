@@ -8,6 +8,7 @@
         <artifactId>wing4j-family</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
+    <groupId>org.wing4j.toolkit</groupId>
     <artifactId>wing4j-toolkit</artifactId>
     <packaging>pom</packaging>
     <modules>

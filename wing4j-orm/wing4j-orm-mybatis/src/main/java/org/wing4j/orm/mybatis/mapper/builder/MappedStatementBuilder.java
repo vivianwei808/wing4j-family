@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 @ToString
 public abstract class MappedStatementBuilder {
-    public MappedStatementBuilder(Configuration config, String namespace, Class mapperClass, Class entityClass, Class keyClass, WordMode sqlMode, WordMode keywordMode) {
+    public MappedStatementBuilder(Configuration config, String namespace, Class mapperClass, Class entityClass, Class keyClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
         this.config = config;
         this.namespace = namespace;
         this.mapperClass = mapperClass;
@@ -23,6 +23,7 @@ public abstract class MappedStatementBuilder {
         this.keyClass = keyClass;
         this.sqlMode = sqlMode;
         this.keywordMode = keywordMode;
+        this.strictWing4j = strictWing4j;
     }
 
     /**
@@ -54,6 +55,10 @@ public abstract class MappedStatementBuilder {
      * 关键字大小写模式
      */
     protected WordMode keywordMode;
+    /**
+     * 严格Wing4j注解
+     */
+    protected boolean strictWing4j;
     /**
      * 将多个节点组装成组合节点
      * @param sqlNodes 节点数组

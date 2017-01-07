@@ -29,6 +29,7 @@
         <property name="sqlMode" value="upperCase"/>
         <property name="keywordMode" value="upperCase"/>
         <property name="databaseType" value="MySQL"/>
+        <property name="strictWing4j" value="true"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
         <property name="basePackage" value="org.wing4j.orm.mybatis.spring"/>
     </bean>

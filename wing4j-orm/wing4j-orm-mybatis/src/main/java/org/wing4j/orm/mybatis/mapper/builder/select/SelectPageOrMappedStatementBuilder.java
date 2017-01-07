@@ -27,14 +27,14 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
 @Slf4j
 public class SelectPageOrMappedStatementBuilder extends MappedStatementBuilder{
 
-    public SelectPageOrMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode);
+    public SelectPageOrMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
     }
 
     @Override
     public MappedStatement build() {
         TypeHandlerRegistry registry = config.getTypeHandlerRegistry();
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, strictWing4j);
         String select = convert("SELECT", keywordMode);
         String from = convert("FROM", keywordMode);
         StringBuilder sqlBuilder = new StringBuilder();

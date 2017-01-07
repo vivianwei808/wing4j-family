@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>wing4j-toolkit</artifactId>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.toolkit</groupId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>wing4j-toolkit-cli</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.wing4j</groupId>
-            <artifactId>wing4j-orm-entity</artifactId>
+            <groupId>org.wing4j.orm</groupId>
+            <artifactId>wing4j-orm-codegen</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -47,91 +47,93 @@ import java.util.List;
  */
 public abstract class MappedStatementRegister {
     static Logger LOGGER = LoggerFactory.getLogger(MappedStatementRegister.class);
+
     /**
      * 扫描DAO接口实现的Mapper接口
+     *
      * @param configuration
      * @param daoInterface
      */
-    static void scan( Configuration configuration, Class daoInterface, WordMode sqlMode, WordMode keywordMode){
+    static void scan(Configuration configuration, Class daoInterface, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
         List<MappedStatementBuilder> builders = new ArrayList<>();
         //---------------------------新增-----------------------------------------
         if (InsertSelectiveMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new InsertSelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new InsertSelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (InsertAllMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new InsertMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new InsertMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         //---------------------------删除-----------------------------------------
         if (DeleteAndMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new DeleteAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new DeleteAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (DeleteOrMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new DeleteOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new DeleteOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (DeleteByPrimaryKeyMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new DeleteByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new DeleteByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (TruncateMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new TruncateMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new TruncateMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         //---------------------------修改-----------------------------------------
         if (UpdateByPrimaryKeyMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new UpdateByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new UpdateByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (UpdateByPrimaryKeySelectiveMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new UpdateByPrimaryKeySelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new UpdateByPrimaryKeySelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         //---------------------------查询-----------------------------------------
         if (SelectAndMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectAndMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectOrMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectByPrimaryKeyMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectAllMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectAllMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectAllMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectPageAndMappedStatementBuilder.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectPageAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectPageAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (SelectPageOrMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new SelectOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new SelectOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         //---------------------------统计-----------------------------------------
         if (CountAllMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new CountAllMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new CountAllMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (CountAndMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new CountAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new CountAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (CountOrMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new CountOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new CountOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         //---------------------------加锁-----------------------------------------
         if (LockByForUpdateAndMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new LockByForUpdateAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new LockByForUpdateAndMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (LockByForUpdateOrMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new LockByForUpdateOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new LockByForUpdateOrMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (LockByForUpdateByPrimaryKeyMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new LockByForUpdateByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new LockByForUpdateByPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
         if (LockByUpdateSetPrimaryKeyMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new LockByUpdateSetPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode));
+            builders.add(new LockByUpdateSetPrimaryKeyMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
         }
-        for (MappedStatementBuilder builder : builders){
+        for (MappedStatementBuilder builder : builders) {
             MappedStatement ms = builder.build();
             String id = ms.getId();
-            if(configuration.hasStatement(id)){
+            if (configuration.hasStatement(id)) {
                 LOGGER.error("Mybatis has existed MappedStatement id:{0},but now override...", id);
-            }else{
+            } else {
                 configuration.addMappedStatement(ms);
             }
         }

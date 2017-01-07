@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>wing4j-orm</artifactId>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.orm</groupId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>wing4j-orm-api</artifactId>
@@ -19,7 +19,7 @@
     </licenses>
     <dependencies>
         <dependency>
-            <groupId>org.wing4j</groupId>
+            <groupId>org.wing4j.annotation</groupId>
             <artifactId>wing4j-annotation-orm</artifactId>
         </dependency>
     </dependencies>

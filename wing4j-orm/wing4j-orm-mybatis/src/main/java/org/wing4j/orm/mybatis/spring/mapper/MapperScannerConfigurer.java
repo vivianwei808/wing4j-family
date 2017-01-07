@@ -70,6 +70,12 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
     @Setter
     String databaseType = DatabaseType.MySQL.name();
 
+    /**
+     * 严格wing4j注解模式
+     */
+    @Setter
+    boolean strictWing4j;
+
     public void setBasePackage(String basePackage) {
         this.basePackage = basePackage;
     }
@@ -160,6 +166,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
         scanner.setSqlMode(this.sqlMode);
         scanner.setKeywordMode(this.keywordMode);
         scanner.setDatabaseType(this.databaseType);
+        scanner.setStrictWing4j(this.strictWing4j);
         scanner.registerFilters();
         scanner.scan(StringUtils.tokenizeToStringArray(this.basePackage, ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS));
     }

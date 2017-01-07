@@ -31,13 +31,13 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
  */
 @Slf4j
 public class InsertMappedStatementBuilder extends MappedStatementBuilder {
-    public InsertMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode);
+    public InsertMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
     }
 
     @Override
     public MappedStatement build() {
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, strictWing4j);
         TextSqlNode insertIntoSqlNode = new TextSqlNode(convert("INSERT INTO ", keywordMode) + convert(tableMetadata.getTableName(), keywordMode) + "(");
         List<SqlNode> heads = new ArrayList<>();
         List<SqlNode> values = new ArrayList<>();

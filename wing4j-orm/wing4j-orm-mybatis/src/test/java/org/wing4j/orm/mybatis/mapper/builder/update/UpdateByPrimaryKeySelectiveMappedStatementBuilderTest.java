@@ -42,7 +42,7 @@ public class UpdateByPrimaryKeySelectiveMappedStatementBuilderTest extends BaseT
         final Executor executor = config.newExecutor(transaction);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
@@ -59,7 +59,7 @@ public class UpdateByPrimaryKeySelectiveMappedStatementBuilderTest extends BaseT
         demoEntity.setSerialNo(serialNo);
         demoEntity.setCol2(new BigDecimal("12324"));
 
-        MappedStatementBuilder builder = new UpdateByPrimaryKeySelectiveMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase);
+        MappedStatementBuilder builder = new UpdateByPrimaryKeySelectiveMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
         MappedStatement ms = builder.build();
         config.addMappedStatement(ms);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

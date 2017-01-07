@@ -33,7 +33,7 @@ public class CreateTableTestExecutionListener extends AbstractTestExecutionListe
             WordMode keywordMode = createTable.keywordMode();
             for (Class clazz : clazzs) {
                 JdbcTemplate jdbcTemplate = testContext.getApplicationContext().getBean(JdbcTemplate.class);
-                if (drop && DevDataSourceType.h2DataSource.name().equals(dsn)) {
+                if (drop) {
                     String dropSql = SqlScriptUtils.generateDropTable(clazz, "", sqlMode, keywordMode, drop);
                     jdbcTemplate.execute(dropSql);
                 }

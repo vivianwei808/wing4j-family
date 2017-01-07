@@ -48,7 +48,7 @@ public class SelectPageAndMappedStatementBuilderTest extends BaseTest {
         Transaction transaction = new SpringManagedTransaction(dataSource);
         final Executor executor = config.newExecutor(transaction);
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
@@ -93,7 +93,7 @@ public class SelectPageAndMappedStatementBuilderTest extends BaseTest {
         config.addInterceptor(new PaginationStage2Interceptor());
         {
 
-            MappedStatementBuilder builder = new SelectPageAndMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+            MappedStatementBuilder builder = new SelectPageAndMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

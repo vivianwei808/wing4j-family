@@ -28,6 +28,11 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
     @Setter
     String keywordMode = WordMode.lowerCase.name();
     /**
+     * 严格wing4j注解模式
+     */
+    @Setter
+    boolean strictWing4j;
+    /**
      * 数据库类型
      */
     @Setter
@@ -66,7 +71,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
         configuration.addInterceptor(new PaginationStage1Interceptor(databaseType0));
         configuration.addInterceptor(new PaginationStage2Interceptor());
 
-        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0);
+        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0, strictWing4j);
         if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
             try {
                 configuration.addMapper(this.mapperInterface);

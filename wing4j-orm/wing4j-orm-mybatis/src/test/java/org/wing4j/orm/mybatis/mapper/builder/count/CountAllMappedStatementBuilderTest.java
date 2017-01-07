@@ -45,7 +45,7 @@ public class CountAllMappedStatementBuilderTest extends BaseTest {
         Transaction transaction = new SpringManagedTransaction(dataSource);
         final Executor executor = config.newExecutor(transaction);
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
@@ -68,7 +68,7 @@ public class CountAllMappedStatementBuilderTest extends BaseTest {
                 Assert.assertEquals(1, cnt);
             }
         }
-        MappedStatementBuilder builder = new CountAllMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase);
+        MappedStatementBuilder builder = new CountAllMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
         MappedStatement ms = builder.build();
         config.addMappedStatement(ms);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

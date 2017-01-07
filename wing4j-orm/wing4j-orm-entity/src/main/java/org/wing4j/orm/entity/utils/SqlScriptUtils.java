@@ -19,7 +19,7 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
 @Slf4j
 public abstract class SqlScriptUtils {
     public static String generateCreateTable(Class entityClass, String schema, String engine, WordMode sqlMode, WordMode keywordMode, boolean createBeforeTest) {
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, false);
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         try {
             generateCreateTable(os, tableMetadata, schema, engine, sqlMode, keywordMode, true);
@@ -80,7 +80,7 @@ public abstract class SqlScriptUtils {
                     defval = "0";
                 }
             } else if (columnMetadata.getJdbcType().startsWith("NUMERIC")) {
-                if (!columnMetadata.getAutoIncrement()) {
+                if (columnMetadata.getAutoIncrement() != null && !columnMetadata.getAutoIncrement()) {
                     if (defval == null || defval.isEmpty()) {
                         defval = "0";
                     }
@@ -96,7 +96,7 @@ public abstract class SqlScriptUtils {
             if (defval != null && !defval.isEmpty()) {
                 sql.append(convert(" DEFAULT ", keywordMode) + defval + " ");
             }
-            if (columnMetadata.getAutoIncrement()) {
+            if (columnMetadata.getAutoIncrement() != null && columnMetadata.getAutoIncrement()) {
                 sql.append(convert(" AUTO_INCREMENT ", keywordMode));
                 autoIncrementCnt++;
             }
@@ -131,7 +131,7 @@ public abstract class SqlScriptUtils {
     }
 
     public static String generateDropTable(Class entityClass, String schema, WordMode sqlMode, WordMode keywordMode, boolean dropBeforeTest) {
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, false);
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         try {
             generateDropTable(os, tableMetadata, schema, sqlMode, keywordMode, dropBeforeTest);
@@ -225,7 +225,7 @@ public abstract class SqlScriptUtils {
      * @return 列名
      */
     public static String genreateSqlHead(Class<?> entityClass, WordMode keywordMode, WordMode sqlMode, boolean newline) {
-        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass);
+        TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, false);
         StringBuilder builder = new StringBuilder();
         int index = 0;
         Map<String, ColumnMetadata> fields = tableMetadata.getColumnMetadatas();

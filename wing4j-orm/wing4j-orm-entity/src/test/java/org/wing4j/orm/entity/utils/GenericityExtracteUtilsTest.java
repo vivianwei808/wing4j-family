@@ -3,6 +3,7 @@ package org.wing4j.orm.entity.utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wing4j.orm.count.CountMapper;
+import org.wing4j.orm.entity.utils.wing4j.NormalWing4jDemoEntity;
 import org.wing4j.orm.select.SelectMapper;
 
 /**

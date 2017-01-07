@@ -5,18 +5,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>wing4j-common-sequence</artifactId>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.common</groupId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>wing4j-common-sequence-h2</artifactId>
     <dependencies>
         <dependency>
-            <groupId>org.wing4j</groupId>
+            <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-sequence-api</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.wing4j</groupId>
+            <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-logtrack</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>

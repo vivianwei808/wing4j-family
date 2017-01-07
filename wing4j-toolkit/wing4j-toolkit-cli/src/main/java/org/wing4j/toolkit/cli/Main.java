@@ -3,8 +3,10 @@ package org.wing4j.toolkit.cli;
 import jline.console.completer.Completer;
 import jline.console.completer.FileNameCompleter;
 import lombok.extern.slf4j.Slf4j;
+import org.wing4j.common.utils.MessageFormatter;
+import org.wing4j.orm.codegen.DaoCodeGen;
+import org.wing4j.orm.codegen.EntityCodeGen;
 import org.wing4j.orm.entity.metadata.TableMetadata;
-import org.wing4j.orm.entity.utils.EntityUtils;
 import org.wing4j.orm.entity.utils.ReverseEntityUtils;
 
 import java.io.BufferedReader;
@@ -93,7 +95,7 @@ public class Main {
     static void usage() {
         System.out.println("Wing4j toolkit用法:");
         HelpFormatter formmatter = new HelpFormatter();
-        formmatter.render("", commandCollection,"");
+        formmatter.render("", commandCollection, "");
     }
 
     protected boolean processCmd(Command command) {
@@ -120,9 +122,16 @@ public class Main {
                 System.out.println("schema is empty!");
                 return false;
             }
+            String headFormat = "/**\n" +
+                    " * {} \n" +
+                    " */";
+            String head = MessageFormatter.format(headFormat, "the file is using wing4j-toolkit auto codegen!");
             try {
+                String entityPackageName = packageName + ".entity";
+                String daoPackageName = packageName + ".dao";
                 List<TableMetadata> tableMetadatas = ReverseEntityUtils.reverseFormDatabase(schema, h, u, p);
-                EntityUtils.generate(tableMetadatas, packageName);
+                EntityCodeGen.generate(head, null, tableMetadatas, entityPackageName, ".");
+                DaoCodeGen.generate(head, null, tableMetadatas, daoPackageName, entityPackageName, ".");
             } catch (Exception e) {
                 log.error("逆向生成失败", e);
             }

@@ -12,7 +12,7 @@
         <module>wing4j-common-sequence-redis</module>
     </modules>
     <parent>
-        <groupId>org.wing4j</groupId>
+        <groupId>org.wing4j.common</groupId>
         <artifactId>wing4j-common</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>

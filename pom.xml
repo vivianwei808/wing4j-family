@@ -24,7 +24,6 @@
         <module>wing4j-orm</module>
         <module>wing4j-test</module>
         <module>wing4j-toolkit</module>
-        <module>wing4j-demo</module>
     </modules>
     <build>
         <plugins>

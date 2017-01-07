@@ -35,6 +35,10 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
      * 数据库类型
      */
     String databaseType;
+    /**
+     * 严格wing4j注解模式
+     */
+    boolean strictWing4j;
 
     private boolean addToConfig = true;
 
@@ -166,6 +170,7 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
             definition.getPropertyValues().add("databaseType", this.databaseType);
             definition.getPropertyValues().add("sqlMode", this.sqlMode);
             definition.getPropertyValues().add("keywordMode", this.keywordMode);
+            definition.getPropertyValues().add("strictWing4j", this.strictWing4j);
 
             boolean explicitFactoryUsed = false;
             if (StringUtils.hasText(this.sqlSessionFactoryBeanName)) {
@@ -226,5 +231,9 @@ public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
 
     public void setDatabaseType(String databaseType) {
         this.databaseType = databaseType;
+    }
+
+    public void setStrictWing4j(boolean strictWing4j) {
+        this.strictWing4j = strictWing4j;
     }
 }
