@@ -69,7 +69,6 @@ public class HelpFormatter {
         for (CommandDefine define :commandCollection.getOptionCollection().values()){
             render(pw, header, define, footer);
             pw.append(newLine);
-            pw.append(newLine);
         }
         pw.flush();
     }
@@ -83,6 +82,7 @@ public class HelpFormatter {
     public void render(String header, CommandDefine define, String footer) {
         PrintWriter pw = new PrintWriter(System.out);
         render(pw, header, define, footer);
+        pw.append(newLine);
         pw.flush();
     }
     /**

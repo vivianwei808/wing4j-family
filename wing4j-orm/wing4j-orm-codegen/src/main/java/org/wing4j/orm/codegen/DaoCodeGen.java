@@ -1,6 +1,6 @@
 package org.wing4j.orm.codegen;
 
-import org.wing4j.common.logtrack.BaseRuntimeException;
+import org.wing4j.common.logtrack.LogtrackRuntimeException;
 import org.wing4j.common.logtrack.ErrorContextFactory;
 import org.wing4j.orm.entity.metadata.TableMetadata;
 
@@ -43,7 +43,7 @@ public class DaoCodeGen {
                 fos = new FileOutputStream(parnetDir + "/" + daoClassName + ".java");
                 generate(head, tail, fos, tableMetadata, daoPackageName, entityPackageName, daoClassName);
             } catch (Exception e) {
-                throw new BaseRuntimeException(ErrorContextFactory.instance()
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                         .activity("生成实体{}的数据访问对象{}", tableMetadata.getClassName(), daoClassName)
                         .message("发生异常，导致存放到{}数据访问对象{}生成失败", daoPackageName, daoClassName)
                         .solution("联系开发者wing4j@foxmail.com")

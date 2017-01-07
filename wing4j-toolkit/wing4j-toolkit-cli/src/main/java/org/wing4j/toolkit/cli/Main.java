@@ -41,7 +41,7 @@ public class Main {
             define.addOption("package", "f", true, 1, "保存包名", "org.wing4j.entity");
             define.setName("逆向工程");
             define.setCmd("reverse");
-            define.setExample("reverse -h jdbc:mysql://192.168.1.106:3306/wing4j -u root -p root -schema wing4j -package org.wing4j.entity");
+            define.setExample("reverse -h jdbc:mysql://192.168.1.106:3306/wing4j -u root -p root -schema wing4j -package org.wing4j.demo");
             define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
@@ -49,13 +49,8 @@ public class Main {
             CommandDefine define = new CommandDefine();
             define.setName("帮助信息");
             define.setCmd("help");
-            define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
-            commandCollection.addDefine(define);
-        }
-        {
-            CommandDefine define = new CommandDefine();
-            define.setName("退出CLI");
-            define.setCmd("quit");
+            define.addOption("cmd", "c", false, 1, "命令", "reverse");
+            define.setExample("help -c reverse");
             define.setExtrInfo("有关详细信息, 请参阅 http://www.wing4j.org/help");
             commandCollection.addDefine(define);
         }
@@ -100,10 +95,11 @@ public class Main {
 
     protected boolean processCmd(Command command) {
         String cmd = command.getCmd();
-        if (cmd.equals("quit") || cmd.equals("exit")) {
-            System.out.println("Quitting...");
+        if (cmd.equals("exit")) {
+            System.out.println("正在退出...");
             System.exit(0);
         } else if (cmd.equals("history")) {
+            System.out.println("历史命令");
             for (int i = commandCount - 10; i <= commandCount; ++i) {
                 if (i < 0) continue;
                 System.out.println(i + " - " + history.get(i));
@@ -140,7 +136,14 @@ public class Main {
                 System.out.println("\n");
             }
         } else if (cmd.equals("help")) {
-            usage();
+            if (command.getArgs().isEmpty()) {
+                usage();
+            }else if(command.hasOption("cmd")){
+                String arg = command.valueString("cmd");
+                CommandDefine define = commandCollection.getOptionCollection().get(arg);
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.render("", define, "");
+            }
         }
         return true;
     }

@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.Assert;
-import org.wing4j.common.logtrack.BaseRuntimeException;
+import org.wing4j.common.logtrack.LogtrackRuntimeException;
 import org.wing4j.common.logtrack.ErrorContextFactory;
 import org.wing4j.common.sequence.SequenceService;
 import org.wing4j.common.utils.StringUtils;
@@ -75,7 +75,7 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
             }, generatedKeyHolder);
             return generatedKeyHolder.getKey().intValue();
         } catch (DataAccessException e) {
-            throw new BaseRuntimeException(ErrorContextFactory.instance()
+            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                     .activity("use SequenceService generate nextval")
                     .message("use MySQL MyISAM engine nextval happens error!")
                     .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))
@@ -100,7 +100,7 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
             int seq = jdbcTemplate.queryForObject(StringUtils.format(SQL_CURVAL, schema, prefix), new Object[]{sequenceName, feature}, Integer.class);
             return seq;
         } catch (DataAccessException e) {
-            throw new BaseRuntimeException(ErrorContextFactory.instance()
+            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                     .activity("use SequenceService generate nextval")
                     .message("use MySQL MyISAM engine nextval happens error!")
                     .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))

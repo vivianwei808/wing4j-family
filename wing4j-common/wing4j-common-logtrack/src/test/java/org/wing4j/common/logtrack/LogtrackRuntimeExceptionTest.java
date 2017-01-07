@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Created by woate on 2017/1/6.
  */
-public class BaseRuntimeExceptionTest {
+public class LogtrackRuntimeExceptionTest {
 
     void makeException() {
         throw new RuntimeException("this is a root exception");
@@ -14,7 +14,7 @@ public class BaseRuntimeExceptionTest {
         try {
             makeException();
         } catch (Exception e) {
-            throw new BaseRuntimeException(ErrorContextFactory.instance()
+            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                     .code("1")
                     .desc("发生致命错误")
                     .activity("this is doing {}", "1")

@@ -87,7 +87,7 @@ public class SimpleErrorContext implements ErrorContext {
 
     @Override
     public ErrorContext cause(Throwable cause) {
-        if (this.cause instanceof BaseRuntimeException) {
+        if (this.cause instanceof LogtrackRuntimeException) {
             //这里没必要，有可能导致死循环
         } else {
             this.cause = cause;
