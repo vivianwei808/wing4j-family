@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-common-sequence</artifactId>
         <groupId>org.wing4j.common</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>wing4j-common-sequence-mysql</artifactId>
 
@@ -14,12 +14,12 @@
         <dependency>
             <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-sequence-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-logtrack</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

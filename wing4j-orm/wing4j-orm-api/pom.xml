@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-orm</artifactId>
         <groupId>org.wing4j.orm</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>wing4j-orm-api</artifactId>
     <description>This is the wing4j-orm member wing4j-orm-api</description>

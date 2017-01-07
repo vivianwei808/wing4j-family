@@ -7,7 +7,7 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>wing4j-family</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>wing4j-family</name>
     <packaging>pom</packaging>
     <description>This is the wing4j-family</description>
