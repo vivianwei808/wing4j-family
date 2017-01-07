@@ -1,14 +1,14 @@
 package org.wing4j.orm.test.spring;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
+import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.utils.SqlScriptUtils;
 import org.wing4j.orm.test.spring.datasource.TestDataSourceUtils;
 import org.wing4j.test.CreateTable;
-import org.wing4j.orm.WordMode;
 import org.wing4j.test.DevDataSourceType;
 
 import java.lang.reflect.Method;
@@ -16,10 +16,9 @@ import java.lang.reflect.Method;
 /**
  * 自动创建表监听器
  */
-public class CreateTableTestExecutionListener extends AbstractTestExecutionListener {
-
-    private static final Logger logger = LoggerFactory.getLogger(CreateTableTestExecutionListener.class);
-
+@Slf4j
+public class CreateTableTestExecutionListener extends AbstractTestExecutionListener{
+    ApplicationContext ctx;
     @Override
     public void beforeTestMethod(TestContext testContext) throws Exception {
         final Method testMethod = testContext.getTestMethod();
@@ -31,6 +30,7 @@ public class CreateTableTestExecutionListener extends AbstractTestExecutionListe
             boolean drop = createTable.testBeforeDrop();
             WordMode sqlMode = createTable.sqlMode();
             WordMode keywordMode = createTable.keywordMode();
+            String schema = createTable.schema();
             for (Class clazz : clazzs) {
                 JdbcTemplate jdbcTemplate = testContext.getApplicationContext().getBean(JdbcTemplate.class);
                 if (drop) {
@@ -40,7 +40,10 @@ public class CreateTableTestExecutionListener extends AbstractTestExecutionListe
                 String createSql = SqlScriptUtils.generateCreateTable(clazz, "", "", sqlMode, keywordMode, test);
                 jdbcTemplate.execute(createSql);
             }
+
+
         }
+
     }
 
     @Override
@@ -68,4 +71,5 @@ public class CreateTableTestExecutionListener extends AbstractTestExecutionListe
     public int getOrder() {
         return LOWEST_PRECEDENCE - 1;
     }
+
 }

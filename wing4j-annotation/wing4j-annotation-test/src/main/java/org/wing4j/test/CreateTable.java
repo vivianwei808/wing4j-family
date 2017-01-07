@@ -12,23 +12,35 @@ import java.lang.annotation.Target;
 public @interface CreateTable {
     /**
      * 所需要的实体类列表
+     *
      * @return 实体类列表
      */
     Class[] entities();
+
+    /**
+     * 数据库模式
+     * @return 数据库模式
+     */
+    String schema() default "";
+
     /**
      * 创建表前进行测试
+     *
      * @return 真假值
      */
-    boolean createBeforeTest()default true;
+    boolean createBeforeTest() default true;
 
     /**
      * 进行测试前进行数据清除
+     *
      * @return 真假值
      */
     boolean testBeforeDrop() default true;
+
     /**
      * 关键字的单词模式
      * 例如select drop delete update where 等
+     *
      * @return 单词模式
      */
     WordMode keywordMode() default WordMode.lowerCase;
@@ -36,6 +48,7 @@ public @interface CreateTable {
     /**
      * SQL语句使用的单词模式
      * 例如 select col1 from table1, col1和table1就是SQL语句
+     *
      * @return 单词模式
      */
     WordMode sqlMode() default WordMode.lowerCase;
