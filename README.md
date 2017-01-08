@@ -8,7 +8,7 @@
 3. [wing4j test](http://git.oschina.net/wing4j/wing4j-family/wikis/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8wing4j-test)
 4. [wing4j toolkit](http://git.oschina.net/wing4j/wing4j-family/wikis/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8wing4j-toolkit)
 
-[开源中国项目介绍](https://www.oschina.net/p/wing4j-family)
+[在开源中国的项目介绍](https://www.oschina.net/p/wing4j-family)
 
  **wing4j common** 
 提供开发过程中的公共程序，日志跟踪模块，序号服务生成服务。 
