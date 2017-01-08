@@ -11,10 +11,12 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
+import org.wing4j.common.logtrack.ErrorContextFactory;
 import org.wing4j.common.utils.ReflectionUtils;
 import org.wing4j.common.utils.StringUtils;
 import org.wing4j.orm.Constants;
 import org.wing4j.orm.PrimaryKeyStrategy;
+import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
 import org.wing4j.orm.select.SelectMapper;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
@@ -98,9 +100,21 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
                     @Override
                     public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
                         try {
-                            Method pkm = entityClass1.getMethod("set" + StringUtils.firstCharToUpper(pkColumonName), primaryKeyMetadata.getJavaType());
-                            pkm.invoke(parameter, UUID.randomUUID().toString());
+                            String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                            String setterMethodName = "set" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                            //如果设置过主键，则使用设置过的主键值
+                            Method getMethod = entityClass1.getMethod(getterMethodName, new Class[0]);
+                            if(getMethod.invoke(parameter) != null){
+                                return;
+                            }
+                            //将主键值设置到实体
+                            Method setMethod = entityClass1.getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
+                            setMethod.invoke(parameter, UUID.randomUUID().toString());
                         } catch (Exception e) {
+                            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("正在使用wing4j orm 的自动生成主键")
+                            .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                            .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName()));
                             //这个异常一般不会发生
                         }
                     }

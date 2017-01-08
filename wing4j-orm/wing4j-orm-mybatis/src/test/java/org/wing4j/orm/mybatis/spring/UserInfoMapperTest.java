@@ -25,18 +25,21 @@ public class UserInfoMapperTest extends BaseTest{
         UserInfoCrudMapper userInfoCrudMapper = getBean(UserInfoCrudMapper.class);
         UserInfoEntity userInfoEntity = new UserInfoEntity();
         {
-            userInfoEntity.setSerialNo(UUID.randomUUID().toString());
+            String pk = UUID.randomUUID().toString();
+            userInfoEntity.setSerialNo(pk);
             userInfoEntity.setCol1("col1");
             userInfoEntity.setCol2(new BigDecimal("111"));
             userInfoEntity.setCol3(23);
             userInfoCrudMapper.insert(userInfoEntity);
+            Assert.assertEquals(pk, userInfoEntity.getSerialNo());
         }
         {
-            userInfoEntity.setSerialNo(UUID.randomUUID().toString());
+            userInfoEntity.setSerialNo(null);
             userInfoEntity.setCol1("col1_1");
             userInfoEntity.setCol2(new BigDecimal("222"));
             userInfoEntity.setCol3(23);
             userInfoCrudMapper.insert(userInfoEntity);
+            Assert.assertNotNull(userInfoEntity.getSerialNo());
         }
         {
             List<UserInfoEntity> list = userInfoCrudMapper.selectAll();
