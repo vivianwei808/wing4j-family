@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-common-sequence</artifactId>
         <groupId>org.wing4j.common</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>wing4j-common-sequence-zookeeper</artifactId>
 

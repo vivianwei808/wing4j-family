@@ -20,6 +20,7 @@ import org.wing4j.orm.Constants;
 import org.wing4j.orm.PrimaryKeyFeatureConstant;
 import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
+import org.wing4j.orm.entity.utils.KeywordsUtils;
 import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.select.SelectMapper;
 import org.wing4j.orm.WordMode;
@@ -144,7 +145,7 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                 log.debug("use sequence");
                 final String schema = primaryKeyMetadata.getTableMetadata().getSchema();
                 final String tableName = primaryKeyMetadata.getTableMetadata().getTableName();
-                final String tablePrefix = tableName.substring(0, tableName.indexOf("_"));
+                final String tablePrefix = KeywordsUtils.convert(tableName.substring(0, tableName.indexOf("_")), sqlMode);
                 final String feature = primaryKeyMetadata.getPrimaryKeyFeature();
                 final String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
                 final String setterMethodName = "set" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
@@ -177,8 +178,17 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                 msBuilder.keyGenerator(new KeyGenerator() {
                     @Override
                     public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
+                        int pk = 0;
                         try {
-                            int pk = sequenceService.nextval(schema, tablePrefix, tableName,  seqFeature);
+                            pk = sequenceService.nextval(schema, tablePrefix, tableName,  seqFeature);
+                        } catch (Exception e) {
+                            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                                    .activity("正在使用wing4j orm 的自动生成主键")
+                                    .message("生成序列号发生异常")
+                                    .solution("检查序列号介质是否存在，在'autoCreate'属性设置为true"));
+                            //这个异常一般不会发生
+                        }
+                        try {
                             setMethod.invoke(parameter, pk);
                         } catch (Exception e) {
                             throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
@@ -187,6 +197,7 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                                     .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName()));
                             //这个异常一般不会发生
                         }
+
                     }
                     @Override
                     public void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
