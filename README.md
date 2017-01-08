@@ -24,3 +24,19 @@
 1. 自动创建表结构，无论多少次运行单元测试，结果始终如一；
 2. 开发数据可以进行本地数据库方式和MySQL数据源的选择；
 3. 能够根据环境选择数据源，如果进行的是Maven编译，则不能使用MySQL数据源，必须使用本地数据源。
+
+开始使用wing4j family
+pom.xml添加如下代码
+```xml
+        <dependency>
+            <groupId>org.wing4j.orm</groupId>
+            <artifactId>wing4j-orm-mybatis</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wing4j.test</groupId>
+            <artifactId>wing4j-test-core</artifactId>
+            <version>1.0.1</version>
+            <scope>test</scope>
+        </dependency>
+```
