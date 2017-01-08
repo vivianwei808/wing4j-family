@@ -127,7 +127,7 @@ public class Wing4jEntityExtracteUtils {
         }
         if (numberColumn != null) {
             if (numberColumn.type() != null) {
-                if (numberColumn.type() == NumberType.INTEGER) {
+                if(numberColumn.type() == NumberType.AUTO){
                     if (fieldClass == Integer.TYPE) {
                         dataType = "INTEGER";
                         jdbcType = "NUMERIC";
@@ -152,15 +152,54 @@ public class Wing4jEntityExtracteUtils {
                                     .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
                                     .solution("nullable属性需要设置为{}", false));
                         }
-                    }else{
+                    }else if(fieldClass == BigDecimal.class){
+                        if (numberColumn.scale() > 0 && numberColumn.precision() > 0 && numberColumn.precision() > numberColumn.scale()) {
+                            dataType = "DECIMAL(" + numberColumn.precision() + "," + numberColumn.scale() + ")";
+                        } else if (numberColumn.precision() > 0 && numberColumn.scale() == 0) {
+                            dataType = "DECIMAL(" + numberColumn.precision() + ")";
+                        } else if (numberColumn.precision() > numberColumn.scale() && numberColumn.scale() == 0) {
+                            dataType = "DECIMAL(18)";
+                        } else {
+                            dataType = "DECIMAL(18,2)";
+                        }
+                    }
+                }else if (numberColumn.type() == NumberType.INTEGER) {
+                    if (fieldClass == Integer.TYPE) {
+                        dataType = "INTEGER";
+                        jdbcType = "NUMERIC";
+                    } else if (fieldClass == Integer.class) {
+                        dataType = "INTEGER";
+                        jdbcType = "NUMERIC";
+                        if (numberColumn.nullable()) {
+                            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                    .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                    .solution("nullable属性需要设置为{}", false));
+                        }
+                    } else if (fieldClass == Boolean.TYPE) {
+                        dataType = "TINYINT";
+                        jdbcType = "NUMERIC";
+                    } else if (fieldClass == Boolean.class) {
+                        dataType = "TINYINT";
+                        jdbcType = "NUMERIC";
+                        if (numberColumn.nullable()) {
+                            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                    .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                    .solution("nullable属性需要设置为{}", false));
+                        }
+                    } else {
                         throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                                 .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
                                 .message("字段{}为为非整数类型，标注注解为整数型", columnMetadata.getJavaName())
                                 .solution("将字段类型修改为[{},{},{},{}]任意一种或者修改注解", Integer.class, Integer.TYPE, Boolean.class, Boolean.TYPE));
                     }
-                } else if (numberColumn.type() == NumberType.DECIMAL || numberColumn.type() == NumberType.AUTO) {
+                } else if (numberColumn.type() == NumberType.DECIMAL) {
                     if (fieldClass != BigDecimal.class) {
-                        throw new OrmEntityRuntimeException(ErrorContextFactory.instance());
+                        throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                                .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                .message("字段{}为为非小数类型，标注注解为小数型", columnMetadata.getJavaName())
+                                .solution("将字段类型修改为{}", BigDecimal.class));
                     }
                     if (numberColumn.scale() > 0 && numberColumn.precision() > 0 && numberColumn.precision() > numberColumn.scale()) {
                         dataType = "DECIMAL(" + numberColumn.precision() + "," + numberColumn.scale() + ")";
@@ -332,29 +371,40 @@ public class Wing4jEntityExtracteUtils {
     static void extractFieldPrimaryKey(ColumnMetadata columnMetadata) {
         Field field = columnMetadata.getColumnField();
         PrimaryKey primaryKey = columnMetadata.getColumnField().getAnnotation(PrimaryKey.class);
-        boolean autoIncrement = false;
+        PrimaryKeyStrategy primaryKeyStrategy = PrimaryKeyStrategy.AUTO;
         if (primaryKey == null) {
+            columnMetadata.setPrimaryKeyStrategy(primaryKeyStrategy);
             return;
         }
-        autoIncrement = primaryKey.strategy() == PrimaryKeyStrategy.AUTO || primaryKey.strategy() == PrimaryKeyStrategy.IDENTITY;
-        if (autoIncrement) {
+        if (primaryKey.strategy() == PrimaryKeyStrategy.AUTO) {
+            if (columnMetadata.getJavaType() == Integer.class || columnMetadata.getJavaType() == Integer.TYPE) {
+                primaryKeyStrategy = PrimaryKeyStrategy.IDENTITY;
+            }
+        } else if (primaryKey.strategy() == PrimaryKeyStrategy.IDENTITY) {
             if (columnMetadata.getJavaType() != Integer.class && columnMetadata.getJavaType() != Integer.TYPE) {
                 throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
                         .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
                         .message("字段{}使用了自增主键，类型必须为整数", field.getName())
                         .solution("将字段{}的类型从{}修改为{}或者{}", field.getName(), columnMetadata.getJavaType(), Integer.class, "int"));
             }
+            primaryKeyStrategy = PrimaryKeyStrategy.IDENTITY;
+        } else if (primaryKey.strategy() == PrimaryKeyStrategy.SEQUENCE) {
+            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                    .message("字段{}是主键，目前主键策略未实现", field.getName())
+                    .solution("主键策略修改为[{},{}]中一种", PrimaryKeyStrategy.IDENTITY, PrimaryKeyStrategy.AUTO));
+        } else if (primaryKey.strategy() == PrimaryKeyStrategy.UUID) {
+            primaryKeyStrategy = PrimaryKeyStrategy.UUID;
         }
-        if (primaryKey != null) {
-            if (columnMetadata.getNullable()) {
-                throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
-                        .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
-                        .message("字段{}是主键，该字段不允许为空", field.getName())
-                        .solution("在字段{}将{}属性修改为{}", field.getName(), "nullabe", false));
-            }
-            columnMetadata.getTableMetadata().getPrimaryKeys().add(columnMetadata.getJdbcName());
+        if (columnMetadata.getNullable() != null && columnMetadata.getNullable()) {
+            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                    .message("字段{}是主键，该字段不允许为空", field.getName())
+                    .solution("在字段{}将{}属性修改为{}", field.getName(), "nullabe", false));
         }
-        columnMetadata.setAutoIncrement(autoIncrement);
+        columnMetadata.getTableMetadata().getPrimaryKeys().add(columnMetadata.getJdbcName());
+        columnMetadata.setPrimaryKeyStrategy(primaryKeyStrategy);
+
     }
 
 

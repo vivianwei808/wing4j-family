@@ -124,12 +124,10 @@ public class EntityCodeGen {
         if (columnMetadata.getTableMetadata().getPrimaryKeys().contains(columnMetadata.getJdbcName())) {
             StringBuilder sql = new StringBuilder("@");
             sql.append(PrimaryKey.class.getSimpleName());
-            if (columnMetadata.getAutoIncrement()) {
-                sql.append("(");
-                sql.append("strategy = ");
-                sql.append(PrimaryKeyStrategy.class.getSimpleName()).append(".").append("IDENTITY");
-                sql.append(")");
-            }
+            sql.append("(");
+            sql.append("strategy = ");
+            sql.append(PrimaryKeyStrategy.class.getSimpleName()).append(".").append(columnMetadata.getPrimaryKeyStrategy().name());
+            sql.append(")");
             return sql.toString();
         } else {
             return "";

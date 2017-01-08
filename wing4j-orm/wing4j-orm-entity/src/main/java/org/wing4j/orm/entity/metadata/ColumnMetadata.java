@@ -1,6 +1,7 @@
 package org.wing4j.orm.entity.metadata;
 
 import lombok.*;
+import org.wing4j.orm.PrimaryKeyStrategy;
 
 import java.lang.reflect.Field;
 
@@ -51,9 +52,9 @@ public class ColumnMetadata {
      */
     String comment = "";
     /**
-     * 是否允许自动生成主键
+     * 主键生成策略
      */
-    Boolean autoIncrement = false;
+    PrimaryKeyStrategy primaryKeyStrategy = PrimaryKeyStrategy.AUTO;
     /**
      * 默认值
      */
@@ -62,7 +63,7 @@ public class ColumnMetadata {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ColumnMetadata{");
-        sb.append("entityClass=").append(entityClass);
+        sb.append(", entityClass=").append(entityClass);
         sb.append(", columnField=").append(columnField);
         sb.append(", javaName='").append(javaName).append('\'');
         sb.append(", javaType=").append(javaType);
@@ -71,7 +72,7 @@ public class ColumnMetadata {
         sb.append(", jdbcType='").append(jdbcType).append('\'');
         sb.append(", nullable=").append(nullable);
         sb.append(", comment='").append(comment).append('\'');
-        sb.append(", autoIncrement=").append(autoIncrement);
+        sb.append(", primaryKeyStrategy=").append(primaryKeyStrategy);
         sb.append(", defaultValue='").append(defaultValue).append('\'');
         sb.append('}');
         return sb.toString();

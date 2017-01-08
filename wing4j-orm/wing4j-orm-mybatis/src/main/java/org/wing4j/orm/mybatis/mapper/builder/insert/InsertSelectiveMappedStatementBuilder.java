@@ -1,7 +1,9 @@
 package org.wing4j.orm.mybatis.mapper.builder.insert;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
+import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMap;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -9,7 +11,9 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
+import org.wing4j.common.utils.StringUtils;
 import org.wing4j.orm.Constants;
+import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.select.SelectMapper;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
@@ -17,9 +21,12 @@ import org.wing4j.orm.entity.metadata.TableMetadata;
 import org.wing4j.orm.entity.utils.EntityExtracteUtils;
 import org.wing4j.orm.mybatis.mapper.builder.MappedStatementBuilder;
 
+import java.lang.reflect.Method;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.wing4j.orm.entity.utils.GenericityExtracteUtils.extractEntityClass;
 import static org.wing4j.orm.entity.utils.GenericityExtracteUtils.extractKeyClass;
@@ -72,14 +79,34 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
         List<String> primaryKeys = tableMetadata.getPrimaryKeys();
         //存在主键，肯定的
         if (!primaryKeys.isEmpty()) {
-            String pkColumonName = primaryKeys.get(0);
-            ColumnMetadata primaryKeyMetadata = fields.get(pkColumonName);
+            final String pkColumonName = primaryKeys.get(0);
+            final ColumnMetadata primaryKeyMetadata = fields.get(pkColumonName);
             //如果主键是自增整数主键，则使用主键自动生成
-            if (primaryKeyMetadata.getAutoIncrement()) {
-                log.debug("use Jdbc3KeyGenerator");
+            if (primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.IDENTITY) {
+                log.debug("use int increment");
                 msBuilder.keyColumn(primaryKeyMetadata.getJdbcName());
                 msBuilder.keyProperty(primaryKeyMetadata.getJavaName());
                 msBuilder.keyGenerator(new Jdbc3KeyGenerator());
+            }else if(primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.UUID){
+                log.debug("use uuid");
+                msBuilder.keyColumn(primaryKeyMetadata.getJdbcName());
+                msBuilder.keyProperty(primaryKeyMetadata.getJavaName());
+                final Class entityClass1 = this.entityClass;
+                msBuilder.keyGenerator(new KeyGenerator() {
+                    @Override
+                    public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
+                        try {
+                            Method pkm = entityClass1.getMethod("set" + StringUtils.firstCharToUpper(pkColumonName), primaryKeyMetadata.getJavaType());
+                            pkm.invoke(parameter, UUID.randomUUID().toString());
+                        } catch (Exception e) {
+                            //这个异常一般不会发生
+                        }
+                    }
+                    @Override
+                    public void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
+
+                    }
+                });
             }
         }
         msBuilder.parameterMap(paramBuilder.build());

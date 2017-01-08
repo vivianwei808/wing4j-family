@@ -2,6 +2,7 @@ package org.wing4j.orm.entity.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
 import org.wing4j.orm.entity.metadata.TableMetadata;
@@ -80,7 +81,7 @@ public abstract class SqlScriptUtils {
                     defval = "0";
                 }
             } else if (columnMetadata.getJdbcType().startsWith("NUMERIC")) {
-                if (columnMetadata.getAutoIncrement() != null && !columnMetadata.getAutoIncrement()) {
+                if (columnMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.IDENTITY) {
                     if (defval == null || defval.isEmpty()) {
                         defval = "0";
                     }
@@ -96,7 +97,7 @@ public abstract class SqlScriptUtils {
             if (defval != null && !defval.isEmpty()) {
                 sql.append(convert(" DEFAULT ", keywordMode) + defval + " ");
             }
-            if (columnMetadata.getAutoIncrement() != null && columnMetadata.getAutoIncrement()) {
+            if (columnMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.IDENTITY) {
                 sql.append(convert(" AUTO_INCREMENT ", keywordMode));
                 autoIncrementCnt++;
             }

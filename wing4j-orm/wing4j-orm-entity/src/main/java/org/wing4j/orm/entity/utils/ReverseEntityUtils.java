@@ -1,6 +1,7 @@
 package org.wing4j.orm.entity.utils;
 
 import org.wing4j.common.utils.StringUtils;
+import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
 import org.wing4j.orm.entity.metadata.TableMetadata;
 
@@ -92,7 +93,7 @@ public class ReverseEntityUtils {
             //如果是主键则添加到主键列表中
             if(column_key != null && "PRI".equalsIgnoreCase(column_key)){
                 tableMetadata.getPrimaryKeys().add(column_name);
-                builder.autoIncrement(true);
+                builder.primaryKeyStrategy(PrimaryKeyStrategy.IDENTITY);
             }
             tableMetadata.getOrderColumns().add(column_name);
             tableMetadata.getColumnMetadatas().put(column_name, builder.build());

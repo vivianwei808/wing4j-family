@@ -2,6 +2,7 @@ package org.wing4j.orm.entity.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.wing4j.common.logtrack.ErrorContextFactory;
+import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
 import org.wing4j.orm.entity.metadata.TableMetadata;
@@ -182,32 +183,42 @@ public class JpaEntityExtracteUtils {
     static void extractFieldPrimaryKey(ColumnMetadata columnMetadata) {
         Field field = columnMetadata.getColumnField();
         Id id = columnMetadata.getColumnField().getAnnotation(Id.class);
+        PrimaryKeyStrategy primaryKeyStrategy = PrimaryKeyStrategy.AUTO;
         if (id == null) {
+            columnMetadata.setPrimaryKeyStrategy(primaryKeyStrategy);
             return;
         }
         GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
-        boolean autoIncrement = false;
         if (generatedValue != null) {
-            autoIncrement = generatedValue.strategy() == GenerationType.AUTO || generatedValue.strategy() == GenerationType.IDENTITY;
-        }
-        if (autoIncrement) {
-            if (columnMetadata.getJavaType() != Integer.class && columnMetadata.getJavaType() != Integer.TYPE) {
+            if (generatedValue.strategy() == GenerationType.AUTO) {
+                if (columnMetadata.getJavaType() == Integer.class || columnMetadata.getJavaType() == Integer.TYPE) {
+                    primaryKeyStrategy = PrimaryKeyStrategy.IDENTITY;
+                }
+            }else if (generatedValue.strategy() == GenerationType.IDENTITY) {
+                if (columnMetadata.getJavaType() != Integer.class && columnMetadata.getJavaType() != Integer.TYPE) {
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                            .message("字段{}使用了自增主键，类型必须为整数", field.getName())
+                            .solution("将字段{}的类型从{}修改为{}或者{}", field.getName(), columnMetadata.getJavaType(), Integer.class, "int"));
+                }
+                primaryKeyStrategy = PrimaryKeyStrategy.IDENTITY;
+            } else if (generatedValue.strategy() == GenerationType.StringType) {
+                primaryKeyStrategy = PrimaryKeyStrategy.UUID;
+            }else if(generatedValue.strategy() == GenerationType.SEQUENCE){
                 throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
                         .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
-                        .message("字段{}使用了自增主键，类型必须为整数", field.getName())
-                        .solution("将字段{}的类型从{}修改为{}或者{}", field.getName(), columnMetadata.getJavaType(), Integer.class, "int"));
+                        .message("字段{}是主键，目前主键策略未实现", field.getName())
+                        .solution("主键策略修改为[{},{}]中一种", PrimaryKeyStrategy.IDENTITY, PrimaryKeyStrategy.AUTO));
             }
-        }
-        if (id != null) {
-            if (columnMetadata.getNullable()) {
+            if (columnMetadata.getNullable() != null && columnMetadata.getNullable()) {
                 throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
                         .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
                         .message("字段{}是主键，该字段不允许为空", field.getName())
                         .solution("在字段{}将{}属性修改为{}", field.getName(), "nullabe", false));
             }
-            columnMetadata.getTableMetadata().getPrimaryKeys().add(columnMetadata.getJdbcName());
         }
-        columnMetadata.setAutoIncrement(autoIncrement);
+        columnMetadata.getTableMetadata().getPrimaryKeys().add(columnMetadata.getJdbcName());
+        columnMetadata.setPrimaryKeyStrategy(primaryKeyStrategy);
     }
 
 
