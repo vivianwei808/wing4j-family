@@ -40,8 +40,9 @@ pom.xml添加如下代码
             <scope>test</scope>
         </dependency>
 ```
-向作者捐助
+
+ **向作者捐助** 
 ![微信捐助](http://git.oschina.net/uploads/images/2017/0108/235252_58e650c5_865359.jpeg "微信捐助")
 
-加入QQ群获取技术支持
+ **加入QQ群获取技术支持** 
 ![QQ群](http://git.oschina.net/uploads/images/2017/0108/233335_a9521262_865359.jpeg "QQ群")
