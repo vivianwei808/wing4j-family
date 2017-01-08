@@ -40,3 +40,6 @@ pom.xml添加如下代码
             <scope>test</scope>
         </dependency>
 ```
+
+加入QQ群获取技术支持
+![QQ群](http://git.oschina.net/uploads/images/2017/0108/233227_b9e5b2b8_865359.jpeg "QQ群")
