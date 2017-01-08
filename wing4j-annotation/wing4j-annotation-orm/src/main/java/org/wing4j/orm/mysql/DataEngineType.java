@@ -11,5 +11,5 @@ package org.wing4j.orm.mysql;
 public enum DataEngineType {
     InnoDB,
     MyISAM,
-    Auto
+    AUTO
 }

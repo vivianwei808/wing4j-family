@@ -6,6 +6,10 @@ package org.wing4j.orm;
  */
 public enum NumberType {
     /**
+     * 自动选择
+     */
+    AUTO,
+    /**
      * 小数类型
      */
     DECIMAL,

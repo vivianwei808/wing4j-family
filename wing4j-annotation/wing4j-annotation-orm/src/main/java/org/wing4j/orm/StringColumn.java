@@ -43,6 +43,6 @@ public @interface StringColumn {
      *
      * @return 数据类型
      */
-    StringType type() default StringType.VARCHAR;
+    StringType type() default StringType.AUTO;
 }
 

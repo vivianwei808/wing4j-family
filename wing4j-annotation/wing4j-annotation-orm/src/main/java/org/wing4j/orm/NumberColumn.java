@@ -46,5 +46,5 @@ public @interface NumberColumn {
      * 数字类型
      * @return 数字类型
      */
-    NumberType type() default NumberType.INTEGER;
+    NumberType type() default NumberType.AUTO;
 }

@@ -2,6 +2,7 @@ package org.wing4j.orm.entity.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.wing4j.common.logtrack.ErrorContextFactory;
+import org.wing4j.common.logtrack.LogtrackRuntimeException;
 import org.wing4j.orm.*;
 import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
@@ -37,7 +38,7 @@ public class Wing4jEntityExtracteUtils {
         }
         //提取数据引擎
         if (dataEngineAnn != null && dataEngineAnn.value() != null) {
-            if (dataEngineAnn.value() != DataEngineType.Auto) {
+            if (dataEngineAnn.value() != DataEngineType.AUTO) {
                 tableMetadata.setDataEngine(dataEngineAnn.value().name());
             }
         }
@@ -125,40 +126,99 @@ public class Wing4jEntityExtracteUtils {
                     .solution("将字段{}的类型从{}修改为[{},{},{},{},{}]任意一种", columnMetadata.getJavaName(), fieldClass, BigDecimal.class, Integer.class, Integer.TYPE, Boolean.class, Boolean.TYPE));
         }
         if (numberColumn != null) {
-            if (fieldClass == BigDecimal.class) {
-                if (numberColumn.scale() > 0 && numberColumn.precision() > 0 && numberColumn.precision() > numberColumn.scale()) {
-                    dataType = "DECIMAL(" + numberColumn.precision() + "," + numberColumn.scale() + ")";
-                } else if (numberColumn.precision() > 0 && numberColumn.scale() == 0) {
-                    dataType = "DECIMAL(" + numberColumn.precision() + ")";
-                } else if (numberColumn.precision() > numberColumn.scale() && numberColumn.scale() == 0) {
-                    dataType = "DECIMAL(18)";
+            if (numberColumn.type() != null) {
+                if (numberColumn.type() == NumberType.INTEGER) {
+                    if (fieldClass == Integer.TYPE) {
+                        dataType = "INTEGER";
+                        jdbcType = "NUMERIC";
+                    } else if (fieldClass == Integer.class) {
+                        dataType = "INTEGER";
+                        jdbcType = "NUMERIC";
+                        if (numberColumn.nullable()) {
+                            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                    .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                    .solution("nullable属性需要设置为{}", false));
+                        }
+                    } else if (fieldClass == Boolean.TYPE) {
+                        dataType = "TINYINT";
+                        jdbcType = "NUMERIC";
+                    } else if (fieldClass == Boolean.class) {
+                        dataType = "TINYINT";
+                        jdbcType = "NUMERIC";
+                        if (numberColumn.nullable()) {
+                            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                    .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                    .solution("nullable属性需要设置为{}", false));
+                        }
+                    }else{
+                        throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                .message("字段{}为为非整数类型，标注注解为整数型", columnMetadata.getJavaName())
+                                .solution("将字段类型修改为[{},{},{},{}]任意一种或者修改注解", Integer.class, Integer.TYPE, Boolean.class, Boolean.TYPE));
+                    }
+                } else if (numberColumn.type() == NumberType.DECIMAL || numberColumn.type() == NumberType.AUTO) {
+                    if (fieldClass != BigDecimal.class) {
+                        throw new OrmEntityRuntimeException(ErrorContextFactory.instance());
+                    }
+                    if (numberColumn.scale() > 0 && numberColumn.precision() > 0 && numberColumn.precision() > numberColumn.scale()) {
+                        dataType = "DECIMAL(" + numberColumn.precision() + "," + numberColumn.scale() + ")";
+                    } else if (numberColumn.precision() > 0 && numberColumn.scale() == 0) {
+                        dataType = "DECIMAL(" + numberColumn.precision() + ")";
+                    } else if (numberColumn.precision() > numberColumn.scale() && numberColumn.scale() == 0) {
+                        dataType = "DECIMAL(18)";
+                    } else {
+                        dataType = "DECIMAL(18,2)";
+                    }
+                    jdbcType = "DECIMAL";
                 } else {
-                    dataType = "DECIMAL(18,2)";
+                    throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                            .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                            .message("字段{}数据类型没有配置type", columnMetadata.getJavaName())
+                            .solution("type属性需要设置值"));
                 }
-                jdbcType = "DECIMAL";
-            } else if (fieldClass == Integer.class) {
-                dataType = "INTEGER";
-                jdbcType = "NUMERIC";
-                if (numberColumn.nullable()) {
-                    throw new IllegalArgumentException("实体[" + columnMetadata.getEntityClass().getName() + "]字段[" + columnMetadata.getJdbcName() + "]为整型包装类型，不允许为空");
-                }
-            } else if (fieldClass == Integer.TYPE) {
-                dataType = "INTEGER";
-                jdbcType = "NUMERIC";
-                if (numberColumn.nullable()) {
-                    throw new IllegalArgumentException("实体[" + columnMetadata.getEntityClass().getName() + "]字段[" + columnMetadata.getJdbcName() + "]为整型包装类型，不允许为空");
-                }
-            } else if (fieldClass == Boolean.TYPE) {
-                dataType = "TINYINT";
-                jdbcType = "NUMERIC";
-                if (numberColumn.nullable()) {
-                    throw new IllegalArgumentException("实体[" + columnMetadata.getEntityClass().getName() + "]字段[" + columnMetadata.getJdbcName() + "]为布尔值包装类型，不允许为空");
-                }
-            } else if (fieldClass == Boolean.class) {
-                dataType = "TINYINT";
-                jdbcType = "NUMERIC";
-                if (numberColumn.nullable()) {
-                    throw new IllegalArgumentException("实体[" + columnMetadata.getEntityClass().getName() + "]字段[" + columnMetadata.getJdbcName() + "]为布尔值包装类型，不允许为空");
+            } else {
+                if (fieldClass == BigDecimal.class) {
+                    if (numberColumn.scale() > 0 && numberColumn.precision() > 0 && numberColumn.precision() > numberColumn.scale()) {
+                        dataType = "DECIMAL(" + numberColumn.precision() + "," + numberColumn.scale() + ")";
+                    } else if (numberColumn.precision() > 0 && numberColumn.scale() == 0) {
+                        dataType = "DECIMAL(" + numberColumn.precision() + ")";
+                    } else if (numberColumn.precision() > numberColumn.scale() && numberColumn.scale() == 0) {
+                        dataType = "DECIMAL(18)";
+                    } else {
+                        dataType = "DECIMAL(18,2)";
+                    }
+                    jdbcType = "DECIMAL";
+                } else if (fieldClass == Integer.TYPE) {
+                    dataType = "INTEGER";
+                    jdbcType = "NUMERIC";
+                } else if (fieldClass == Integer.class) {
+                    dataType = "INTEGER";
+                    jdbcType = "NUMERIC";
+                    if (numberColumn.nullable()) {
+                        throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                .solution("nullable属性需要设置为{}", false));
+                    }
+                } else if (fieldClass == Boolean.TYPE) {
+                    dataType = "TINYINT";
+                    jdbcType = "NUMERIC";
+                } else if (fieldClass == Boolean.class) {
+                    dataType = "TINYINT";
+                    jdbcType = "NUMERIC";
+                    if (numberColumn.nullable()) {
+                        throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                                .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                                .message("字段{}为包装类型，该字段必须设置为非null", columnMetadata.getJavaName())
+                                .solution("nullable属性需要设置为{}", false));
+                    }
+                } else {
+                    throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                            .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                            .message("字段{}数据类型不支持{}属性", columnMetadata.getJavaName(), columnMetadata.getJavaType())
+                            .solution("将字段{}的类型从{}修改为[{},{},{},{},{}]任意一种", columnMetadata.getJavaName(), fieldClass, BigDecimal.class, Integer.class, Integer.TYPE, Boolean.class, Boolean.TYPE));
                 }
             }
             columnMetadata.setDefaultValue(numberColumn.defaultValue());
@@ -233,6 +293,25 @@ public class Wing4jEntityExtracteUtils {
                 }
                 dataType = "DATETIME";
                 jdbcType = "TIMESTAMP";
+            } else if (dateColumn.type() == DateType.AUTO) {
+                if (fieldClass == java.sql.Date.class) {
+                    dataType = "DATETIME";
+                    jdbcType = "TIMESTAMP";
+                } else if (fieldClass == java.util.Date.class) {
+                    dataType = "DATE";
+                    jdbcType = "DATE";
+                } else if (fieldClass == java.sql.Time.class) {
+                    dataType = "TIME";
+                    jdbcType = "TIME";
+                } else if (fieldClass == java.sql.Timestamp.class) {
+                    dataType = "TIMESTAMP";
+                    jdbcType = "TIMESTAMP";
+                } else {
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                            .message("字段{}数据类型和注解类型支持的映射数据不一致", columnMetadata.getJavaName())
+                            .solution("将字段{}的类型从{}修改为[{},{},{},{}]任意一种", columnMetadata.getJavaName(), fieldClass, java.util.Date.class, java.sql.Date.class, java.sql.Time.class, java.sql.Timestamp.class));
+                }
             }
             columnMetadata.setDefaultValue(dateColumn.defaultValue());
         }

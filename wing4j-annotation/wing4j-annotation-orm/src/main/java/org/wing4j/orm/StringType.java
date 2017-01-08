@@ -2,6 +2,10 @@ package org.wing4j.orm;
 
 public enum StringType {
     /**
+     * 自动数据类型
+     */
+    AUTO,
+    /**
      * 变长字符串
      */
     VARCHAR,
@@ -12,9 +16,5 @@ public enum StringType {
     /**
      * 大文本类型
      */
-    TEXT,
-    /**
-     * 自动数据类型
-     */
-    AUTO
+    TEXT
 }

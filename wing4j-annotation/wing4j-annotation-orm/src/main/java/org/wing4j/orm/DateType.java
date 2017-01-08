@@ -5,6 +5,10 @@ package org.wing4j.orm;
  */
 public enum DateType {
     /**
+     * 自动选择
+     */
+    AUTO,
+    /**
      * 只保存日期
      */
     DATE,

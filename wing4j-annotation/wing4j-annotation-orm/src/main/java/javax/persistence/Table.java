@@ -29,7 +29,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(TYPE) 
 @Retention(RUNTIME)
-
 public @interface Table {
 
     String name() default "";

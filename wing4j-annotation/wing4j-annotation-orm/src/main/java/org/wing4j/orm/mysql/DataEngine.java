@@ -16,5 +16,5 @@ public @interface DataEngine {
      * 数据引擎
      * @return 数据引擎
      */
-    DataEngineType value() default DataEngineType.Auto;
+    DataEngineType value() default DataEngineType.AUTO;
 }

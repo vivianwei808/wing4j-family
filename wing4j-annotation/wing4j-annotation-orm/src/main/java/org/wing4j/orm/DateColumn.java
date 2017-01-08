@@ -35,5 +35,5 @@ public @interface DateColumn {
      *
      * @return 数据类型
      */
-    DateType type() default DateType.TIMESTAMP;
+    DateType type() default DateType.AUTO;
 }
