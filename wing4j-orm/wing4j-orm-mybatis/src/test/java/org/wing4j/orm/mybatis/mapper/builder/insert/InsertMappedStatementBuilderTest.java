@@ -39,7 +39,7 @@ public class InsertMappedStatementBuilderTest extends BaseTest {
         config.setAggressiveLazyLoading(true);
         Transaction transaction = new SpringManagedTransaction(dataSource);
         final Executor executor = config.newExecutor(transaction);
-        MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
+        MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false, null);
         MappedStatement ms = builder.build();
         config.addMappedStatement(ms);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

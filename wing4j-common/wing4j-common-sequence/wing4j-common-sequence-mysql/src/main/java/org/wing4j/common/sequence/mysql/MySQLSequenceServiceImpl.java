@@ -2,32 +2,22 @@ package org.wing4j.common.sequence.mysql;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.util.Assert;
-import org.wing4j.common.logtrack.LogtrackRuntimeException;
 import org.wing4j.common.logtrack.ErrorContextFactory;
+import org.wing4j.common.logtrack.LogtrackRuntimeException;
 import org.wing4j.common.sequence.SequenceService;
+import org.wing4j.common.utils.MessageFormatter;
 import org.wing4j.common.utils.StringUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.MessageFormat;
+import javax.sql.DataSource;
+import java.sql.*;
 
 /**
  * Created by wing4j on 2016/12/29.
  */
 @Slf4j
-public class MySQLSequenceServiceImpl implements SequenceService, InitializingBean {
-    @Autowired(required = false)
-    JdbcTemplate jdbcTemplate;
+public class MySQLSequenceServiceImpl implements SequenceService {
+    @Setter
+    DataSource dataSource;
     /**
      * allow auto execute create-table sql
      */
@@ -37,7 +27,12 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
      * create-table sql script
      * primary key is order, seq_name, seq_feature, seq_value is fixed!
      */
-    static String SQL_CREATE_TABLE = "create table if not exists {}{}_sequence_inf(seq_value int not null auto_increment, seq_name varchar(50) not null, seq_feature varchar(50) not null, primary key(seq_name, seq_feature, seq_value)) ENGINE=MyISAM auto_increment=1";
+    static String SQL_CREATE_TABLE = "create table if not exists {}{}_sequence_inf(" +
+            "   seq_value int not null auto_increment, " +
+            "   seq_name varchar(50) not null," +
+            "   seq_feature varchar(50) not null," +
+            "   primary key(seq_name, seq_feature, seq_value)" +
+            ") ENGINE=MyISAM auto_increment=1";
     /**
      * nextval sql script
      */
@@ -49,6 +44,16 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
 
     @Override
     public int nextval(String schema, String prefix, final String sequenceName, final String feature) {
+        if(dataSource == null){
+            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService")
+                    .message("{} base MySQL database implement SequenceService require 'dataSource'",  this.getClass().getSimpleName())
+                    .solution("please check configure file!"));
+        }
+        Connection connection = null;
+        PreparedStatement pst = null;
+        Statement st = null;
+        ResultSet rs = null;
         if (schema == null || schema.isEmpty()) {
             schema = "";
         } else {
@@ -57,34 +62,59 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
         if (prefix == null || prefix.isEmpty()) {
             prefix = "wing4j";
         }
-        final String sql = MessageFormat.format(SQL_NEXTVAL, schema, prefix);
-        log.debug(sql);
-        if (this.autoCreate) {
-            jdbcTemplate.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
-        }
+        final String nextvalsql = MessageFormatter.format(SQL_NEXTVAL, schema, prefix);
+        log.debug(nextvalsql);
         try {
-            KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(new PreparedStatementCreator() {
-                @Override
-                public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                    PreparedStatement preState = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                    preState.setString(1, sequenceName);
-                    preState.setString(2, feature);
-                    return preState;
-                }
-            }, generatedKeyHolder);
-            return generatedKeyHolder.getKey().intValue();
-        } catch (DataAccessException e) {
+            connection = dataSource.getConnection();
+            String db = connection.getMetaData().getDatabaseProductName();
+            if (!"MySQL".equals(db)) {
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is {}, {} only can run on MySQL MyISAM database", db, this.getClass().getSimpleName())
+                        .solution("please check if use MySQL database in pom.xml"));
+            }
+            if (autoCreate) {
+                st = connection.createStatement();
+                st.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
+                close(null, st, null);
+            }
+            pst = connection.prepareStatement(nextvalsql,Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, sequenceName);
+            pst.setString(2, feature);
+            pst.executeUpdate();
+            //获取自动生成的主键
+            rs = pst.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }else{
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is {}, {} only can run on MySQL MyISAM database", db, this.getClass().getSimpleName())
+                        .solution("please check database configure!"));
+            }
+        } catch (SQLException e) {
             throw new LogtrackRuntimeException(ErrorContextFactory.instance()
                     .activity("use SequenceService generate nextval")
-                    .message("use MySQL MyISAM engine nextval happens error!")
-                    .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))
+                    .message("nextval happens a error,{} only can run on MySQL MyISAM database", this.getClass().getSimpleName())
+                    .solution("please check if use H2 database in pom.xml")
                     .cause(e));
+        }finally {
+            close(connection, pst, rs);
         }
     }
 
     @Override
     public int curval(String schema, String prefix, String sequenceName, String feature) {
+        if(dataSource == null){
+            throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                    .activity("use SequenceService")
+                    .message("{} base MySQL database implement SequenceService require 'dataSource'",  this.getClass().getSimpleName())
+                    .solution("please check configure file!"));
+        }
+        Connection connection = null;
+        PreparedStatement pst = null;
+        Statement st = null;
+        ResultSet rs = null;
         if (schema == null || schema.isEmpty()) {
             schema = "";
         } else {
@@ -93,24 +123,80 @@ public class MySQLSequenceServiceImpl implements SequenceService, InitializingBe
         if (prefix == null || prefix.isEmpty()) {
             prefix = "wing4j";
         }
-        if (this.autoCreate) {
-            jdbcTemplate.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
-        }
+        final String curvalsql = MessageFormatter.format(SQL_CURVAL, schema, prefix);
+        log.debug(curvalsql);
         try {
-            int seq = jdbcTemplate.queryForObject(StringUtils.format(SQL_CURVAL, schema, prefix), new Object[]{sequenceName, feature}, Integer.class);
-            return seq;
-        } catch (DataAccessException e) {
+            connection = dataSource.getConnection();
+            String db = connection.getMetaData().getDatabaseProductName();
+            if (!"MySQL".equals(db)) {
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService fetch curval")
+                        .message("curval happens a error, cause current database is {}, {} only can run on MySQL MyISAM database", db, this.getClass().getSimpleName())
+                        .solution("please check if use MySQL database in pom.xml"));
+            }
+            if (autoCreate) {
+                st = connection.createStatement();
+                st.execute(StringUtils.format(SQL_CREATE_TABLE, schema, prefix));
+                close(null, st, null);
+            }
+            pst = connection.prepareStatement(curvalsql);
+            pst.setString(1, sequenceName);
+            pst.setString(2, feature);
+            pst.execute();
+            //获取自动生成的主键
+            rs = pst.getResultSet();
+            if(rs.next()){
+                return rs.getInt(1);
+            }else{
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService fetch curval")
+                        .message("curval happens a error, cause current database is {}, {} only can run on MySQL MyISAM database", db, this.getClass().getSimpleName())
+                        .solution("please check database configure!"));
+            }
+        } catch (SQLException e) {
             throw new LogtrackRuntimeException(ErrorContextFactory.instance()
-                    .activity("use SequenceService generate nextval")
-                    .message("use MySQL MyISAM engine nextval happens error!")
-                    .solution("please in MySQL database execute this sql script：{}", StringUtils.format(SQL_CREATE_TABLE, schema, prefix))
+                    .activity("use SequenceService fetch curval")
+                    .message("curval happens a error,{} only can run on MySQL MyISAM database", this.getClass().getSimpleName())
+                    .solution("please check if use MySQL database in pom.xml")
                     .cause(e));
+        }finally {
+            close(connection, pst, rs);
         }
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Assert.notNull(jdbcTemplate, "base MySQL implement on MyISAM engine ,SequenceService require 'JdbcTemplate'");
+    void close(Connection connection, Statement st, ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is MySQL, {} can not run on other database", this.getClass().getSimpleName())
+                        .solution("please check if use MySQL database in pom.xml")
+                        .cause(e));
+            }
+        }
+        if (st != null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is MySQL, {} can not run on other database", this.getClass().getSimpleName())
+                        .solution("please check if use MySQL database in pom.xml")
+                        .cause(e));
+            }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new LogtrackRuntimeException(ErrorContextFactory.instance()
+                        .activity("use SequenceService generate nextval")
+                        .message("nextval happens a error, cause current database is MySQL, {} can not run on other database", this.getClass().getSimpleName())
+                        .solution("please check if use MySQL database in pom.xml")
+                        .cause(e));
+            }
+        }
     }
-
 }

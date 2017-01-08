@@ -33,4 +33,18 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
         <property name="basePackage" value="org.wing4j.orm.mybatis.spring"/>
     </bean>
+
+    <bean class="org.wing4j.orm.mybatis.sequnece.SpringSequenceServiceConfigure">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappings">
+            <map>
+                <entry key="TB_DEMO" value="org.wing4j.common.sequence.h2.H2SequenceServiceImpl"/>
+            </map>
+        </property>
+        <property name="parameters">
+            <props>
+                <prop key="autoCreate">true</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

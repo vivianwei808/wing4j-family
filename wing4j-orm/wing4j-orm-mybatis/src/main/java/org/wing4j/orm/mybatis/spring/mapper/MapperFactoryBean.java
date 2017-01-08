@@ -4,10 +4,12 @@ import lombok.Setter;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.Configuration;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.wing4j.orm.DatabaseType;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.mybatis.plugins.PaginationStage1Interceptor;
 import org.wing4j.orm.mybatis.plugins.PaginationStage2Interceptor;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.mybatis.spring.SqlSessionDaoSupport;
 
 import static org.springframework.util.Assert.notNull;
@@ -32,6 +34,12 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
      */
     @Setter
     boolean strictWing4j;
+    /**
+     * 序号配置
+     */
+    @Setter
+    @Autowired(required = false)
+    SequenceServiceConfigure sequenceConfigure;
     /**
      * 数据库类型
      */
@@ -71,7 +79,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
         configuration.addInterceptor(new PaginationStage1Interceptor(databaseType0));
         configuration.addInterceptor(new PaginationStage2Interceptor());
 
-        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0, strictWing4j);
+        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0, strictWing4j, sequenceConfigure);
         if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
             try {
                 configuration.addMapper(this.mapperInterface);

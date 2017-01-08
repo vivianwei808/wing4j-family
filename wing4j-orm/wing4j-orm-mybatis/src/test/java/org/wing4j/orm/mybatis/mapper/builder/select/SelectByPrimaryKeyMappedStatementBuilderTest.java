@@ -41,7 +41,7 @@ public class SelectByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         final Executor executor = config.newExecutor(transaction);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false, null);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

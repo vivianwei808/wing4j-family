@@ -56,6 +56,10 @@ public class ColumnMetadata {
      */
     PrimaryKeyStrategy primaryKeyStrategy = PrimaryKeyStrategy.AUTO;
     /**
+     * 主键生成时候的特征
+     */
+    String primaryKeyFeature;
+    /**
      * 默认值
      */
     String defaultValue = "";

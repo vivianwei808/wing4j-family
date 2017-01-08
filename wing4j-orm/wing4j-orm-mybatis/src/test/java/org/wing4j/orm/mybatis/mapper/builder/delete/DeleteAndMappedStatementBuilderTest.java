@@ -41,7 +41,7 @@ public class DeleteAndMappedStatementBuilderTest extends BaseTest {
         final Executor executor = config.newExecutor(transaction);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false, null);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             {

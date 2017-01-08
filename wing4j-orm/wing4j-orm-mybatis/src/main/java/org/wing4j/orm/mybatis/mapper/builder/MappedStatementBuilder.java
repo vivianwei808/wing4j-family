@@ -1,6 +1,5 @@
 package org.wing4j.orm.mybatis.mapper.builder;
 
-import lombok.Data;
 import lombok.ToString;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.xmltags.MixedSqlNode;

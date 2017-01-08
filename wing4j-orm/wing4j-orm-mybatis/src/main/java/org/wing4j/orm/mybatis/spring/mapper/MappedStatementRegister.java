@@ -35,6 +35,7 @@ import org.wing4j.orm.mybatis.mapper.builder.lock.LockByUpdateSetPrimaryKeyMappe
 import org.wing4j.orm.mybatis.mapper.builder.select.*;
 import org.wing4j.orm.mybatis.mapper.builder.update.UpdateByPrimaryKeyMappedStatementBuilder;
 import org.wing4j.orm.mybatis.mapper.builder.update.UpdateByPrimaryKeySelectiveMappedStatementBuilder;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.select.*;
 import org.wing4j.orm.update.UpdateByPrimaryKeyMapper;
 import org.wing4j.orm.update.UpdateByPrimaryKeySelectiveMapper;
@@ -54,14 +55,14 @@ public abstract class MappedStatementRegister {
      * @param configuration
      * @param daoInterface
      */
-    static void scan(Configuration configuration, Class daoInterface, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+    static void scan(Configuration configuration, Class daoInterface, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j, SequenceServiceConfigure sequenceConfigure) {
         List<MappedStatementBuilder> builders = new ArrayList<>();
         //---------------------------新增-----------------------------------------
         if (InsertSelectiveMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new InsertSelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
+            builders.add(new InsertSelectiveMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j, sequenceConfigure));
         }
         if (InsertAllMapper.class.isAssignableFrom(daoInterface)) {
-            builders.add(new InsertMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j));
+            builders.add(new InsertMappedStatementBuilder(configuration, daoInterface, sqlMode, keywordMode, strictWing4j, sequenceConfigure));
         }
         //---------------------------删除-----------------------------------------
         if (DeleteAndMapper.class.isAssignableFrom(daoInterface)) {

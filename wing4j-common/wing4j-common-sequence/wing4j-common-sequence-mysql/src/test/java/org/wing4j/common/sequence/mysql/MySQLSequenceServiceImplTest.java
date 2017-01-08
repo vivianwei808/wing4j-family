@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.wing4j.common.sequence.SequenceService;
+import org.wing4j.common.utils.DateUtils;
+
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -20,44 +23,46 @@ public class MySQLSequenceServiceImplTest {
     SequenceService sequenceService;
     @Test
     public void testNextval(){
+        Date curdate = new Date();
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed1");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(DateUtils.getNextDay(curdate,1)));
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO1", "fixed1");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO1", DateUtils.toFullString(curdate));
             Assert.assertEquals(1, seq);
         }
     }
 
     @Test
     public void testCurval() throws Exception {
+        Date curdate = new Date();
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(1, seq);
         }
         {
-            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.nextval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(2, seq);
         }
         {
-            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", "fixed");
+            int seq = sequenceService.curval("wing4j", "fa", "ORDER_NO", DateUtils.toFullString(curdate));
             Assert.assertEquals(2, seq);
         }
     }

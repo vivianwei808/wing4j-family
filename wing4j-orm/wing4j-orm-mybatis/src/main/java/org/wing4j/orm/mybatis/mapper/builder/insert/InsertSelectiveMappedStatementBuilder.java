@@ -12,10 +12,15 @@ import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 import org.wing4j.common.logtrack.ErrorContextFactory;
+import org.wing4j.common.sequence.SequenceService;
+import org.wing4j.common.utils.DateStyle;
+import org.wing4j.common.utils.DateUtils;
 import org.wing4j.common.utils.StringUtils;
 import org.wing4j.orm.Constants;
+import org.wing4j.orm.PrimaryKeyFeatureConstant;
 import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.select.SelectMapper;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
@@ -25,10 +30,7 @@ import org.wing4j.orm.mybatis.mapper.builder.MappedStatementBuilder;
 
 import java.lang.reflect.Method;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.wing4j.orm.entity.utils.GenericityExtracteUtils.extractEntityClass;
 import static org.wing4j.orm.entity.utils.GenericityExtracteUtils.extractKeyClass;
@@ -40,8 +42,14 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
  */
 @Slf4j
 public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilder {
-    public InsertSelectiveMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+    /**
+     * 序号服务配置对象
+     */
+    protected SequenceServiceConfigure sequenceConfigure;
+
+    public InsertSelectiveMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j, SequenceServiceConfigure sequenceConfigure) {
         super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
+        this.sequenceConfigure = sequenceConfigure;
     }
 
     @Override
@@ -69,6 +77,7 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
 
         //创建一个MappedStatement建造器
         MappedStatement.Builder msBuilder = new MappedStatement.Builder(config, namespace + "." + Constants.INSERT_SELECTIVE, sqlSource, SqlCommandType.INSERT);
+        msBuilder = msBuilder.flushCacheRequired(true).useCache(false);
         //创建参数映射
         List<ParameterMapping> parameterMappings = new ArrayList<>();
         for (String column : fields.keySet()) {
@@ -91,23 +100,86 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                 msBuilder.keyGenerator(new Jdbc3KeyGenerator());
             }else if(primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.UUID){
                 log.debug("use uuid");
-                msBuilder.keyColumn(primaryKeyMetadata.getJdbcName());
-                msBuilder.keyProperty(primaryKeyMetadata.getJavaName());
                 final Class entityClass1 = this.entityClass;
+                final String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                final String setterMethodName = "set" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                //将主键值设置到实体
+                Method getMethod0 = null;
+                Method setMethod0 = null;
+                try {
+                    getMethod0 = entityClass1.getMethod(getterMethodName, new Class[0]);
+                    setMethod0 = entityClass1.getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                final Method setMethod = setMethod0;
+                final Method getMethod = getMethod0;
                 msBuilder.keyGenerator(new KeyGenerator() {
                     @Override
                     public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
                         try {
-                            String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
-                            String setterMethodName = "set" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
-                            //如果设置过主键，则使用设置过的主键值
-                            Method getMethod = entityClass1.getMethod(getterMethodName, new Class[0]);
-                            if(getMethod.invoke(parameter) != null){
+                            if (getMethod.invoke(parameter) != null) {
                                 return;
                             }
                             //将主键值设置到实体
-                            Method setMethod = entityClass1.getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
                             setMethod.invoke(parameter, UUID.randomUUID().toString());
+                        } catch (Exception e) {
+                            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                                    .activity("正在使用wing4j orm 的自动生成主键")
+                                    .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                                    .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName()));
+                            //这个异常一般不会发生
+                        }
+                    }
+
+                    @Override
+                    public void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
+
+                    }
+                });
+            }else if(primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.SEQUENCE){
+                if(this.sequenceConfigure == null){
+                    //TODO
+                }
+                log.debug("use sequence");
+                final String schema = primaryKeyMetadata.getTableMetadata().getSchema();
+                final String tableName = primaryKeyMetadata.getTableMetadata().getTableName();
+                final String tablePrefix = tableName.substring(0, tableName.indexOf("_"));
+                final String feature = primaryKeyMetadata.getPrimaryKeyFeature();
+                final String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                final String setterMethodName = "set" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
+                //将主键值设置到实体
+                Method setMethod0 = null;
+                try {
+                    setMethod0 = tableMetadata.getEntityClass().getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                final Method setMethod = setMethod0;
+                String seqFeature0 = null;
+                if(feature.equals(PrimaryKeyFeatureConstant.CURRENT_DATE)){
+                    seqFeature0 = DateUtils.toFullString(new Date());
+                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss_SSS)){
+                    seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT2);
+                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss)){
+                    seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT3);
+                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm)){
+                    seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT4);
+                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH)){
+                    seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT5);
+                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd)){
+                    seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT6);
+                }else{
+                    seqFeature0 = feature;
+                }
+                final String seqFeature = seqFeature0;
+                final SequenceService sequenceService = sequenceConfigure.getSequenceService(tableMetadata.getTableName());
+                msBuilder.keyGenerator(new KeyGenerator() {
+                    @Override
+                    public void processBefore(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
+                        try {
+                            int pk = sequenceService.nextval(schema, tablePrefix, tableName,  seqFeature);
+                            setMethod.invoke(parameter, pk);
                         } catch (Exception e) {
                             throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
                                     .activity("正在使用wing4j orm 的自动生成主键")

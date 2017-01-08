@@ -49,26 +49,37 @@ public enum DateStyle {
      */
     FILE_FORMAT1("yyyy-MM-dd_HH-mm-ss", "\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}"),
     /**
-     * 能够用于文件命名的日期 yyyyMMddHHmmss
-     */
-    FILE_FORMAT2("yyyyMMddHHmmss", "\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}"),
-    /**
      * 能够用于文件命名的日期 yyyyMMddHHmmssSSS
      */
-    FILE_FORMAT3("yyyyMMddHHmmssSSS", "\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}\\d{3}"),
+    FILE_FORMAT2("yyyyMMddHHmmssSSS", "\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}\\d{3}"),
+    /**
+     * 能够用于文件命名的日期 yyyyMMddHHmmss
+     */
+    FILE_FORMAT3("yyyyMMddHHmmss", "\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}\\d{2}"),
+    /**
+     * 能够用于文件命名的日期 yyyyMMddHHmm
+     */
+    FILE_FORMAT4("yyyyMMddHHmm", "\\d{4}\\d{2}\\d{2}\\d{2}\\d{2}"),
+    /**
+     * 能够用于文件命名的日期 yyyyMMddHH
+     */
+    FILE_FORMAT5("yyyyMMddHH", "\\d{4}\\d{2}\\d{2}\\d{2}"),
     /**
      * 能够用于文件命名的日期 yyyyMMdd
      */
-    FILE_FORMAT4("yyyyMMdd", "\\d{4}\\d{2}\\d{2}"),
+    FILE_FORMAT6("yyyyMMdd", "\\d{4}\\d{2}\\d{2}"),
     /**
-     * 能够用于文件命名的日期 HHmmss
+     * 能够用于文件命名的日期 yyyyMM
      */
-    FILE_FORMAT5("HHmmss", "\\d{2}\\d{2}\\d{2}"),
+    FILE_FORMAT7("yyyyMM", "\\d{4}\\d{2}"),
     /**
      * 能够用于文件命名的日期 HHmmssSSS
      */
-    FILE_FORMAT6("HHmmssSSS", "\\d{2}\\d{2}\\d{2}\\d{3}"),
-
+    FILE_FORMAT8("HHmmssSSS", "\\d{2}\\d{2}\\d{2}\\d{3}"),
+    /**
+     * 能够用于文件命名的日期 HHmmss
+     */
+    FILE_FORMAT9("HHmmss", "\\d{2}\\d{2}\\d{2}"),
     /**
      * 中文日期格式 yyyy年MM月dd日 HH时mm分ss秒
      */

@@ -33,5 +33,6 @@
 
     <bean class="org.wing4j.common.sequence.h2.H2SequenceServiceImpl">
         <property name="autoCreate" value="true"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>

@@ -389,10 +389,14 @@ public class Wing4jEntityExtracteUtils {
             }
             primaryKeyStrategy = PrimaryKeyStrategy.IDENTITY;
         } else if (primaryKey.strategy() == PrimaryKeyStrategy.SEQUENCE) {
-            throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
-                    .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
-                    .message("字段{}是主键，目前主键策略未实现", field.getName())
-                    .solution("主键策略修改为[{},{}]中一种", PrimaryKeyStrategy.IDENTITY, PrimaryKeyStrategy.AUTO));
+            if (columnMetadata.getJavaType() != Integer.class && columnMetadata.getJavaType() != Integer.TYPE) {
+                throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                        .activity("提取实体类{}的元信息", columnMetadata.getEntityClass())
+                        .message("字段{}使用了自增主键，类型必须为整数", field.getName())
+                        .solution("将字段{}的类型从{}修改为{}或者{}", field.getName(), columnMetadata.getJavaType(), Integer.class, "int"));
+            }
+            columnMetadata.setPrimaryKeyFeature(primaryKey.feature());
+            primaryKeyStrategy = PrimaryKeyStrategy.SEQUENCE;
         } else if (primaryKey.strategy() == PrimaryKeyStrategy.UUID) {
             primaryKeyStrategy = PrimaryKeyStrategy.UUID;
         }

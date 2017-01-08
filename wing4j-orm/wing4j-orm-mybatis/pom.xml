@@ -29,6 +29,17 @@
             <version>1.0.1</version>
         </dependency>
         <dependency>
+            <groupId>org.wing4j.common</groupId>
+            <artifactId>wing4j-common-sequence-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wing4j.common</groupId>
+            <artifactId>wing4j-common-sequence-h2</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.wing4j.annotation</groupId>
             <artifactId>wing4j-annotation-orm</artifactId>
         </dependency>

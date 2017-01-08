@@ -1,6 +1,7 @@
 package org.wing4j.orm.mybatis.spring;
 
 import lombok.Data;
+import lombok.ToString;
 import org.wing4j.orm.*;
 
 import java.math.BigDecimal;
@@ -8,11 +9,12 @@ import java.math.BigDecimal;
 @Data
 @Table(name = "TB_DEMO", schema = "db")
 @Comment("测试表")
+@ToString
 public class UserInfoEntity {
-    @PrimaryKey(strategy = PrimaryKeyStrategy.UUID)
-    @StringColumn(name = "SERIAL_NO", nullable = false, length = 36, type = StringType.CHAR, defaultValue = "1")
+    @PrimaryKey(strategy = PrimaryKeyStrategy.SEQUENCE, feature = PrimaryKeyFeatureConstant.yyyy_MM_dd_HH)
+    @NumberColumn(name = "SERIAL_NO", nullable = false, type = NumberType.INTEGER, defaultValue = "1")
     @Comment("流水号")
-    String serialNo;
+    Integer serialNo;
 
     @StringColumn(name = "COL1", length = 12, type = StringType.CHAR)
     @Comment("字段1")

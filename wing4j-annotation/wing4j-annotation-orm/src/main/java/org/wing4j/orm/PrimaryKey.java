@@ -13,11 +13,24 @@ import java.lang.annotation.Target;
 public @interface PrimaryKey {
     /**
      * 主键生成规则
+     *
      * @return 主键生成规则
      */
     PrimaryKeyStrategy strategy() default PrimaryKeyStrategy.UUID;
+
     /**
      * 用于指定主键生成的特征
+     * <ol>
+     * <li>${new Date()}</li>
+     * <li>${yyyyMMdd}</li>
+     * <li>${yyyyMMddHH}</li>
+     * <li>${yyyyMMddHHmm}</li>
+     * <li>${yyyyMMddHHmmss}</li>
+     * <li>${yyyyMMddHHmmssSSS}</li>
+     * <li>固定字符串
+     * <p>
+     * </ol>
+     * @see PrimaryKeyFeatureConstant
      * @return 主键特征
      */
     String feature() default "";
