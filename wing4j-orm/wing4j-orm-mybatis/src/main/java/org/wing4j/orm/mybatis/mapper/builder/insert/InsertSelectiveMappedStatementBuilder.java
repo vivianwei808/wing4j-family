@@ -111,7 +111,11 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                     getMethod0 = entityClass1.getMethod(getterMethodName, new Class[0]);
                     setMethod0 = entityClass1.getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("正在使用wing4j orm 的自动生成主键")
+                            .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                            .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName())
+                            .cause(e));
                 }
                 final Method setMethod = setMethod0;
                 final Method getMethod = getMethod0;
@@ -151,7 +155,11 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                 try {
                     setMethod0 = tableMetadata.getEntityClass().getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("正在使用wing4j orm 的自动生成主键")
+                            .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                            .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName())
+                            .cause(e));
                 }
                 final Method setMethod = setMethod0;
                 String seqFeature0 = null;

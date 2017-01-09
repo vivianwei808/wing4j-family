@@ -21,13 +21,14 @@ import org.wing4j.orm.PrimaryKeyFeatureConstant;
 import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.entity.exception.OrmEntityRuntimeException;
 import org.wing4j.orm.entity.utils.KeywordsUtils;
-import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
-import org.wing4j.orm.select.SelectMapper;
-import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
 import org.wing4j.orm.entity.metadata.TableMetadata;
 import org.wing4j.orm.entity.utils.EntityExtracteUtils;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.mybatis.mapper.builder.MappedStatementBuilder;
+import org.wing4j.orm.select.SelectMapper;
+import org.wing4j.orm.WordMode;
+
 
 import java.lang.reflect.Method;
 import java.sql.Statement;
@@ -99,7 +100,7 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
                 msBuilder.keyColumn(primaryKeyMetadata.getJdbcName());
                 msBuilder.keyProperty(primaryKeyMetadata.getJavaName());
                 msBuilder.keyGenerator(new Jdbc3KeyGenerator());
-            }else if(primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.UUID){
+            } else if (primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.UUID) {
                 log.debug("use uuid");
                 final Class entityClass1 = this.entityClass;
                 final String getterMethodName = "get" + StringUtils.firstCharToUpper(primaryKeyMetadata.getJavaName());
@@ -111,7 +112,11 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
                     getMethod0 = entityClass1.getMethod(getterMethodName, new Class[0]);
                     setMethod0 = entityClass1.getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("正在使用wing4j orm 的自动生成主键")
+                            .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                            .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName())
+                            .cause(e));
                 }
                 final Method setMethod = setMethod0;
                 final Method getMethod = getMethod0;
@@ -151,23 +156,27 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
                 try {
                     setMethod0 = tableMetadata.getEntityClass().getMethod(setterMethodName, new Class[]{primaryKeyMetadata.getJavaType()});
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
+                            .activity("正在使用wing4j orm 的自动生成主键")
+                            .message("获取设置字段{}主键值发生错误", primaryKeyMetadata.getJavaName())
+                            .solution("检查实体{}字段{}是否为public", primaryKeyMetadata.getEntityClass(), primaryKeyMetadata.getJavaName())
+                            .cause(e));
                 }
                 final Method setMethod = setMethod0;
                 String seqFeature0 = null;
-                if(feature.equals(PrimaryKeyFeatureConstant.CURRENT_DATE)){
+                if (feature.equals(PrimaryKeyFeatureConstant.CURRENT_DATE)) {
                     seqFeature0 = DateUtils.toFullString(new Date());
-                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss_SSS)){
+                } else if (feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss_SSS)) {
                     seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT2);
-                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss)){
+                } else if (feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm_ss)) {
                     seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT3);
-                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm)){
+                } else if (feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH_mm)) {
                     seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT4);
-                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH)){
+                } else if (feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd_HH)) {
                     seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT5);
-                }else if(feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd)){
+                } else if (feature.equals(PrimaryKeyFeatureConstant.yyyy_MM_dd)) {
                     seqFeature0 = DateUtils.toString(new Date(), DateStyle.FILE_FORMAT6);
-                }else{
+                } else {
                     seqFeature0 = feature;
                 }
                 final String seqFeature = seqFeature0;
@@ -178,7 +187,7 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
 
                         int pk = 0;
                         try {
-                            pk = sequenceService.nextval(schema, tablePrefix, tableName,  seqFeature);
+                            pk = sequenceService.nextval(schema, tablePrefix, tableName, seqFeature);
                         } catch (Exception e) {
                             throw new OrmEntityRuntimeException(ErrorContextFactory.instance()
                                     .activity("正在使用wing4j orm 的自动生成主键")
@@ -197,6 +206,7 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
                         }
 
                     }
+
                     @Override
                     public void processAfter(Executor executor, MappedStatement ms, Statement stmt, Object parameter) {
 
