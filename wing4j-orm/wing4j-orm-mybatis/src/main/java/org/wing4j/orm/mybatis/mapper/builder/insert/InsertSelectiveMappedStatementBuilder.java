@@ -139,9 +139,6 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
                     }
                 });
             }else if(primaryKeyMetadata.getPrimaryKeyStrategy() == PrimaryKeyStrategy.SEQUENCE){
-                if(this.sequenceConfigure == null){
-                    //TODO
-                }
                 log.debug("use sequence");
                 final String schema = primaryKeyMetadata.getTableMetadata().getSchema();
                 final String tableName = primaryKeyMetadata.getTableMetadata().getTableName();
