@@ -39,7 +39,7 @@ public class DeleteAndMappedStatementBuilder extends MappedStatementBuilder {
         TypeHandlerRegistry registry = config.getTypeHandlerRegistry();
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, strictWing4j);
         Map<String, ColumnMetadata> fields = tableMetadata.getColumnMetadatas();
-        String delete = convert("DELETE", keywordMode);
+        String delete = convert("DELETE FROM", keywordMode);
         //headBuilder是前半段
         StringBuilder headBuilder = new StringBuilder();
         headBuilder.append(delete).append(" ");
