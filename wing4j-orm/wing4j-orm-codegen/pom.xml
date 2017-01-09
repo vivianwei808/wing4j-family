@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-orm</artifactId>
         <groupId>org.wing4j.orm</groupId>
-        <version>1.0.2</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>wing4j-orm-codegen</artifactId>
     <description>the model is using auto codegen wing4j java code</description>
@@ -14,12 +14,12 @@
         <dependency>
             <groupId>org.wing4j.orm</groupId>
             <artifactId>wing4j-orm-api</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j.orm</groupId>
             <artifactId>wing4j-orm-entity</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 </project>

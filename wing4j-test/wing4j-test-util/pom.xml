@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-test</artifactId>
         <groupId>org.wing4j.test</groupId>
-        <version>1.0.2</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>wing4j-test-util</artifactId>
     <description>wing4j-test-util</description>
