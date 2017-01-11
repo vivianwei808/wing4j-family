@@ -1,7 +1,9 @@
-package org.wing4j.common.markdown;
+package org.wing4j.orm.mybatis.markdown.wing4j;
 
 import lombok.Data;
+import org.wing4j.orm.mybatis.markdown.wing4j.expression.SqlExp;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  */
 @Data
 public class MarkdownStatment {
+    String type;
     /**
      * 语句编号
      */
@@ -34,6 +37,10 @@ public class MarkdownStatment {
      *
      */
     int fetchSize;
+    /**
+     * 超时设置
+     */
     int timeout;
-    final List<String> sqls = new ArrayList<>();
+
+    final List<SqlExp> sqls = new ArrayList<>();
 }

@@ -1,4 +1,4 @@
-package org.wing4j.common.markdown;
+package org.wing4j.orm.mybatis.markdown.wing4j;
 
 import lombok.Data;
 import lombok.ToString;

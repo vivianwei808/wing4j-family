@@ -1,0 +1,64 @@
+﻿<!doctype html public '-//W3C//DTD HTML 4.0 Transitional //EN'>
+<html>
+<head>
+<title>sql</title>
+<meta charset='UTF-8' />
+<meta name='generator' content='EverEdit' />
+<link href='C:\Program Files (x86)\EverEdit\mode\markdown\default.css' rel='stylesheet'></link>
+<link href='C:\Program Files (x86)\EverEdit\mode\markdown\prettify.css' rel='stylesheet'></link>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\prettify.js'></script>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\jquery-1.10.2.min.js'></script>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\toc.js'></script>
+</head>
+<body>
+<div id='generated-toc'></div>
+<pre><code class="configure">--@dialect wing4j
+--@namespace org.wing4j.orm</code></pre>
+
+<h1><a href="selectDemo">查询用户信息</a></h1>
+
+<pre><code class="params">
+--@flushCacheRequired=true
+--@useCache=false
+--@fetchSize=1
+--@timeout=1000
+--@comment=备注
+--@f</code></pre>
+
+<pre><code class="sql">select * 
+from tb_demo_wing4j_inf t
+/*#def 'A'*/
+where t.col1=#{col2:VRACHAR}
+/*#if col2 == null {*/
+/*#def 'A'*/
+and col2=#{col2:VRACHAR}
+/*#}*/
+/*#if col3 is not null*/
+/*#def 'A'*/
+and col3=#{col2:NUMBER}
+/*#fi*/</code></pre>
+
+<h1><a href="updateById">根据用户ID更新数据</a></h1>
+
+<pre><code class="sql">update table t
+/*#def 'A'*/
+set t.col1 = #{col2:VRACHAR}
+where t.col1='col1'
+/*#if col2 is not null*/
+/*#def 'A'*/
+and col2=$col2:VRACHAR$
+/*#fi*/
+/*#if col3 is not null*/
+/*#def 'A'*/
+and col3=$col3:NUMBER$
+/*#fi*/</code></pre>
+<script type='text/javascript'>
+$(document).ready(function(){
+  if($('code').length>0){
+    $('code').parent().addClass('prettyprint linenums');
+    prettyPrint();
+};
+});
+</script>
+</body>
+</html>
