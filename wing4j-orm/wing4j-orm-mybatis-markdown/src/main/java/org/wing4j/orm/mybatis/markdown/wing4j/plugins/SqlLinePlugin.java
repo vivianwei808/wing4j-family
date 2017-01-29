@@ -1,10 +1,7 @@
 package org.wing4j.orm.mybatis.markdown.wing4j.plugins;
 
 import lombok.extern.slf4j.Slf4j;
-import org.wing4j.orm.mybatis.markdown.wing4j.LifeCycle;
-import org.wing4j.orm.mybatis.markdown.wing4j.MarkdownContext;
-import org.wing4j.orm.mybatis.markdown.wing4j.Plugin;
-import org.wing4j.orm.mybatis.markdown.wing4j.RuntimeContext;
+import org.wing4j.orm.mybatis.markdown.wing4j.*;
 import org.wing4j.orm.mybatis.markdown.wing4j.expression.IfSqlExp;
 import org.wing4j.orm.mybatis.markdown.wing4j.expression.StaticSqlExp;
 
@@ -32,14 +29,14 @@ public class SqlLinePlugin implements Plugin {
             if(line.endsWith("*/")){
                 int beginIdx = line.indexOf("/*#");
                 int endIdx = line.indexOf("*/");
-                String tempLine = line.substring(beginIdx + "/*#".length(), endIdx);
+                String tempLine = line.substring(beginIdx + "/*#".length(), endIdx).trim();
                 if(tempLine.startsWith("if")){
                     tempLine = tempLine.substring("if".length()).trim();
-                    runtimeContext.sqlExp = new IfSqlExp();
-                    runtimeContext.statment.getSqls().add(runtimeContext.sqlExp);
-                    IfSqlExp ifSqlExp = (IfSqlExp)runtimeContext.sqlExp;
+                    IfSqlExp ifSqlExp = new IfSqlExp();
                     ifSqlExp.setOnglExp(tempLine);
                     ifSqlExp.setDefaultValue(runtimeContext.defaultValue);
+                    runtimeContext.sqlExp = ifSqlExp;
+                    runtimeContext.statment.getSqls().add(runtimeContext.sqlExp);
                 }else if(tempLine.startsWith("fi")){//发现if代码块结束
                     log.debug("if 结束");
                 }
@@ -48,21 +45,19 @@ public class SqlLinePlugin implements Plugin {
                 return;
             }
         }else{
+            MarkdownStatment statment = runtimeContext.statment;
             if(runtimeContext.sqlExp == null){
                 runtimeContext.sqlExp = new StaticSqlExp();
-                runtimeContext.statment.getSqls().add(runtimeContext.sqlExp);
+                statment.getSqls().add(runtimeContext.sqlExp);
             }
             if(runtimeContext.sqlExp instanceof StaticSqlExp){
-                runtimeContext.sqlExp = new StaticSqlExp();
-                runtimeContext.statment.getSqls().add(runtimeContext.sqlExp);
+                ((StaticSqlExp)runtimeContext.sqlExp).getSqls().add(runtimeContext.line);
             }else if(runtimeContext.sqlExp instanceof IfSqlExp){
                 IfSqlExp ifSqlExp = (IfSqlExp)runtimeContext.sqlExp;
-                runtimeContext.sqlExp = new StaticSqlExp();
-                StaticSqlExp sqlExp = (StaticSqlExp)runtimeContext.sqlExp;
+                StaticSqlExp sqlExp =  new StaticSqlExp();
+                sqlExp.getSqls().add(runtimeContext.line);
                 ifSqlExp.getSqlExps().add(sqlExp);
-                sqlExp.getSqls().add(line.trim());
             }
-
         }
     }
 }
