@@ -12,46 +12,61 @@
 </head>
 <body>
 <div id='generated-toc'></div>
-<pre><code class="configure">--@dialect wing4j
+<pre><code class="configure">--方言设置
+--@dialect wing4j
+--命名空间
 --@namespace org.wing4j.orm</code></pre>
 
 <h1><a href="selectDemo">查询用户信息</a></h1>
 
-<pre><code class="params">
+<pre><code class="params">--强制刷新缓存
 --@flushCacheRequired=true
+--使用缓存关闭
 --@useCache=false
+--获取记录大小
 --@fetchSize=1
+--超时时间
 --@timeout=1000
---@comment=备注
---@f</code></pre>
+--语句注释
+--@comment=备注</code></pre>
 
 <pre><code class="sql">select * 
 from tb_demo_wing4j_inf t
-/*#def 'A'*/
 where t.col1=#{col2:VRACHAR}
-/*#if col2 == null {*/
-/*#def 'A'*/
+/*#     if col2 == null                  */
 and col2=#{col2:VRACHAR}
-/*#}*/
-/*#if col3 is not null*/
-/*#def 'A'*/
+/*#     fi                               */
+/*#     if col3 is not null              */
 and col3=#{col2:NUMBER}
-/*#fi*/</code></pre>
+/*#     fi                               */</code></pre>
+
+<h1><a href="insert">新增数据</a></h1>
+
+<pre><code class="sql">insert into table1(col1, col2, col3)
+values('col1', 'col2', 3)</code></pre>
 
 <h1><a href="updateById">根据用户ID更新数据</a></h1>
 
 <pre><code class="sql">update table t
-/*#def 'A'*/
 set t.col1 = #{col2:VRACHAR}
 where t.col1='col1'
-/*#if col2 is not null*/
-/*#def 'A'*/
+/*#     if col2 is not null              */
 and col2=$col2:VRACHAR$
-/*#fi*/
-/*#if col3 is not null*/
-/*#def 'A'*/
+/*#     fi                               */
+/*#     if col3 is not null              */
 and col3=$col3:NUMBER$
-/*#fi*/</code></pre>
+/*#     fi                               */</code></pre>
+
+<h1><a href="deleteById">根据用户ID删除数据</a></h1>
+
+<pre><code class="sql">delete from table t
+where t.col1='col1'
+/*#     if col2 is not null              */
+and col2=$col2:VRACHAR$
+/*#     fi                               */
+/*#     if col3 is not null              */
+and col3=$col3:NUMBER$
+/*#     fi                               */</code></pre>
 <script type='text/javascript'>
 $(document).ready(function(){
   if($('code').length>0){
