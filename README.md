@@ -13,6 +13,22 @@
  **wing4j common** 
 提供开发过程中的公共程序，日志跟踪模块，序号服务生成服务。 
 
+ 1.wing4j common utils 
+
+​	wing4j开发过程中用到的工具类
+
+ 2.wing4j common logtrack
+
+​	wing4j 提供的日志跟踪实现，用于更好的记录日志，用于更好的日志查错。
+
+ 3.wing4j common sequence
+
+ 	wing4j提供的序号生成服务，连续自增序号的生成，支持单机，集群分布式环境
+
+ 4.wing4j common markdown
+
+​	wing4j实现的markdown文档模型解析markdown文件，在orm中使用到该模块。
+
  **wing4j orm**
 目前基于MyBatis深度开发，完成单表的操作的自动生成，完全告别mybatis code generator方式，不再维护冗余的自动生成代码；
 1. 基于注解方式申明表结构，支持JPA注解和Wing4j注解两种方式，JPA方式用于移植老旧的Hibernate程序；
