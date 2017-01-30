@@ -1,5 +1,6 @@
 package org.wing4j.orm.mybatis.spring;
 
+import lombok.Setter;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.executor.ErrorContext;
@@ -39,15 +40,23 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, InitializingBean, ApplicationListener<ApplicationEvent> {
 
     private static final Log LOGGER = LogFactory.getLog(SqlSessionFactoryBean.class);
-
+    @Setter
     private Resource configLocation;
-
-    private Resource[] mapperLocations;
+    /**
+     * XML格式的Mapper文件
+     */
+    @Setter
+    private Resource[] xmlMapperLocations;
+    /**
+     * Markdown格式的Mapper文件
+     */
+    @Setter
+    private Resource[] markdownMapperLocations;
 
     private DataSource dataSource;
 
     private TransactionFactory transactionFactory;
-
+    @Setter
     private Properties configurationProperties;
 
     private SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
@@ -56,83 +65,29 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
 
     //EnvironmentAware requires spring 3.1
     private String environment = SqlSessionFactoryBean.class.getSimpleName();
-
+    @Setter
     private boolean failFast;
-
+    @Setter
     private Interceptor[] plugins;
-
+    @Setter
     private TypeHandler<?>[] typeHandlers;
-
+    @Setter
     private String typeHandlersPackage;
-
+    @Setter
     private Class<?>[] typeAliases;
-
+    @Setter
     private String typeAliasesPackage;
-
+    @Setter
     private Class<?> typeAliasesSuperType;
 
     //issue #19. No default provider.
+    @Setter
     private DatabaseIdProvider databaseIdProvider;
-
+    @Setter
     private ObjectFactory objectFactory;
-
+    @Setter
     private ObjectWrapperFactory objectWrapperFactory;
 
-    public void setObjectFactory(ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
-    }
-
-    public void setObjectWrapperFactory(ObjectWrapperFactory objectWrapperFactory) {
-        this.objectWrapperFactory = objectWrapperFactory;
-    }
-
-    public DatabaseIdProvider getDatabaseIdProvider() {
-        return databaseIdProvider;
-    }
-
-    public void setDatabaseIdProvider(DatabaseIdProvider databaseIdProvider) {
-        this.databaseIdProvider = databaseIdProvider;
-    }
-
-    public void setPlugins(Interceptor[] plugins) {
-        this.plugins = plugins;
-    }
-
-    public void setTypeAliasesPackage(String typeAliasesPackage) {
-        this.typeAliasesPackage = typeAliasesPackage;
-    }
-
-    public void setTypeAliasesSuperType(Class<?> typeAliasesSuperType) {
-        this.typeAliasesSuperType = typeAliasesSuperType;
-    }
-
-    public void setTypeHandlersPackage(String typeHandlersPackage) {
-        this.typeHandlersPackage = typeHandlersPackage;
-    }
-
-    public void setTypeHandlers(TypeHandler<?>[] typeHandlers) {
-        this.typeHandlers = typeHandlers;
-    }
-
-    public void setTypeAliases(Class<?>[] typeAliases) {
-        this.typeAliases = typeAliases;
-    }
-
-    public void setFailFast(boolean failFast) {
-        this.failFast = failFast;
-    }
-
-    public void setConfigLocation(Resource configLocation) {
-        this.configLocation = configLocation;
-    }
-
-    public void setMapperLocations(Resource[] mapperLocations) {
-        this.mapperLocations = mapperLocations;
-    }
-
-    public void setConfigurationProperties(Properties sqlSessionFactoryProperties) {
-        this.configurationProperties = sqlSessionFactoryProperties;
-    }
 
     public void setDataSource(DataSource dataSource) {
         if (dataSource instanceof TransactionAwareDataSourceProxy) {
@@ -144,20 +99,6 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
         } else {
             this.dataSource = dataSource;
         }
-    }
-
-
-    public void setSqlSessionFactoryBuilder(SqlSessionFactoryBuilder sqlSessionFactoryBuilder) {
-        this.sqlSessionFactoryBuilder = sqlSessionFactoryBuilder;
-    }
-
-    public void setTransactionFactory(TransactionFactory transactionFactory) {
-        this.transactionFactory = transactionFactory;
-    }
-
-
-    public void setEnvironment(String environment) {
-        this.environment = environment;
     }
 
     @Override
@@ -270,33 +211,52 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>, In
                 throw new NestedIOException("Failed getting a databaseId", e);
             }
         }
-
-        if (!isEmpty(this.mapperLocations)) {
-            for (Resource mapperLocation : this.mapperLocations) {
-                if (mapperLocation == null) {
+        //Xml格式的Mapper
+        if (!isEmpty(this.xmlMapperLocations)) {
+            for (Resource xmlMapperLocation : this.xmlMapperLocations) {
+                if (xmlMapperLocation == null) {
                     continue;
                 }
 
                 try {
-                    XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(mapperLocation.getInputStream(),
-                            configuration, mapperLocation.toString(), configuration.getSqlFragments());
+                    XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(xmlMapperLocation.getInputStream(),
+                            configuration,
+                            xmlMapperLocation.toString(),
+                            configuration.getSqlFragments());
                     xmlMapperBuilder.parse();
                 } catch (Exception e) {
-                    throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
+                    throw new NestedIOException("Failed to parse mapping resource: '" + xmlMapperLocation + "'", e);
                 } finally {
                     ErrorContext.instance().reset();
                 }
 
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Parsed mapper file: '" + mapperLocation + "'");
+                    LOGGER.debug("Parsed mapper file: '" + xmlMapperLocation + "'");
                 }
             }
         } else {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Property 'mapperLocations' was not specified or no matching resources found");
+                LOGGER.debug("Property 'xmlMapperLocations' was not specified or no matching resources found");
             }
         }
 
+        //Markdown格式的Mapper
+        if (!isEmpty(this.markdownMapperLocations)) {
+            for (Resource markdownMapperLocation : this.markdownMapperLocations) {
+                if (markdownMapperLocation == null) {
+                    continue;
+                }
+                //TODO  扫描Markdown文件所在目录
+
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Parsed mapper file: '" + markdownMapperLocation + "'");
+                }
+            }
+        } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Property 'markdownMapperLocations' was not specified or no matching resources found");
+            }
+        }
         return this.sqlSessionFactoryBuilder.build(configuration);
     }
 

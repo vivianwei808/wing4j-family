@@ -23,6 +23,7 @@
         <module>wing4j-orm-test</module>
         <module>wing4j-orm-core</module>
         <module>wing4j-orm-api</module>
+        <module>wing4j-orm-mybatis-markdown</module>
         <module>wing4j-orm-mybatis</module>
         <module>wing4j-orm-codegen</module>
     </modules>

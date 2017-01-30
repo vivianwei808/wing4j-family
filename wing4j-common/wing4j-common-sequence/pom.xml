@@ -8,8 +8,8 @@
         <module>wing4j-common-sequence-api</module>
         <module>wing4j-common-sequence-h2</module>
         <module>wing4j-common-sequence-mysql</module>
-        <module>wing4j-common-sequence-zookeeper</module>
-        <module>wing4j-common-sequence-redis</module>
+        <!--<module>wing4j-common-sequence-zookeeper</module>-->
+        <!--<module>wing4j-common-sequence-redis</module>-->
     </modules>
     <parent>
         <groupId>org.wing4j.common</groupId>
