@@ -16,5 +16,11 @@
             <artifactId>mybatis</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wing4j.common</groupId>
+            <artifactId>wing4j-common-markdown</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
     </dependencies>
 </project>

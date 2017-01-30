@@ -23,5 +23,6 @@
         <module>wing4j-common-utils</module>
         <module>wing4j-common-sequence</module>
         <module>wing4j-common-logtrack</module>
+        <module>wing4j-common-markdown</module>
     </modules>
 </project>

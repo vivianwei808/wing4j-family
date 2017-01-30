@@ -16,6 +16,7 @@ public class ZookeeperSequenceServiceImpl implements SequenceService {
     int sessionTimeout;
     int connectionTimeout;
     public static final String SEQ_ZNODE = "/sequence/{}/{}/{}";
+
     @Override
     public int nextval(String schema, String prefix, String sequenceName, String feature) {
         ZkClient zkClient = new ZkClient(MessageFormatter.format("{}:{}", address, port), sessionTimeout, connectionTimeout);
@@ -31,7 +32,7 @@ public class ZookeeperSequenceServiceImpl implements SequenceService {
         ZkClient zkClient = new ZkClient(MessageFormatter.format("{}:{}", address, port), sessionTimeout, connectionTimeout);
         String node = MessageFormatter.format(SEQ_ZNODE, schema, sequenceName, feature);
         Stat stat = new Stat();
-        byte[] sequenceBytes = zkClient.(node, stat);
+        byte[] sequenceBytes = zkClient.
         String s = new String(sequenceBytes);
         int sequence = Integer.parseInt(s);
         zkClient.close();

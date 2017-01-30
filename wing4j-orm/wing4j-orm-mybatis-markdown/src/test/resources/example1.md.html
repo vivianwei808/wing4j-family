@@ -1,0 +1,89 @@
+﻿<!doctype html public '-//W3C//DTD HTML 4.0 Transitional //EN'>
+<html>
+<head>
+<title>example1</title>
+<meta charset='UTF-8' />
+<meta name='generator' content='EverEdit' />
+<link href='C:\Program Files (x86)\EverEdit\mode\markdown\default.css' rel='stylesheet'></link>
+<link href='C:\Program Files (x86)\EverEdit\mode\markdown\prettify.css' rel='stylesheet'></link>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\prettify.js'></script>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\jquery-1.10.2.min.js'></script>
+<script type='text/javascript' src='C:\Program Files (x86)\EverEdit\mode\markdown\toc.js'></script>
+</head>
+<body>
+<div id='generated-toc'></div>
+<p>这是一个markdown文件的演示例子</p>
+
+<pre><code class="wing4j configure">--方言设置
+--@dialect=mySQL
+--命名空间
+--@namespace=org.wing4j.orm</code></pre>
+
+<h1><a href="selectDemo">查询用户信息</a></h1>
+
+<p>这是一个markdown文件的演示例子</p>
+
+<pre><code class="wing4j param">--强制刷新缓存
+--@flushCacheRequired=true
+--使用缓存关闭
+--@useCache=false
+--获取记录大小
+--@fetchSize=1
+--超时时间
+--@timeout=1000
+--@paramEntity=org.wing4j.orm.markdown.ParamEntity//参数实体
+--@resultEntity=org.wing4j.orm.markdown.ResultEntity//结果实体</code></pre>
+
+<pre><code class="sql">select * 
+from tb_demo_wing4j_inf t
+where t.col1=#{col2:VRACHAR}
+/*#     if col2 == null                  */
+and col2=#{col2:VRACHAR}
+/*#     fi                               */
+/*#     if col3 is not null              */
+and col3=#{col2:NUMBER}
+/*#     fi                               */</code></pre>
+
+<h1><a href="insert">新增数据</a></h1>
+
+<pre><code class="wing4j param">--@paramEntity=org.wing4j.orm.markdown.ParamEntity//参数实体</code></pre>
+
+<pre><code class="sql">insert into table1(col1, col2, col3)
+values('col1', 'col2', 3)</code></pre>
+
+<h1><a href="updateById">根据用户ID更新数据</a></h1>
+
+<pre><code class="wing4j param">--@paramEntity=org.wing4j.orm.markdown.ParamEntity//参数实体</code></pre>
+
+<pre><code class="sql">update table t
+set t.col1 = #{col2:VRACHAR}
+where t.col1='col1'
+/*#     if col2 is not null              */
+and col2=#{col2:VRACHAR}
+/*#     fi                               */
+/*#     if col3 is not null              */
+and col3=#{col3:NUMBER}
+/*#     fi                               */</code></pre>
+
+<h1><a href="deleteById">根据用户ID删除数据</a></h1>
+
+<pre><code class="wing4j param">--@paramEntity=org.wing4j.orm.markdown.ParamEntity//参数实体</code></pre>
+
+<pre><code class="sql">delete from table t
+where t.col1='col1'
+/*#     if col2 is not null              */
+and col2=#{col2:VRACHAR}
+/*#     fi                               */
+/*#     if col3 is not null              */
+and col3=#{col3:NUMBER}
+/*#     fi                               */</code></pre>
+<script type='text/javascript'>
+$(document).ready(function(){
+  if($('code').length>0){
+    $('code').parent().addClass('prettyprint linenums');
+    prettyPrint();
+};
+});
+</script>
+</body>
+</html>

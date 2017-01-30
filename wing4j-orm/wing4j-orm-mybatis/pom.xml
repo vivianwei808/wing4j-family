@@ -50,6 +50,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.wing4j.orm</groupId>
+            <artifactId>wing4j-orm-mybatis-markdown</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <scope>provided</scope>

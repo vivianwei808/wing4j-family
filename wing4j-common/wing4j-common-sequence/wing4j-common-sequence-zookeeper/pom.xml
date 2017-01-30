@@ -11,9 +11,9 @@
     <artifactId>wing4j-common-sequence-zookeeper</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.101tec</groupId>
-            <artifactId>zkclient</artifactId>
-            <version>0.10</version>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j.common</groupId>

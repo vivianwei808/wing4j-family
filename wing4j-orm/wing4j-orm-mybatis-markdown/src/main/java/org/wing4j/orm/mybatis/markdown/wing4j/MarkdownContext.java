@@ -2,6 +2,7 @@ package org.wing4j.orm.mybatis.markdown.wing4j;
 
 import lombok.Data;
 import lombok.ToString;
+import org.apache.ibatis.session.Configuration;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,6 +14,10 @@ import java.util.List;
 @Data
 @ToString
 public class MarkdownContext {
+    /**
+     * MyBatis配置对象
+     */
+    Configuration config;
     /**
      * 方言
      */
@@ -29,8 +34,4 @@ public class MarkdownContext {
      * 命名空间
      */
     String namespace;
-    /**
-     * 语句列表
-     */
-    final List<MarkdownStatment> statments = new ArrayList<>();
 }
