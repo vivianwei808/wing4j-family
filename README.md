@@ -23,7 +23,7 @@
 
  3.wing4j common sequence
 
- 	wing4j提供的序号生成服务，连续自增序号的生成，支持单机，集群分布式环境
+​	wing4j提供的序号生成服务，连续自增序号的生成，支持单机，集群分布式环境
 
  4.wing4j common markdown
 
