@@ -18,7 +18,11 @@ public class DefaultMarkdownMapperParserTest {
         MarkdownContext ctx = new MarkdownContext();
         ctx.setFile(new File("target/test-classes/example1.md").toURI());
         ctx.setFileEncoding("GBK");
-        ctx.setConfig(new Configuration());
+        Configuration config = new Configuration();
+        config.setCacheEnabled(true);
+        config.setLazyLoadingEnabled(false);
+        config.setAggressiveLazyLoading(true);
+        ctx.setConfig(config);
         parser.parse(ctx);
     }
 }
