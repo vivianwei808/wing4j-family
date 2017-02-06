@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>wing4j-config-center-client</module>
+        <module>wing4j-config-center-common</module>
+        <module>wing4j-config-center-core</module>
+        <module>wing4j-config-center-server</module>
+    </modules>
+    <parent>
+        <artifactId>wing4j-family</artifactId>
+        <groupId>org.wing4j</groupId>
+        <version>1.0.1</version>
+    </parent>
+    <artifactId>wing4j-config-center</artifactId>
+    <description>配置中心</description>
+    <packaging>pom</packaging>
+</project>

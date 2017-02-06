@@ -36,6 +36,16 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
+      <xsd:attribute name="strictWing4j" type="xsd:boolean"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+             严格wing4j注解
+            ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="databaseType" type="xsd:string"
                      use="required">
         <xsd:annotation>
