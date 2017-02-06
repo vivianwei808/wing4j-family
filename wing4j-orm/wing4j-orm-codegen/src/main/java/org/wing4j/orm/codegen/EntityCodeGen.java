@@ -100,7 +100,7 @@ public class EntityCodeGen {
         if (tableMetadata.getDataEngine() != null) {
             headBuf.append("@").append(DataEngine.class.getSimpleName()).append("(").append(DataEngineType.class.getSimpleName()).append(".").append(tableMetadata.getDataEngine()).append(")\n");
         }
-        headBuf.append("public").append(" ").append("class").append(" ").append(tableMetadata.getClassName()).append(" ").append("{\n");
+        headBuf.append("public").append("UTF-8").append("class").append(" ").append(tableMetadata.getClassName()).append(" ").append("{\n");
         os.write(headBuf.toString().getBytes("UTF-8"));
         for (String column : tableMetadata.getOrderColumns()) {
             ColumnMetadata columnMetadata = tableMetadata.getColumnMetadatas().get(column);
