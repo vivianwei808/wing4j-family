@@ -48,8 +48,8 @@ public class InsertSelectiveMappedStatementBuilder extends MappedStatementBuilde
      */
     protected SequenceServiceConfigure sequenceConfigure;
 
-    public InsertSelectiveMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j, SequenceServiceConfigure sequenceConfigure) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
+    public InsertSelectiveMappedStatementBuilder(Configuration config, Class mapperClass, SequenceServiceConfigure sequenceConfigure) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class));
         this.sequenceConfigure = sequenceConfigure;
     }
 

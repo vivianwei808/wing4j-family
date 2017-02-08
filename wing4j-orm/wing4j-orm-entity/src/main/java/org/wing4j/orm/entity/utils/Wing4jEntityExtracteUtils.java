@@ -31,6 +31,8 @@ public class Wing4jEntityExtracteUtils {
         if (tableMetadata.getTableName() == null && tableAnn != null && tableAnn.name() != null) {
             tableMetadata.setTableName(tableAnn.name());
             tableMetadata.setSchema(tableAnn.schema());
+            tableMetadata.setPrefix(tableAnn.prefix());
+            tableMetadata.setSuffix(tableAnn.suffix());
         }
         //提取表注释
         if (commentAnn != null && commentAnn.value() != null) {

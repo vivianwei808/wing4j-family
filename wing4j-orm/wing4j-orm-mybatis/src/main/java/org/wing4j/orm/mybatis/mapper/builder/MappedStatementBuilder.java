@@ -1,11 +1,13 @@
 package org.wing4j.orm.mybatis.mapper.builder;
 
+import lombok.Data;
 import lombok.ToString;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.xmltags.MixedSqlNode;
 import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.session.Configuration;
 import org.wing4j.orm.WordMode;
+import org.wing4j.test.TableNameMode;
 
 import java.util.Arrays;
 
@@ -13,18 +15,43 @@ import java.util.Arrays;
  * Created by wing4j on 2016/12/18.
  */
 @ToString
+@Data
 public abstract class MappedStatementBuilder {
-    public MappedStatementBuilder(Configuration config, String namespace, Class mapperClass, Class entityClass, Class keyClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
+    public MappedStatementBuilder(Configuration config, String namespace, Class mapperClass, Class entityClass, Class keyClass) {
         this.config = config;
         this.namespace = namespace;
         this.mapperClass = mapperClass;
         this.entityClass = entityClass;
         this.keyClass = keyClass;
-        this.sqlMode = sqlMode;
-        this.keywordMode = keywordMode;
-        this.strictWing4j = strictWing4j;
     }
+    /**
+     * 数据库模式
+     */
+    String schema;
 
+    /**
+     * 前缀
+     */
+    String prefix;
+
+    /**
+     * 后缀
+     */
+    String suffix;
+    /**
+     * 表模式使用
+     */
+    TableNameMode schemaMode;
+
+    /**
+     * 前缀模式
+     */
+    TableNameMode prefixMode;
+
+    /**
+     * 后缀模式
+     */
+    TableNameMode suffixModed;
     /**
      * 配置对象
      */

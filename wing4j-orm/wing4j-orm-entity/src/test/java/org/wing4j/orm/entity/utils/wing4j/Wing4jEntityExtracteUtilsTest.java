@@ -18,6 +18,9 @@ public class Wing4jEntityExtracteUtilsTest {
     @Test
     public void testExtractTable_wing4j_normal() throws Exception {
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
+        Assert.assertEquals("FA", tableMetadata.getPrefix());
+        Assert.assertEquals("INF", tableMetadata.getSuffix());
+        Assert.assertEquals("SCHEMA", tableMetadata.getSchema());
         System.out.println(tableMetadata);
         Assert.assertEquals(11, tableMetadata.getColumnMetadatas().size());
         Assert.assertEquals("CHAR(36)", tableMetadata.getColumnMetadatas().get("SERIAL_NO").getDataType());

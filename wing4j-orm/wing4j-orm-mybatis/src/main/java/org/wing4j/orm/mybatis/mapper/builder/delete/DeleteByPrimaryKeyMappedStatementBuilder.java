@@ -29,8 +29,8 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
  */
 public class DeleteByPrimaryKeyMappedStatementBuilder extends MappedStatementBuilder {
 
-    public DeleteByPrimaryKeyMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
+    public DeleteByPrimaryKeyMappedStatementBuilder(Configuration config, Class mapperClass) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class));
     }
 
     @Override
