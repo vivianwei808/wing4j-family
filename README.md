@@ -49,12 +49,12 @@ pom.xml添加如下代码
         <dependency>
             <groupId>org.wing4j.orm</groupId>
             <artifactId>wing4j-orm-mybatis</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wing4j.test</groupId>
             <artifactId>wing4j-test-core</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 ```

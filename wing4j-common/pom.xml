@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.wing4j</groupId>
         <artifactId>wing4j-family</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <groupId>org.wing4j.common</groupId>
     <artifactId>wing4j-common</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>wing4j-common</name>
     <description>This is the wing4j-family member wing4j-common</description>
