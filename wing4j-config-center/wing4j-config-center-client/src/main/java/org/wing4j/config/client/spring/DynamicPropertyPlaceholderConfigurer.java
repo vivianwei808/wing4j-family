@@ -129,17 +129,19 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
         //检验参数
         vlidateParams();
         //如果是本地模式，则按父类方式处理即可
-        if (ConfigMode.LOCAL.equals(configMode)) {
+        if (ConfigMode.LOCAL == configMode) {
             super.postProcessBeanFactory(beanFactory);
             return;
         }
         //最终解析出的坐标
         log.info("Finally load client's config coordinate [groupId, artifactId , version, profile] -> [{}, {}, {}, {}]", groupId, artifactId, profile, version);
         try {
-            //加载引导参数
-            initBootProperties();
-            //处理参数
-            processProperties(beanFactory, procProperties());
+            if(ConfigMode.AUTO == configMode){
+                //加载引导参数
+                initBootProperties();
+                //处理参数
+                processProperties(beanFactory, procProperties());
+            }
             //初始化配置中心客户端
             initConfigCenter();
         } catch (IOException e) {
