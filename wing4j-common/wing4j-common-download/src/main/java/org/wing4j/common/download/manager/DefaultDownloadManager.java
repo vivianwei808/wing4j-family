@@ -1,13 +1,12 @@
-package org.wing4j.common.httpclient.restful;
+package org.wing4j.common.download.manager;
 
 import lombok.extern.slf4j.Slf4j;
-import org.wing4j.common.httpclient.RemoteUrl;
-import org.wing4j.common.httpclient.RestfulManager;
-import org.wing4j.common.httpclient.RetryStrategy;
-import org.wing4j.common.httpclient.UnreliableHandler;
-import org.wing4j.common.httpclient.handler.FetchFileHandler;
+import org.wing4j.common.download.RemoteUrl;
+import org.wing4j.common.download.DownloadManager;
+import org.wing4j.common.download.RetryStrategy;
+import org.wing4j.common.download.UnreliableHandler;
+import org.wing4j.common.download.handler.HttpFileHandler;
 import org.wing4j.common.utils.FileSystemUtils;
-import org.wing4j.common.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +16,10 @@ import java.net.URL;
  * Created by wing4j on 2017/2/7.
  */
 @Slf4j
-public class DefaultRestfulManager implements RestfulManager {
+public class DefaultDownloadManager implements DownloadManager {
     RetryStrategy retryStrategy;
 
-    public DefaultRestfulManager(RetryStrategy retryStrategy) {
+    public DefaultDownloadManager(RetryStrategy retryStrategy) {
         this.retryStrategy = retryStrategy;
     }
 
@@ -46,7 +45,7 @@ public class DefaultRestfulManager implements RestfulManager {
                  int retryIntervalSeconds) {
         Exception ex = null;
         for (URL url : remoteUrl.getUrls()) {
-            UnreliableHandler unreliableHandler = new FetchFileHandler(url, tempDirPath);
+            UnreliableHandler unreliableHandler = new HttpFileHandler(url, tempDirPath);
             try {
                 return retryStrategy.retry(unreliableHandler, retryTimes, retryIntervalSeconds);
             } catch (Exception e) {

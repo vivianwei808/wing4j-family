@@ -8,7 +8,7 @@
         <groupId>org.wing4j.common</groupId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>wing4j-common-httpclient</artifactId>
+    <artifactId>wing4j-common-download</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.wing4j.common</groupId>

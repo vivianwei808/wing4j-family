@@ -1,11 +1,11 @@
-package org.wing4j.common.httpclient;
+package org.wing4j.common.download;
 
 import java.io.IOException;
 
 /**
  * Created by wing4j on 2017/2/7.
  */
-public interface RestfulManager {
+public interface DownloadManager {
     /**
      * 下载
      * @param remoteUrl 远程服务器地址

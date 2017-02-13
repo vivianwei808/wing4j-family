@@ -1,8 +1,8 @@
-package org.wing4j.common.httpclient.retry;
+package org.wing4j.common.download.retry;
 
 import lombok.extern.slf4j.Slf4j;
-import org.wing4j.common.httpclient.RetryStrategy;
-import org.wing4j.common.httpclient.UnreliableHandler;
+import org.wing4j.common.download.RetryStrategy;
+import org.wing4j.common.download.UnreliableHandler;
 
 /**
  * Created by wing4j on 2017/2/7.

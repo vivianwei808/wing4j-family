@@ -1,4 +1,4 @@
-package org.wing4j.common.httpclient;
+package org.wing4j.common.download;
 
 /**
  * 一个可重试可执行方法

@@ -1,4 +1,4 @@
-package org.wing4j.common.httpclient;
+package org.wing4j.common.download;
 
 /**
  * 重试的策略

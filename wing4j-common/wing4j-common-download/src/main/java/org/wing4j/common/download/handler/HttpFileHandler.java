@@ -1,7 +1,7 @@
-package org.wing4j.common.httpclient.handler;
+package org.wing4j.common.download.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.wing4j.common.httpclient.UnreliableHandler;
+import org.wing4j.common.download.UnreliableHandler;
 import org.wing4j.common.utils.FileSystemUtils;
 import org.wing4j.common.utils.FileUtils;
 
@@ -13,11 +13,11 @@ import java.net.URL;
  * 下载远程文件到本地临时目录
  */
 @Slf4j
-public class FetchFileHandler implements UnreliableHandler {
+public class HttpFileHandler implements UnreliableHandler {
     URL remoteUrl;
     File localTmpFile;
 
-    public FetchFileHandler(URL remoteUrl, File localTmpFile) {
+    public HttpFileHandler(URL remoteUrl, File localTmpFile) {
         this.remoteUrl = remoteUrl;
         this.localTmpFile = localTmpFile;
     }
