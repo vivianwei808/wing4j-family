@@ -12,7 +12,7 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <context:component-scan base-package="org.wing4j.config.client"/>
     <bean id="dynamicPropertyPlaceholderConfigurer" class="org.wing4j.config.client.spring.DynamicPropertyPlaceholderConfigurer">
-        <property name="host" value="localhost" />
+        <property name="host" value="192.168.25.90" />
         <property name="port" value="5678" />
         <property name="groupId" value="io.github.xdiamond" />
         <property name="artifactId" value="xdiamond-client-example" />
@@ -21,6 +21,7 @@
         <property name="secretKey" value=""></property>
         <property name="maxRetryTimes" value="2000"></property>
         <property name="maxRetryIntervalSeconds" value="10"></property>
+        <property name="configMode" value="SERVER"/>
         <property name="locations">
             <array>
                 <value>classpath*:local.properties</value>

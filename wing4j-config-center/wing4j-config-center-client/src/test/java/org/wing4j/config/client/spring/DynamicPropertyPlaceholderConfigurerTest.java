@@ -21,10 +21,6 @@ public class DynamicPropertyPlaceholderConfigurerTest {
 
     @Test
     public void testProcProperties() throws Exception {
-        config.getParam2();
-        config.getParam1();
-        config.setParam1("ss");
-        config.setParam2("sss");
         config.ssssss();
         while (true){
             System.out.println(config.getParam1());

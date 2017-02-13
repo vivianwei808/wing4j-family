@@ -139,11 +139,15 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
             if(ConfigMode.AUTO == configMode){
                 //加载引导参数
                 initBootProperties();
+                //记载本地
+                procProperties();
                 //处理参数
-                processProperties(beanFactory, procProperties());
+                processProperties(beanFactory, this.runtimeProperties);
             }
             //初始化配置中心客户端
             initConfigCenter();
+            //处理参数
+            processProperties(beanFactory, this.runtimeProperties);
         } catch (IOException e) {
             log.error("proccess properies happens error!", e);
         }
@@ -199,7 +203,7 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
      * @return
      * @throws IOException
      */
-    Properties procProperties() throws IOException {
+    void procProperties() throws IOException {
         //加载bootProrperties文件
         Properties overrideProperties = clone(bootProperties);
         //加载location指定的Properties文件
@@ -215,7 +219,6 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
             String propertieKey = (String) key;
             this.runtimeProperties.setProperty(propertieKey, overrideProperties.getProperty(propertieKey));
         }
-        return this.runtimeProperties;
     }
 
     /**
