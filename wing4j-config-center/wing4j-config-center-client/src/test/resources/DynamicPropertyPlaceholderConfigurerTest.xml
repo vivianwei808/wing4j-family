@@ -13,13 +13,14 @@
     <context:component-scan base-package="org.wing4j.config.client"/>
     <bean id="dynamicPropertyPlaceholderConfigurer" class="org.wing4j.config.client.spring.DynamicPropertyPlaceholderConfigurer">
         <property name="host" value="localhost" />
-        <property name="port" value="5555" />
+        <property name="port" value="5678" />
         <property name="groupId" value="io.github.xdiamond" />
         <property name="artifactId" value="xdiamond-client-example" />
         <property name="version" value="0.0.1-SNAPSHOT" />
         <property name="profile" value="test" />
         <property name="secretKey" value=""></property>
-        <property name="scanListenerAnnotation" value="true"/>
+        <property name="maxRetryTimes" value="2000"></property>
+        <property name="maxRetryIntervalSeconds" value="10"></property>
         <property name="locations">
             <array>
                 <value>classpath*:local.properties</value>

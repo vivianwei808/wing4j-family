@@ -90,22 +90,25 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
      * 失败重试的次数
      */
     @Setter
-    int maxRetryTimes = 3;
+    int maxRetryTimes = 0;
     /**
      * 失败重试的时间间隔
      */
     @Setter
-    int retryIntervalSeconds = 1;
+    int retryIntervalSeconds = 0;
     /**
      * 最大的重试时间间隔
      */
     @Setter
-    int maxRetryIntervalSeconds = 60;
+    int maxRetryIntervalSeconds = 0;
     /**
-     * 是否使用扫描监听器注解
+     * 当保存配置失败时，重试的最多次数
      */
-    @Setter
-    boolean scanListenerAnnotation;
+    int maxTrySaveTimes;
+    /**
+     * 保存间隔
+     */
+    int trySaveIntervalMs;
     /**
      * 配置中心
      */
@@ -139,7 +142,6 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
             processProperties(beanFactory, procProperties());
             //初始化配置中心客户端
             initConfigCenter();
-            Properties ex = this.mergeProperties();
         } catch (IOException e) {
             log.error("proccess properies happens error!", e);
         }
@@ -149,6 +151,24 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
      * 初始化配置中心
      */
     void initConfigCenter() {
+        if(profile == null){
+            profile = "dev";
+        }
+        if (maxRetryTimes == 0) {
+            maxRetryTimes = Integer.MAX_VALUE;
+        }
+        if (retryIntervalSeconds == 0) {
+            retryIntervalSeconds = 60;
+        }
+        if (maxRetryIntervalSeconds == 0) {
+            maxRetryIntervalSeconds = 5 * 60;
+        }
+        if (maxTrySaveTimes == 0) {
+            maxTrySaveTimes = Integer.MAX_VALUE;
+        }
+        if (trySaveIntervalMs == 0) {
+            trySaveIntervalMs = 1000;
+        }
         ConfigCenterLoader.ConfigCenterLoaderBuilder builder = ConfigCenterLoader.builder();
         builder.host(host)
                 .port(port)
@@ -158,10 +178,12 @@ public class DynamicPropertyPlaceholderConfigurer extends PropertyPlaceholderCon
                 .profile(profile)
                 .secretKey(secretKey)
                 .printConfig(printConfig)
+                .daemon(true)
                 .syncToSystemProperties(syncToSystemProperties)
                 .backOffRetryInterval(backOffRetryInterval)
                 .maxRetryTimes(maxRetryTimes)
                 .maxRetryIntervalSeconds(maxRetryIntervalSeconds)
+                .maxTrySaveTimes(maxTrySaveTimes)
                 .retryIntervalSeconds(retryIntervalSeconds)
                 .runtimeProperties(runtimeProperties);
         this.config = builder.build();

@@ -17,14 +17,16 @@ import org.wing4j.orm.mybatis.mapper.builder.DemoCrudMapper;
 import org.wing4j.orm.mybatis.mapper.builder.DemoEntity;
 import org.wing4j.orm.mybatis.mapper.builder.MappedStatementBuilder;
 import org.wing4j.orm.mybatis.mapper.builder.insert.InsertMappedStatementBuilder;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.mybatis.spring.transaction.SpringManagedTransaction;
 import org.wing4j.test.CreateTable;
+import org.wing4j.test.TableNameMode;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@ContextConfiguration(locations = {"classpath*:testContext-dev.xml"})
+@ContextConfiguration(locations = {"classpath*:testContext-builder.xml"})
 public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
     @Autowired
     DataSource dataSource;
@@ -38,11 +40,16 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         config.setLazyLoadingEnabled(false);
         config.setAggressiveLazyLoading(true);
         Transaction transaction = new SpringManagedTransaction(dataSource);
+        SequenceServiceConfigure sequenceServiceConfigure = getBean(SequenceServiceConfigure.class);
         final Executor executor = config.newExecutor(transaction);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false, null);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, sequenceServiceConfigure);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             DemoEntity demoEntity = new DemoEntity();
@@ -54,7 +61,11 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
             Assert.assertEquals(1, cnt);
         }
         {
-            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.upperCase, WordMode.upperCase, false);
+            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             int cnt = sqlSession.delete(Constants.DELETE_BY_PRIMARY_KEY, serialNo);
@@ -71,11 +82,16 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
         config.setLazyLoadingEnabled(false);
         config.setAggressiveLazyLoading(true);
         Transaction transaction = new SpringManagedTransaction(dataSource);
+        SequenceServiceConfigure sequenceServiceConfigure = getBean(SequenceServiceConfigure.class);
         final Executor executor = config.newExecutor(transaction);
         SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
         String serialNo = UUID.randomUUID().toString();
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false, null);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, sequenceServiceConfigure);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             DemoEntity demoEntity = new DemoEntity();
@@ -87,7 +103,11 @@ public class DeleteByPrimaryKeyMappedStatementBuilderTest extends BaseTest {
             Assert.assertEquals(1, cnt);
         }
         {
-            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
+            MappedStatementBuilder builder = new DeleteByPrimaryKeyMappedStatementBuilder(config, DemoCrudMapper.class);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             int cnt = sqlSession.delete(Constants.DELETE_BY_PRIMARY_KEY, serialNo);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="classpath*:testContext-dev.xml"/>
+
+    <bean class="org.wing4j.orm.mybatis.sequnece.SpringSequenceServiceConfigure">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappings">
+            <map>
+                <entry key="TB_DEMO" value="org.wing4j.common.sequence.h2.H2SequenceServiceImpl"/>
+            </map>
+        </property>
+        <property name="parameters">
+            <props>
+                <prop key="autoCreate">true</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

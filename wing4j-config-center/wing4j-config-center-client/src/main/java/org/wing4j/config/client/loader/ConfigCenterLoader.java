@@ -73,8 +73,8 @@ public class ConfigCenterLoader {
                     log.info("load config from config-center server success. " + toProjectInfoString());
                     bShouldLoadLocalConfig = false;
 
-                    if (printConfig) {
-                        System.out.println(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigs, true));
+                    if (printConfig || log.isDebugEnabled()) {
+                        log.info(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigs, true));
                     }
 
                 }
@@ -93,8 +93,8 @@ public class ConfigCenterLoader {
                 this.resolvedConfigVOMap = ResolvedConfigVO.listToMap(resolvedConfigVOList);
                 log.info("load config-center config " + toProjectInfoString() + " from localConfigPath:" + localConfigPath);
 
-                if (printConfig) {
-                    System.out.println(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigVOList, true));
+                if (printConfig || log.isDebugEnabled()) {
+                    log.info(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigVOList, true));
                 }
             } catch (IOException e) {
                 throw new RuntimeException("load config-center localConfig error! " + toProjectInfoString(), e);
@@ -132,7 +132,9 @@ public class ConfigCenterLoader {
                     configCenter.secretKey);
             try {
                 List<ResolvedConfigVO> resolvedConfigVOs = future.get(10, TimeUnit.SECONDS);
-                System.out.println(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigVOs, true));
+                if (configCenter.isPrintConfig() || log.isDebugEnabled()) {
+                    log.info(ResolvedConfigVO.toUTF8PropertiesString(resolvedConfigVOs, true));
+                }
                 configCenter.loadConfig(resolvedConfigVOs);
             } catch (ConnectException e) {
                 // 对于连接错误，这里不打印错误信息，因为会在重试任务里打印
@@ -184,7 +186,7 @@ public class ConfigCenterLoader {
                     System.setProperty(resolvedConfigVO.getConfig().getKey(), resolvedConfigVO.getConfig().getValue());
                 }
                 runtimeProperties.setProperty(resolvedConfigVO.getConfig().getKey(), resolvedConfigVO.getConfig().getValue());
-            } else if (!value.equals(oldResolvedConfigVO.getConfig().getValue())) {
+            } else{
                 if (syncToSystemProperties) {
                     System.setProperty(resolvedConfigVO.getConfig().getKey(), resolvedConfigVO.getConfig().getValue());
                 }

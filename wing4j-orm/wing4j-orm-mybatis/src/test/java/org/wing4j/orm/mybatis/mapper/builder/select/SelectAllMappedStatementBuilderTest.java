@@ -6,7 +6,7 @@ import org.wing4j.orm.mybatis.mapper.builder.BaseTest;
 
 import static org.junit.Assert.*;
 
-@ContextConfiguration(locations = {"classpath*:testContext-dev.xml"})
+@ContextConfiguration(locations = {"classpath*:testContext-builder.xml"})
 public class SelectAllMappedStatementBuilderTest extends BaseTest {
 
     @Test
