@@ -16,7 +16,7 @@ public class SqlScriptUtilsTest {
     public void testGenerateCreateTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
-        SqlScriptUtils.generateCreateTable(os, tableMetadata, "", null, WordMode.lowerCase, WordMode.lowerCase, true);
+        SqlScriptUtils.generateCreateTable(os, tableMetadata, WordMode.lowerCase, WordMode.lowerCase, true);
         System.out.println(os.toString());
     }
 
@@ -24,7 +24,7 @@ public class SqlScriptUtilsTest {
     public void testGenerateDropTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
-        SqlScriptUtils.generateDropTable(os, tableMetadata, null, WordMode.lowerCase, WordMode.lowerCase, true);
+        SqlScriptUtils.generateDropTable(os, tableMetadata, WordMode.lowerCase, WordMode.lowerCase, true);
         System.out.println(os.toString());
     }
 
@@ -32,7 +32,7 @@ public class SqlScriptUtilsTest {
     public void testGenerateTruncateTable() throws Exception {
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(NormalWing4jDemoEntity.class, false);
-        SqlScriptUtils.generateTruncateTable(os, tableMetadata, null, WordMode.lowerCase, WordMode.lowerCase);
+        SqlScriptUtils.generateTruncateTable(os, tableMetadata, WordMode.lowerCase, WordMode.lowerCase);
         System.out.println(os.toString());
     }
 

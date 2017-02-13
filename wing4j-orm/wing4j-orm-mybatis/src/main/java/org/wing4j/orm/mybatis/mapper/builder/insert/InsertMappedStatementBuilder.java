@@ -49,8 +49,8 @@ public class InsertMappedStatementBuilder extends MappedStatementBuilder {
      */
     protected SequenceServiceConfigure sequenceConfigure;
 
-    public InsertMappedStatementBuilder(Configuration config, Class mapperClass, WordMode sqlMode, WordMode keywordMode, boolean strictWing4j, SequenceServiceConfigure sequenceConfigure) {
-        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class), sqlMode, keywordMode, strictWing4j);
+    public InsertMappedStatementBuilder(Configuration config, Class mapperClass, SequenceServiceConfigure sequenceConfigure) {
+        super(config, mapperClass.getName(), mapperClass, extractEntityClass(mapperClass, SelectMapper.class), extractKeyClass(mapperClass, SelectMapper.class));
         this.sequenceConfigure = sequenceConfigure;
     }
 

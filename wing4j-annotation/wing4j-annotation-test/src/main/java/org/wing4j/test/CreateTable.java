@@ -24,6 +24,18 @@ public @interface CreateTable {
     String schema() default "";
 
     /**
+     * 前缀
+     * @return
+     */
+    String prefix() default "";
+
+    /**
+     * 后缀
+     * @return
+     */
+    String suffix() default "";
+
+    /**
      * 创建表前进行测试
      *
      * @return 真假值
@@ -52,4 +64,22 @@ public @interface CreateTable {
      * @return 单词模式
      */
     WordMode sqlMode() default WordMode.lowerCase;
+
+    /**
+     * 表模式使用
+     * @return
+     */
+    TableNameMode schemaMode() default TableNameMode.createTest;
+
+    /**
+     * 前缀模式
+     * @return
+     */
+    TableNameMode prefixMode() default TableNameMode.createTest;
+
+    /**
+     * 后缀模式
+     * @return
+     */
+    TableNameMode suffixMode() default TableNameMode.createTest;
 }

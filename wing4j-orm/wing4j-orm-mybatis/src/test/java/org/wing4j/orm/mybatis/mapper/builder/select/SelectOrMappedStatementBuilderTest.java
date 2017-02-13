@@ -17,8 +17,10 @@ import org.wing4j.orm.mybatis.mapper.builder.DemoCrudMapper;
 import org.wing4j.orm.mybatis.mapper.builder.DemoEntity;
 import org.wing4j.orm.mybatis.mapper.builder.MappedStatementBuilder;
 import org.wing4j.orm.mybatis.mapper.builder.insert.InsertMappedStatementBuilder;
+import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.mybatis.spring.transaction.SpringManagedTransaction;
 import org.wing4j.test.CreateTable;
+import org.wing4j.test.TableNameMode;
 
 import javax.sql.DataSource;
 
@@ -27,8 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
-
-@ContextConfiguration(locations = {"classpath*:testContext-dev.xml"})
+@ContextConfiguration(locations = {"classpath*:testContext-builder.xml"})
 public class SelectOrMappedStatementBuilderTest extends BaseTest {
     @Autowired
     DataSource dataSource;
@@ -42,9 +43,14 @@ public class SelectOrMappedStatementBuilderTest extends BaseTest {
         config.setLazyLoadingEnabled(false);
         config.setAggressiveLazyLoading(true);
         Transaction transaction = new SpringManagedTransaction(dataSource);
+        SequenceServiceConfigure sequenceServiceConfigure = getBean(SequenceServiceConfigure.class);
         final Executor executor = config.newExecutor(transaction);
         {
-            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false, null);
+            MappedStatementBuilder builder = new InsertMappedStatementBuilder(config, DemoCrudMapper.class, sequenceServiceConfigure);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);
@@ -72,7 +78,11 @@ public class SelectOrMappedStatementBuilderTest extends BaseTest {
             demoEntity.setCol1("col1_test1");
             demoEntity.setCol2(BigDecimal.ZERO);
             demoEntity.setCol3(1);
-            MappedStatementBuilder builder = new SelectOrMappedStatementBuilder(config, DemoCrudMapper.class, WordMode.lowerCase, WordMode.lowerCase, false);
+            MappedStatementBuilder builder = new SelectOrMappedStatementBuilder(config, DemoCrudMapper.class);
+            builder.setKeywordMode(WordMode.lowerCase);
+            builder.setSqlMode(WordMode.lowerCase);
+            builder.setSchemaMode(TableNameMode.auto);
+            builder.setPrefixMode(TableNameMode.auto);
             MappedStatement ms = builder.build();
             config.addMappedStatement(ms);
             SqlSession sqlSession = new DefaultSqlSession(config, executor, false);

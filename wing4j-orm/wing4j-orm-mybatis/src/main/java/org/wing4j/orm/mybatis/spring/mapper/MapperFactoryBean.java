@@ -11,6 +11,7 @@ import org.wing4j.orm.mybatis.plugins.PaginationStage1Interceptor;
 import org.wing4j.orm.mybatis.plugins.PaginationStage2Interceptor;
 import org.wing4j.orm.mybatis.sequnece.SequenceServiceConfigure;
 import org.wing4j.orm.mybatis.spring.SqlSessionDaoSupport;
+import org.wing4j.test.TableNameMode;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -29,6 +30,18 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
      */
     @Setter
     String keywordMode = WordMode.lowerCase.name();
+    @Setter
+    String schemaMode = TableNameMode.auto.name();
+    @Setter
+    String schema;
+    @Setter
+    String prefixMode = TableNameMode.auto.name();
+    @Setter
+    String prefix;
+    @Setter
+    String suffixMode = TableNameMode.auto.name();
+    @Setter
+    String suffix;
     /**
      * 严格wing4j注解模式
      */
@@ -63,12 +76,24 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
         notNull(this.databaseType, "Property 'databaseType' is required");
         WordMode sqlMode0 = null;
         WordMode keywordMode0 = null;
+        TableNameMode schemaMode0 = null;
+        TableNameMode prefixMode0 = null;
+        TableNameMode suffixMode0 = null;
         DatabaseType databaseType0 = null;
         if ((sqlMode0 = WordMode.valueOf(sqlMode)) == null) {
             throw new IllegalArgumentException("Property 'sqlMode' must is lowerCase or upperCase ");
         }
         if ((keywordMode0 = WordMode.valueOf(keywordMode)) == null) {
             throw new IllegalArgumentException("Property 'keywordMode' must is lowerCase or upperCase ");
+        }
+        if ((schemaMode0 = TableNameMode.valueOf(schemaMode)) == null) {
+            throw new IllegalArgumentException("Property 'schemaMode' must is auto 、entity or createTable");
+        }
+        if ((prefixMode0 = TableNameMode.valueOf(prefixMode)) == null) {
+            throw new IllegalArgumentException("Property 'prefixMode' must is auto 、entity or createTable");
+        }
+        if ((suffixMode0 = TableNameMode.valueOf(suffixMode)) == null) {
+            throw new IllegalArgumentException("Property 'suffixMode' must is auto 、entity or createTable");
         }
         if ((databaseType0 = DatabaseType.valueOf(databaseType)) == null) {
             throw new IllegalArgumentException("Property 'databaseType' must is lowerCase or upperCase ");
@@ -79,7 +104,7 @@ public class MapperFactoryBean<T> extends SqlSessionDaoSupport implements Factor
         configuration.addInterceptor(new PaginationStage1Interceptor(databaseType0));
         configuration.addInterceptor(new PaginationStage2Interceptor());
 
-        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0, strictWing4j, sequenceConfigure);
+        MappedStatementRegister.scan(configuration, this.mapperInterface, sqlMode0, keywordMode0, schemaMode0, schema, prefixMode0, prefix, suffixMode0, suffix, strictWing4j, sequenceConfigure);
         if (this.addToConfig && !configuration.hasMapper(this.mapperInterface)) {
             try {
                 configuration.addMapper(this.mapperInterface);

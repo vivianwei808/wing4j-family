@@ -2,10 +2,12 @@ package org.wing4j.orm.entity.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.wing4j.common.utils.MessageFormatter;
 import org.wing4j.orm.PrimaryKeyStrategy;
 import org.wing4j.orm.WordMode;
 import org.wing4j.orm.entity.metadata.ColumnMetadata;
 import org.wing4j.orm.entity.metadata.TableMetadata;
+import org.wing4j.test.TableNameMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,11 +21,60 @@ import static org.wing4j.orm.entity.utils.KeywordsUtils.convert;
  */
 @Slf4j
 public abstract class SqlScriptUtils {
-    public static String generateCreateTable(Class entityClass, String schema, String engine, WordMode sqlMode, WordMode keywordMode, boolean createBeforeTest) {
+    /**
+     * @param entityClass
+     * @param schema           指定的数据库模式，如果为null，则使用元信息数据库模式
+     * @param prefix
+     * @param suffix
+     * @param engine           指定的数据引擎，如果为null，则使用元信息数据引擎
+     * @param sqlMode
+     * @param keywordMode
+     * @param createBeforeTest
+     * @return
+     */
+    public static String generateCreateTable(Class entityClass,
+                                             TableNameMode schemaMode,
+                                             String schema,
+                                             TableNameMode prefixMode,
+                                             String prefix,
+                                             TableNameMode suffixMode,
+                                             String suffix,
+                                             String engine,
+                                             WordMode sqlMode,
+                                             WordMode keywordMode,
+                                             boolean createBeforeTest) {
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, false);
+        if(schemaMode == TableNameMode.auto){
+            if(schema != null){
+                tableMetadata.setSchema(schema);
+            }
+        }else if(schemaMode == TableNameMode.entity){
+
+        }else if (schemaMode == TableNameMode.createTest){
+            tableMetadata.setSchema(schema);
+        }
+        if(prefixMode == TableNameMode.auto){
+            if(prefix != null){
+                tableMetadata.setPrefix(prefix);
+            }
+        }else if(prefixMode == TableNameMode.entity){
+
+        }else if (prefixMode == TableNameMode.createTest){
+            tableMetadata.setPrefix(prefix);
+        }
+        if(suffixMode == TableNameMode.auto){
+            if(suffix != null){
+                tableMetadata.setSuffix(suffix);
+            }
+        }else if(suffixMode == TableNameMode.entity){
+
+        }else if (suffixMode == TableNameMode.createTest){
+            tableMetadata.setSuffix(suffix);
+        }
+        tableMetadata.setDataEngine(engine);
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         try {
-            generateCreateTable(os, tableMetadata, schema, engine, sqlMode, keywordMode, true);
+            generateCreateTable(os, tableMetadata, sqlMode, keywordMode, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,23 +86,27 @@ public abstract class SqlScriptUtils {
      *
      * @param os               输出流
      * @param tableMetadata    表元信息
-     * @param schema           指定的数据库模式，如果为null，则使用元信息数据库模式
-     * @param engine           指定的数据引擎，如果为null，则使用元信息数据引擎
      * @param sqlMode          SQL语句是否大小写
      * @param keywordMode      关键字是否大小写
      * @param createBeforeTest 建表之前是否进行测试
      */
-    public static void generateCreateTable(ByteArrayOutputStream os, TableMetadata tableMetadata, String schema, String engine, WordMode sqlMode, WordMode keywordMode, boolean createBeforeTest) throws IOException {
+    public static void generateCreateTable(ByteArrayOutputStream os,
+                                           TableMetadata tableMetadata,
+                                           WordMode sqlMode,
+                                           WordMode keywordMode,
+                                           boolean createBeforeTest) throws IOException {
         StringBuilder sql = new StringBuilder(convert("CREATE TABLE", keywordMode));
         if (createBeforeTest) {
             sql.append(convert(" IF NOT EXISTS", keywordMode));
         }
-        //如果外部设置数据库模式，则使用外部的
-        if (schema != null) {
-            tableMetadata.setSchema(schema);
-        }
         String table = tableMetadata.getTableName();
         if (StringUtils.isNotBlank(tableMetadata.getSchema())) {
+            if (StringUtils.isNotBlank(tableMetadata.getPrefix())) {
+                table = tableMetadata.getPrefix() + "_" + table;
+            }
+            if (StringUtils.isNotBlank(tableMetadata.getSuffix())) {
+                table = table + "_" + tableMetadata.getSuffix();
+            }
             table = tableMetadata.getSchema() + "." + table;
         }
         table = convert(table, sqlMode);
@@ -113,29 +168,57 @@ public abstract class SqlScriptUtils {
             throw new IllegalArgumentException(tableMetadata.getTableName() + "自增主键只允许一个");
         }
 
-        if (engine != null) {
-            if (engine.isEmpty()) {
-                sql.append(" ");
-            } else {
-                sql.append(convert("ENGINE=", keywordMode) + engine + " ");
-            }
-        } else {
-            if (tableMetadata.getDataEngine() != null && !tableMetadata.getDataEngine().isEmpty()) {
-                sql.append(convert("ENGINE=", keywordMode) + tableMetadata.getDataEngine() + " ");
-            }
+        if (StringUtils.isNotBlank(tableMetadata.getDataEngine())) {
+            sql.append(convert("ENGINE=", keywordMode) + tableMetadata.getDataEngine() + " ");
         }
         //如果实体类上有注解
-        if (tableMetadata.getComment() != null && !tableMetadata.getComment().isEmpty()) {
+        if (StringUtils.isNotBlank(tableMetadata.getComment())) {
             sql.append(convert("COMMENT = '", keywordMode) + tableMetadata.getComment() + "'");
         }
         os.write(sql.toString().getBytes());
     }
 
-    public static String generateDropTable(Class entityClass, String schema, WordMode sqlMode, WordMode keywordMode, boolean dropBeforeTest) {
+    public static String generateDropTable(Class entityClass,
+                                           TableNameMode schemaMode,
+                                           String schema,
+                                           TableNameMode prefixMode,
+                                           String prefix,
+                                           TableNameMode suffixMode,
+                                           String suffix,
+                                           WordMode sqlMode,
+                                           WordMode keywordMode,
+                                           boolean dropBeforeTest) {
         TableMetadata tableMetadata = EntityExtracteUtils.extractTable(entityClass, false);
+        if(schemaMode == TableNameMode.auto){
+            if(schema != null){
+                tableMetadata.setSchema(schema);
+            }
+        }else if(schemaMode == TableNameMode.entity){
+
+        }else if (schemaMode == TableNameMode.createTest){
+            tableMetadata.setSchema(schema);
+        }
+        if(prefixMode == TableNameMode.auto){
+            if(prefix != null){
+                tableMetadata.setPrefix(prefix);
+            }
+        }else if(prefixMode == TableNameMode.entity){
+
+        }else if (prefixMode == TableNameMode.createTest){
+            tableMetadata.setPrefix(prefix);
+        }
+        if(suffixMode == TableNameMode.auto){
+            if(suffix != null){
+                tableMetadata.setSuffix(suffix);
+            }
+        }else if(suffixMode == TableNameMode.entity){
+
+        }else if (suffixMode == TableNameMode.createTest){
+            tableMetadata.setSuffix(suffix);
+        }
         ByteArrayOutputStream os = new ByteArrayOutputStream(1024);
         try {
-            generateDropTable(os, tableMetadata, schema, sqlMode, keywordMode, dropBeforeTest);
+            generateDropTable(os, tableMetadata, sqlMode, keywordMode, dropBeforeTest);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -147,23 +230,28 @@ public abstract class SqlScriptUtils {
      *
      * @param os             输出流
      * @param tableMetadata  表元信息
-     * @param schema         指定的数据库模式，如果为null，则使用元信息数据库模式
      * @param sqlMode        SQL语句是否大小写
      * @param keywordMode    关键字是否大小写
      * @param dropBeforeTest 删表之前进行测试
      */
-    public static void generateDropTable(ByteArrayOutputStream os, TableMetadata tableMetadata, String schema, WordMode sqlMode, WordMode keywordMode, boolean dropBeforeTest) throws IOException {
+    public static void generateDropTable(ByteArrayOutputStream os,
+                                         TableMetadata tableMetadata,
+                                         WordMode sqlMode,
+                                         WordMode keywordMode,
+                                         boolean dropBeforeTest) throws IOException {
         StringBuilder sql = new StringBuilder(convert("DROP TABLE", keywordMode));
         if (dropBeforeTest) {
             sql.append(convert(" IF EXISTS", keywordMode));
         }
         sql.append(" ");
-        //如果外部设置数据库模式，则使用外部的
-        if (schema != null) {
-            tableMetadata.setSchema(schema);
-        }
         String table = tableMetadata.getTableName();
         if (StringUtils.isNotBlank(tableMetadata.getSchema())) {
+            if (StringUtils.isNotBlank(tableMetadata.getPrefix())) {
+                table = tableMetadata.getPrefix() + "_" + table;
+            }
+            if (StringUtils.isNotBlank(tableMetadata.getSuffix())) {
+                table = table + "_" + tableMetadata.getSuffix();
+            }
             table = tableMetadata.getSchema() + "." + table;
         }
         table = convert(table, sqlMode);
@@ -176,19 +264,23 @@ public abstract class SqlScriptUtils {
      *
      * @param os            输出流
      * @param tableMetadata 表元信息
-     * @param schema        指定的数据库模式，如果为null，则使用元信息数据库模式
      * @param sqlMode       SQL语句是否大小写
      * @param keywordMode   关键字是否大小写
      */
-    public static void generateTruncateTable(ByteArrayOutputStream os, TableMetadata tableMetadata, String schema, WordMode sqlMode, WordMode keywordMode) throws IOException {
+    public static void generateTruncateTable(ByteArrayOutputStream os,
+                                             TableMetadata tableMetadata,
+                                             WordMode sqlMode,
+                                             WordMode keywordMode) throws IOException {
         StringBuilder sql = new StringBuilder(convert("TRUNCATE TABLE", keywordMode));
         sql.append(" ");
-        //如果外部设置数据库模式，则使用外部的
-        if (schema != null) {
-            tableMetadata.setSchema(schema);
-        }
         String table = tableMetadata.getTableName();
         if (StringUtils.isNotBlank(tableMetadata.getSchema())) {
+            if (StringUtils.isNotBlank(tableMetadata.getPrefix())) {
+                table = tableMetadata.getPrefix() + "_" + table;
+            }
+            if (StringUtils.isNotBlank(tableMetadata.getSuffix())) {
+                table = table + "_" + tableMetadata.getSuffix();
+            }
             table = tableMetadata.getSchema() + "." + table;
         }
         table = convert(table, sqlMode);
@@ -219,10 +311,11 @@ public abstract class SqlScriptUtils {
 
     /**
      * 通过实体生成SQL select 后的列名
+     *
      * @param entityClass 实体
      * @param keywordMode 关键大小写
-     * @param sqlMode SQL关键大小写
-     * @param newline 是否换行
+     * @param sqlMode     SQL关键大小写
+     * @param newline     是否换行
      * @return 列名
      */
     public static String genreateSqlHead(Class<?> entityClass, WordMode keywordMode, WordMode sqlMode, boolean newline) {

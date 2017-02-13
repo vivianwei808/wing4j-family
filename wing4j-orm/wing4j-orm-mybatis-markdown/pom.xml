@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-orm</artifactId>
         <groupId>org.wing4j.orm</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>wing4j-orm-mybatis-markdown</artifactId>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-markdown</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

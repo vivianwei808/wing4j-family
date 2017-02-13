@@ -4,7 +4,7 @@ import lombok.Data;
 import org.wing4j.orm.*;
 
 @Data
-@Table(name = "TB_DEMO", schema = "db")
+@Table(prefix = "FA", name = "TB_DEMO", suffix = "INF", schema = "SCHEMA")
 @Comment("测试表")
 public class NormalWing4jDemoEntity extends NoPkWing4jDemoEntity{
     @PrimaryKey(strategy = PrimaryKeyStrategy.UUID)

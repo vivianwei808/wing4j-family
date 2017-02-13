@@ -54,7 +54,6 @@ public abstract class EntityExtracteUtils {
                     .message("同时使用JPA注解{}和使用Wing4j注解{}", javax.persistence.Table.class, org.wing4j.orm.Table.class)
                     .solution("建议使用{}注解，也可以使用JPA注解{}", org.wing4j.orm.Table.class, javax.persistence.Table.class));
         }
-
         TableMetadata tableMetadata = TableMetadata.builder().entityClass(entityClass).className(entityClass.getSimpleName()).build();
         //严格模式下，只能使用Wing4j注解
         if(strictWing4j){

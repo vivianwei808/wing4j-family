@@ -29,5 +29,10 @@
             </props>
         </property>
     </bean>
-    <orm:scan basePackage="org.wing4j.orm.mybatis.spring" sqlMode="lowerCase" keywordMode="lowerCase" databaseType="MySQL" sqlSessionFactoryBeanName="sqlSessionFactoryBean"/>
+    <orm:scan basePackage="org.wing4j.orm.mybatis.spring"
+              sqlMode="lowerCase"
+              keywordMode="lowerCase"
+              strictWing4j="false"
+              databaseType="MySQL"
+              sqlSessionFactoryBeanName="sqlSessionFactoryBean"/>
 </beans>

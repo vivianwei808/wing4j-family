@@ -53,5 +53,12 @@ public class TableMetadata {
      * 数据库模式
      */
     String schema = "";
-
+    /**
+     * 表前缀
+     */
+    String prefix = "";
+    /**
+     * 表后缀
+     */
+    String suffix = "";
 }
