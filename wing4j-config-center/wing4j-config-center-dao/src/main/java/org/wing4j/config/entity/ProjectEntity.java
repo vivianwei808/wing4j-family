@@ -6,12 +6,15 @@ import java.util.Date;
  * Created by wing4j on 2017/2/15.
  */
 public class ProjectEntity {
-    Integer id;
+    Integer projectNo;
     String groupId;
     String artifactId;
     String version;
-    Integer ownerGroup;
+    String ownerGroup;
     String description;
-    Boolean bPublic;
-    Boolean bAllowDependency;
+    Boolean abstractProject;
+    Date createDate;
+    Date lastUpdateDate;
+    String createUid;
+    String lastUpdateUid;
 }
