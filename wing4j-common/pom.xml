@@ -24,7 +24,6 @@
         <module>wing4j-common-sequence</module>
         <module>wing4j-common-logtrack</module>
         <module>wing4j-common-markdown</module>
-        <module>wing4j-common-download</module>
         <!--<module>wing4j-common-zookeeper</module>-->
     </modules>
 </project>

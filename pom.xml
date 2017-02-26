@@ -21,9 +21,9 @@
     <modules>
         <module>wing4j-annotation</module>
         <module>wing4j-common</module>
+        <module>wing4j-network</module>
         <module>wing4j-orm</module>
         <module>wing4j-test</module>
-        <module>wing4j-config-center</module>
         <module>wing4j-toolkit</module>
     </modules>
     <dependencyManagement>
