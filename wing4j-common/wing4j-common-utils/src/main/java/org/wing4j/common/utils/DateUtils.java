@@ -86,8 +86,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 将日期字符串转换成日期对象
      *
-     * @param s
-     * @return
+     * @param s 日期字符串
+     * @return 日期对象
      */
     public static Date toDate(String s) {
         DateStyle dateStyle = validate(s);
@@ -97,8 +97,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 将日期字符串转换成日期对象
      *
-     * @param s
-     * @return
+     * @param s 日期字符串
+     * @param dateStyle 日期样式
+     * @return 日期对象
      */
     static Date toDate(String s, DateStyle dateStyle) {
         SimpleDateFormat dateForamt = new SimpleDateFormat(dateStyle.format);
@@ -113,7 +114,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
      * 将日起对象格式化为指定格式的字符串
      * @param date 日期对象
      * @param dateStyle 日期样式
-     * @return
+     * @return 日期字符串
      */
     public static String toString(java.util.Date date, DateStyle dateStyle) {
         return formatJavaDate2String(date, dateStyle);
@@ -141,7 +142,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 得到当前日期yyyyMMdd
      *
-     * @return
+     * @return 日期字符串
      */
     public static String getCurrDate() {
         return formatJavaDate2String(new java.util.Date(), DateStyle.FILE_FORMAT3);
@@ -150,7 +151,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 得到当前时间HHmmss
      *
-     * @return
+     * @return 日期字符串
      */
     public static String getCurrTime() {
         return formatJavaDate2String(new java.util.Date(), DateStyle.FILE_FORMAT4);
@@ -159,7 +160,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 得到当前日期和时间 "yyyy-MM-dd HH:mm:ss";
      *
-     * @return
+     * @return 日期字符串
      */
     public static String getCurrFullTime() {
         return formatJavaDate2String(new java.util.Date(), DateStyle.SECOND_FORMAT1);
@@ -176,7 +177,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
      * 计算输入日期n秒之后
      * @param date 输入日期对象
      * @param n_sec 秒数
-     * @return
+     * @return 日期对象
      */
     public static Date getNextSec(Date date, long n_sec){
         long dateL = date.getTime();
@@ -188,7 +189,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
      * 计算输入日期n秒之后
      * @param date 输入日期对象
      * @param n_sec 秒数
-     * @return
+     * @return 日期对象
      */
     public static String getNextSec(String date, long n_sec){
         DateStyle dateStyle = validate(date);
@@ -201,7 +202,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
      *
      * @param date 输入日期对象
      * @param n    n天
-     * @return
+     * @return 日期对象
      */
     public static Date getNextDay(Date date, int n) {
         // 当前日期的毫秒数增加n天对应的毫秒数
@@ -226,8 +227,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
     /**
      * 检验日期字符串，如果没有匹配的格式抛出异常
      *
-     * @param date
-     * @return
+     * @param date 日期字符串
+     * @return 日期样式
      */
     public static DateStyle validate(String date) {
         DateStyle dateStyle = getPattern(date);
@@ -242,6 +243,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils{
      *
      * @param startDate 起始日期
      * @param endDate   终点日期
+     * @return fan
      */
     public static int getDaysBetween(String startDate, String endDate)
             throws IllegalArgumentException {

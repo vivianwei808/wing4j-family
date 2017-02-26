@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-family</artifactId>
         <groupId>org.wing4j</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>wing4j-network</artifactId>
     <packaging>pom</packaging>

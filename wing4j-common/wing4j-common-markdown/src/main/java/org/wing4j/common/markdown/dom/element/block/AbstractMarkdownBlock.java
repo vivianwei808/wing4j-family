@@ -22,7 +22,7 @@ public abstract class AbstractMarkdownBlock implements MarkdownBlock {
 
     /**
      * 增加行号
-     * @param lineNo
+     * @param lineNo 行号
      */
     public void addLineNo(int lineNo){
         lineNumbers.add(lineNo);

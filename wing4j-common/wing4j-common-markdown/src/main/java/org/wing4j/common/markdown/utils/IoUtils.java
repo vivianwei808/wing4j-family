@@ -18,7 +18,6 @@ public class IoUtils {
      * @param is      输入流
      * @param encoding 文件编码
      * @return 文本列表
-     * @throws IOException 异常
      */
     public static List<String> read2list(InputStream is, String encoding) {
         List<String> lines = new ArrayList<>();

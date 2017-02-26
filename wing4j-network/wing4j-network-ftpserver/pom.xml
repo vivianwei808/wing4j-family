@@ -6,7 +6,7 @@
     <parent>
         <artifactId>wing4j-network</artifactId>
         <groupId>org.wing4j</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>wing4j-network-ftpserver</artifactId>
 </project>

@@ -19,18 +19,25 @@ public interface MarkdownDomWriter {
      * 将Markdown文档对象保存到文件
      * @param dom Markdown文档对象
      * @param file 字符串形式的文件名
+     * @param encoding 编码
+     * @throws IOException 异常
      */
     void writeAsMarkdown(MarkdownDocument dom, String file, String encoding) throws IOException;
     /**
      * 将Markdown文档对象保存到文件
      * @param dom Markdown文档对象
      * @param file 字符串形式的文件名
+     * @param encoding 编码
+     * @throws IOException 异常
      */
     void writeAsMarkdown(MarkdownDocument dom, File file, String encoding) throws IOException;
+
     /**
      * 将Markdown文档对象保存到文件
      * @param dom Markdown文档对象
      * @param os 输出流
+     * @param encoding 编码
+     * @throws IOException 异常
      */
     void writeAsMarkdown(MarkdownDocument dom, OutputStream os, String encoding) throws IOException;
 }

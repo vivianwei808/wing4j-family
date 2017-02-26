@@ -6,10 +6,19 @@
     <parent>
         <artifactId>wing4j-orm</artifactId>
         <groupId>org.wing4j.orm</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>wing4j-orm-mybatis-markdown</artifactId>
+    <name>wing4j-orm-mybatis-markdown</name>
+    <description>This is the wing4j-family member wing4j-orm-mybatis-markdown</description>
+    <url>http://git.oschina.net/wing4j</url>
+    <licenses>
+        <license>
+            <name>Apache License Version 2.0</name>
+            <url>http://www.apache.org/licenses</url>
+        </license>
+    </licenses>
     <dependencies>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -19,7 +28,7 @@
         <dependency>
             <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-markdown</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.2</version>
         </dependency>
 
     </dependencies>
