@@ -1,5 +1,6 @@
 package org.wing4j.orm.codegen;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.wing4j.orm.codegen.wing4j.NormalWing4jDemoEntity;
 import org.wing4j.orm.entity.metadata.TableMetadata;
@@ -16,6 +17,7 @@ import static org.junit.Assert.*;
  */
 public class EntityCodeGenTest {
     @Test
+    @Ignore
     public void testGenerate0() throws Exception {
         List<TableMetadata> tables = ReverseEntityUtils.reverseFormDatabase("wing4j", "jdbc:mysql://192.168.1.106:3306/wing4j", "root", "root");
         EntityCodeGen.generate(null, null, tables, "test.entity", "target/");

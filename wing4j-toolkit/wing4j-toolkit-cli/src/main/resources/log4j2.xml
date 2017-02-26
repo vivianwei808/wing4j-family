@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--设置log4j2的自身log级别为warn-->
+<configuration status="warn">
+
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+        </console>
+        <RollingRandomAccessFile name="wing4j"
+                                 fileName="${WING4J_HOME}/logs/wing4j.log"
+                                 filePattern="${WING4J_HOME}/logs/wing4j.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </appenders>
+    <loggers>
+        <!--过滤掉spring和hibernate的一些无用的debug信息-->
+        <logger name="org.springframework" level="DEBUG" additivity="false"/>
+        <logger name="org.wing4j" level="DEBUG" additivity="false"/>
+        <logger name="org.hibernate" level="INFO" additivity="false"/>
+        <logger name="jdbc.sqlonly" level="OFF" additivity="false"/>
+        <logger name="jdbc.sqltiming" level="DEBUG" additivity="false"/>
+        <logger name="jdbc.audit" level="OFF" additivity="false"/>
+        <logger name="jdbc.resultset" level="OFF" additivity="false"/>
+        <logger name="jdbc.resultsettable" level="DEBUG" additivity="false"/>
+        <logger name="jdbc.connection" level="OFF" additivity="false"/>
+        <root level="all">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="wing4j"/>
+        </root>
+    </loggers>
+
+</configuration>

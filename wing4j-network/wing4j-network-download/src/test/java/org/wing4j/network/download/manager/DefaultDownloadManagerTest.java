@@ -19,6 +19,6 @@ public class DefaultDownloadManagerTest {
         DownloadManager restfulManager = new DefaultDownloadManager(new RetryStrategyRoundRobin());
         RemoteUrl remoteUrl = new RemoteUrl("explore/recommend", Arrays.asList("http://git.oschina.net"));
         //http://apache.fayea.com/zookeeper/HEADER.html
-        restfulManager.download(remoteUrl, "recommend", "./temp", "./download", 3, 1000);
+        restfulManager.download(remoteUrl, "recommend", "./target/temp", "./download", 3, 1000);
     }
 }

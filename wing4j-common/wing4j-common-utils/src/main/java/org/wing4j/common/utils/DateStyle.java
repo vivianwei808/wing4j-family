@@ -69,17 +69,13 @@ public enum DateStyle {
      */
     FILE_FORMAT6("yyyyMMdd", "\\d{4}\\d{2}\\d{2}"),
     /**
-     * 能够用于文件命名的日期 yyyyMM
-     */
-    FILE_FORMAT7("yyyyMM", "\\d{4}\\d{2}"),
-    /**
      * 能够用于文件命名的日期 HHmmssSSS
      */
-    FILE_FORMAT8("HHmmssSSS", "\\d{2}\\d{2}\\d{2}\\d{3}"),
+    FILE_FORMAT7("HHmmssSSS", "\\d{2}\\d{2}\\d{2}\\d{3}"),
     /**
      * 能够用于文件命名的日期 HHmmss
      */
-    FILE_FORMAT9("HHmmss", "\\d{2}\\d{2}\\d{2}"),
+    FILE_FORMAT8("HHmmss", "\\d{2}\\d{2}\\d{2}"),
     /**
      * 中文日期格式 yyyy年MM月dd日 HH时mm分ss秒
      */

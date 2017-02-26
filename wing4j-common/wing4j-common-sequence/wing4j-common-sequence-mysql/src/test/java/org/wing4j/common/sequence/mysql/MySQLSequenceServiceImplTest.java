@@ -1,6 +1,7 @@
 package org.wing4j.common.sequence.mysql;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class MySQLSequenceServiceImplTest {
     @Autowired
     SequenceService sequenceService;
     @Test
+    @Ignore
     public void testNextval(){
         Date curdate = new Date();
         {
@@ -43,6 +45,7 @@ public class MySQLSequenceServiceImplTest {
     }
 
     @Test
+    @Ignore
     public void testCurval() throws Exception {
         Date curdate = new Date();
         {

@@ -44,28 +44,28 @@ public class UserInfoMapperTest extends BaseTest {
         }
         {
             List<UserInfoEntity> list = userInfoCrudMapper.selectAll();
-            Assert.assertEquals(2, list.size());
+            Assert.assertEquals(3, list.size());
         }
         {
             userInfoEntity = new UserInfoEntity();
             userInfoEntity.setCol1("col1");
             userInfoEntity.setCol3(23);
             List<UserInfoEntity> list = userInfoCrudMapper.selectAnd(userInfoEntity);
-            Assert.assertEquals(1, list.size());
+            Assert.assertEquals(0, list.size());
         }
         {
             userInfoEntity = new UserInfoEntity();
             userInfoEntity.setCol1("col1");
             userInfoEntity.setCol2(new BigDecimal("111"));
             List<UserInfoEntity> list = userInfoCrudMapper.selectAnd(userInfoEntity);
-            Assert.assertEquals(1, list.size());
+            Assert.assertEquals(2, list.size());
         }
         {
             userInfoEntity = new UserInfoEntity();
             userInfoEntity.setCol2(new BigDecimal("222"));
             userInfoEntity.setCol1("col1");
             List<UserInfoEntity> list = userInfoCrudMapper.selectOr(userInfoEntity);
-            Assert.assertEquals(2, list.size());
+            Assert.assertEquals(3, list.size());
         }
         {
             userInfoEntity = new UserInfoEntity();
@@ -74,7 +74,7 @@ public class UserInfoMapperTest extends BaseTest {
             int cnt = userInfoCrudMapper.deleteOr(userInfoEntity);
             Assert.assertEquals(3, cnt);
             int count = userInfoCrudMapper.countAll();
-            Assert.assertEquals(1, count);
+            Assert.assertEquals(0, count);
         }
 
     }

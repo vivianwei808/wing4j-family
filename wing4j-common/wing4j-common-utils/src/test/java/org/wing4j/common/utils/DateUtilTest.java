@@ -29,11 +29,13 @@ public class DateUtilTest {
         TEST_CASE.put("2015/01/01 10:10", DateStyle.MINUTE_FORMAT2);
         TEST_CASE.put("2015/12/31 10:10", DateStyle.MINUTE_FORMAT2);
         TEST_CASE.put("2015-01-01_10-10-10", DateStyle.FILE_FORMAT1);
-        TEST_CASE.put("20150101101010", DateStyle.FILE_FORMAT2);
-        TEST_CASE.put("20150101101010123", DateStyle.FILE_FORMAT3);
-        TEST_CASE.put("20150101", DateStyle.FILE_FORMAT4);
-        TEST_CASE.put("101010", DateStyle.FILE_FORMAT5);
-        TEST_CASE.put("101010123", DateStyle.FILE_FORMAT6);
+        TEST_CASE.put("20150101101010123", DateStyle.FILE_FORMAT2);
+        TEST_CASE.put("20150101101010", DateStyle.FILE_FORMAT3);
+        TEST_CASE.put("201501011010", DateStyle.FILE_FORMAT4);
+        TEST_CASE.put("2015010110", DateStyle.FILE_FORMAT5);
+        TEST_CASE.put("20150101", DateStyle.FILE_FORMAT6);
+        TEST_CASE.put("101010123", DateStyle.FILE_FORMAT7);
+        TEST_CASE.put("201501", DateStyle.FILE_FORMAT8);
         TEST_CASE.put("2015年01月01日 13时13分13秒", DateStyle.CHINESE_FORMAT1);
         TEST_CASE.put("2015年01月01日", DateStyle.CHINESE_FORMAT2);
         TEST_CASE.put("13时13分13秒", DateStyle.CHINESE_FORMAT3);
@@ -81,9 +83,9 @@ public class DateUtilTest {
         String oldDate = "20150101010101";
         Date od = DateUtils.toDate(oldDate);
         Date nd = DateUtils.getNextSec(od, 5);
-        Assert.assertEquals("20150101010106", DateUtils.toString(nd, DateStyle.FILE_FORMAT2));
+        Assert.assertEquals("20150101010106", DateUtils.toString(nd, DateStyle.FILE_FORMAT3));
         nd = DateUtils.getNextSec(od, 60 * 60 * 24);
-        Assert.assertEquals("20150102010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT2));
+        Assert.assertEquals("20150102010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT3));
     }
 
     @Test
@@ -99,9 +101,9 @@ public class DateUtilTest {
         String oldDate = "20150101010101";
         Date od = DateUtils.toDate(oldDate);
         Date nd = DateUtils.getNextDay(od, 5);
-        Assert.assertEquals("20150106010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT2));
+        Assert.assertEquals("20150106010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT3));
         nd = DateUtils.getNextDay(od, 30);
-        Assert.assertEquals("20150131010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT2));
+        Assert.assertEquals("20150131010101", DateUtils.toString(nd, DateStyle.FILE_FORMAT3));
     }
     @Test
     public void testGetNextDay2() throws Exception {

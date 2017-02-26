@@ -31,9 +31,9 @@
         <property name="url" value="jdbc:log4jdbc:h2:mem:;DB_CLOSE_DELAY=-1"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
-        <property name="maxActive" value="2"/>
-        <property name="initialSize" value="1"/>
-        <property name="maxIdle" value="2"/>
+        <property name="maxActive" value="5"/>
+        <property name="initialSize" value="5"/>
+        <property name="maxIdle" value="1"/>
         <property name="minIdle" value="1"/>
         <property name="maxWait" value="30000"/>
     </bean>
