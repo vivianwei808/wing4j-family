@@ -12,7 +12,7 @@
 
 [在开源中国的项目介绍](https://www.oschina.net/p/wing4j-family)
 
-测试123
+
 ##wing4j common##
 提供开发过程中的公共程序，日志跟踪模块，序号服务生成服务。 
 
